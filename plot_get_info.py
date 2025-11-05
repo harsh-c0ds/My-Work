@@ -13,8 +13,8 @@ G = 6.673e-11       # m^3/(kg s^2)
 c = 299792458       # m/s
 M_sol = 1.98892e30  # kg
 # convertion factors
-#M_to_ms = 1./(1000*M_sol*G/(c*c*c))
-#M_to_density = c**5 / (G**3 * M_sol**2) # kg/m^3
+M_to_ms = 1./(1000*M_sol*G/(c*c*c))
+M_to_density = c**5 / (G**3 * M_sol**2) # kg/m^3
 
 def get_info(thorn,quantity, folder,t0,coordinate="x"):
         print("Looking for files in the folder: {}".format(folder))
@@ -191,7 +191,7 @@ plt.show()
 
 #plt.close()  # closes the figure
 
-sys.exit()
+#sys.exit()
 # plt.plot(xj_sorted, f_xi_tj_sorted, label=f"1D slice at ixd={ixd}, itd={itd}")
 # plt.xlabel("x")
 # plt.ylabel("f(x)")
@@ -200,14 +200,14 @@ sys.exit()
 # plt.close()  # closes the figure
 
 ############### 1D SLICE PLOTTING SCRIPT #####################
-xj_sorted, rho_0 = get_1d_slice(t, x_p, datax, itd=0, coordinate="x")
+xj_sorted, rho_0 = get_1d_slice(t_h, x_p_h, datax_h, itd=0, coordinate="x")
 rho_0 = rho_0
 rho_threshold = 1e-9
 
 # time = []
 surface = []
-for itd in range(len(t)):
-    xj_sorted, f_xi_tj_sorted = get_1d_slice(t, x_p, datax, itd, coordinate="x")
+for itd in range(len(t_h)):
+    xj_sorted, f_xi_tj_sorted = get_1d_slice(t_h, x_p_h, datax_h, itd, coordinate="x")
     for i in range(len(f_xi_tj_sorted)):
         if f_xi_tj_sorted[i] < rho_threshold:
             surf = xj_sorted[i]
