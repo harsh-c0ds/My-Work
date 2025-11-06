@@ -69,28 +69,52 @@ def solve_tov_full(rho_c, K=100, gamma=2, dr=1e-3, r_max=200):
 
     return M, R, R_iso, np.array(r_int), np.array(m_int), np.array(P_int), phi_int, r_ext, phi_ext
 
+K = 100
+gamma = 2
 rho_c = 1.28e-3
 M, R, R_iso, r_int, m_int, P_int, phi_int, r_ext, phi_ext = solve_tov_full(rho_c)
 
 print(f"Gravitational Mass: {M:.4f}, Radius: {R:.4f}, Isotropic Radius: {R_iso:.4f}")
 
+rho_b_arr = (np.array(P_int)/K)**(1/gamma) # Baryon density
+epsilon_arr = rho_b_arr + np.array(P_int)/(gamma - 1) # Energy density
+enthalpy_arr = np.where(rho_b_arr > 0, (epsilon_arr + np.array(P_int))/np.array(rho_b_arr), 0.0) # Enthalpy
+M_0 = 4 * np.pi * np.array(r_int)**2 * rho_b_arr / np.sqrt(1 - (2*np.array(m_int) / np.array(r_int))) # Baryonic Mass
 
-plt.plot(r_int, m_int, label="Mass Profile")
-plt.xlabel("Radius r")
-plt.ylabel("Enclosed Mass m(r)")
+plt.plot(r_int, rho_b_arr, label=r"Baryon density $\rho_b(r)$")
+plt.xlabel(r"Radius $r$")
+plt.ylabel(r"$\rho_b(r)$")
 plt.legend()
 plt.show()
 
-plt.plot(r_int, P_int, label="Pressure Profile")
-plt.xlabel("Radius r")
-plt.ylabel("Pressure P(r)")
+plt.plot(r_int, enthalpy_arr, label=r"Enthalpy $h(r)$")
+plt.xlabel(r"Radius $r$")
+plt.ylabel(r"Enthalpy ($h$)")
 plt.legend()
 plt.show()
 
-plt.plot(r_int, phi_int, label="Interior")
-plt.plot(r_ext, phi_ext, '--', label="Exterior")
-plt.axvline(R, linestyle=':', color='k')
-plt.xlabel("Radius r")
-plt.ylabel("Metric Potential φ(r)")
+plt.plot(r_int, M_0, label=r"Baryonic Mass $M_0(r)$")
+plt.xlabel(r"Radius $r$")
+plt.ylabel(r"$M_0(r)$")
 plt.legend()
 plt.show()
+
+# plt.plot(r_int, m_int, label="Mass Profile")
+# plt.xlabel("Radius r")
+# plt.ylabel("Enclosed Mass m(r)")
+# plt.legend()
+# plt.show()
+
+# plt.plot(r_int, P_int, label="Pressure Profile")
+# plt.xlabel("Radius r")
+# plt.ylabel("Pressure P(r)")
+# plt.legend()
+# plt.show()
+
+# plt.plot(r_int, phi_int, label="Interior")
+# plt.plot(r_ext, phi_ext, '--', label="Exterior")
+# plt.axvline(R, linestyle=':', color='k')
+# plt.xlabel("Radius r")
+# plt.ylabel("Metric Potential φ(r)")
+# plt.legend()
+# plt.show()
