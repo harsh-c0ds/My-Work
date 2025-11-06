@@ -87,7 +87,7 @@ plt.ylabel(r"$\rho_b(r)$")
 plt.legend()
 plt.show()
 
-plt.plot(r_int, enthalpy_arr, label=r"Enthalpy $h(r)$")
+plt.plot(r_int[0:-1], enthalpy_arr[0:-1], label=r"Enthalpy $h(r)$")
 plt.xlabel(r"Radius $r$")
 plt.ylabel(r"Enthalpy ($h$)")
 plt.legend()
