@@ -89,8 +89,15 @@ gamma = 2
 rho_c = 1.28e-3
 M, R, R_iso, r_int, m_int, P_int, phi_int, r_ext, phi_ext = solve_tov_full(rho_c)
 
-print(f"Gravitational Mass: {M:.4f}, Radius: {R:.4f}, Isotropic Radius: {R_iso:.4f}")
+M = M*2*1e30
+R = R*1.47664  # Convert to km
+r_int = r_int * 1.47664  # Convert to km
+m_int = m_int * 2*1e30  # Convert to Kg
 
+print(f"Gravitational Mass: {M:.4f} (Kg), Radius: {R:.4f} (Km), Isotropic Radius: {R_iso:.4f}")
+
+
+plt.plot()
 rho_b_arr = (np.array(P_int)/K)**(1/gamma) # Baryon density
 epsilon_arr = rho_b_arr + np.array(P_int)/(gamma - 1) # Energy density
 enthalpy_arr = np.where(rho_b_arr > 0, (epsilon_arr + np.array(P_int))/np.array(rho_b_arr), 0.0) # Enthalpy
@@ -114,11 +121,12 @@ M_0 = 4 * np.pi * np.array(r_int)**2 * rho_b_arr / np.sqrt(1 - (2*np.array(m_int
 # plt.legend()
 # plt.show()
 
-# plt.plot(r_int, m_int, label="Mass Profile")
-# plt.xlabel("Radius r")
-# plt.ylabel("Enclosed Mass m(r)")
-# plt.legend()
-# plt.show()
+plt.plot(r_int, m_int, label="Mass Profile")
+plt.xlabel("Radius r(Km)")
+plt.ylabel("Enclosed Mass m(r) (Kg)")
+plt.legend()
+plt.savefig("mass_profile.png", dpi=300, bbox_inches='tight')
+plt.show()
 
 # plt.plot(r_int, P_int, label="Pressure Profile")
 # plt.xlabel("Radius r")
@@ -150,31 +158,31 @@ alpha_ext = np.exp(phi_ext) # Lapse function in isotropic coords (Exterior)
 
 ### Combine Interior and Exterior
 
-# Conformal factor
-plt.plot(r_bar_int, psi_int_iso, label="Interior")
-plt.plot(r_bar_ext, psi_ext_iso, '--', label="Exterior")
-plt.xlabel(r"Isotropic radius $\bar{r}$")
-plt.ylabel(r"Conformal factor $\psi(\bar{r})$")
-plt.legend()
-plt.savefig("/home/harsh/m_thesis/Programs/Harsh_thesis/output_plots/iso_psi.png", dpi=300, bbox_inches='tight')
-plt.show()
+# # Conformal factor
+# plt.plot(r_bar_int, psi_int_iso, label="Interior")
+# plt.plot(r_bar_ext, psi_ext_iso, '--', label="Exterior")
+# plt.xlabel(r"Isotropic radius $\bar{r}$")
+# plt.ylabel(r"Conformal factor $\psi(\bar{r})$")
+# plt.legend()
+# plt.savefig("/home/harsh/m_thesis/Programs/Harsh_thesis/output_plots/iso_psi.png", dpi=300, bbox_inches='tight')
+# plt.show()
 
-# Lapse
-plt.plot(r_bar_int, alpha_int, label="Interior")
-plt.plot(r_bar_ext, alpha_ext, '--', label="Exterior")
-plt.xlabel(r"Isotropic radius $\bar{r}$")
-plt.ylabel(r"Lapse $\alpha(\bar{r})$")
-plt.legend()
-plt.savefig("/home/harsh/m_thesis/Programs/Harsh_thesis/output_plots/iso_alpha.png", dpi=300, bbox_inches='tight')
-plt.show()
+# # Lapse
+# plt.plot(r_bar_int, alpha_int, label="Interior")
+# plt.plot(r_bar_ext, alpha_ext, '--', label="Exterior")
+# plt.xlabel(r"Isotropic radius $\bar{r}$")
+# plt.ylabel(r"Lapse $\alpha(\bar{r})$")
+# plt.legend()
+# plt.savefig("/home/harsh/m_thesis/Programs/Harsh_thesis/output_plots/iso_alpha.png", dpi=300, bbox_inches='tight')
+# plt.show()
 
-# Mapping stretch r → r̄
-plt.plot(r_int, r_bar_int, label=r"$\bar{r}(r)$")
-plt.xlabel(r"Areal radius $r$")
-plt.ylabel(r"Isotropic radius $\bar{r}$")
-plt.legend()
-plt.savefig("/home/harsh/m_thesis/Programs/Harsh_thesis/output_plots/iso_r_stretch.png", dpi=300, bbox_inches='tight')
-plt.show()
+# # Mapping stretch r → r̄
+# plt.plot(r_int, r_bar_int, label=r"$\bar{r}(r)$")
+# plt.xlabel(r"Areal radius $r$")
+# plt.ylabel(r"Isotropic radius $\bar{r}$")
+# plt.legend()
+# plt.savefig("/home/harsh/m_thesis/Programs/Harsh_thesis/output_plots/iso_r_stretch.png", dpi=300, bbox_inches='tight')
+# plt.show()
 
 
 print("psi_int(R) =", psi_int_iso[-1])
