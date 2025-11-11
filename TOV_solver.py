@@ -1,6 +1,94 @@
+import os, sys, re
 import numpy as np
 import matplotlib.pyplot as plt
+from kuibit.simdir import SimDir 
+from kuibit.grid_data import UniformGrid 
 
+##### ETK extraction Functions #####
+
+def get_info(thorn,quantity, folder,t0,coordinate="x"):
+        print("Looking for files in the folder: {}".format(folder))
+        os.chdir(folder)
+        filex = f"{thorn}-{quantity}.{coordinate}.asc"
+        print("Opening file: {}.....".format(filex))
+        datax = np.loadtxt(filex, comments='#')
+        print("Reading file....")
+        
+        # Number of iterations
+        it = np.unique(datax[:, 0])
+        it_n = len(it)
+        print("Number of iterations:", it_n)
+        
+        # Time values
+        t = np.unique(datax[:, 8])
+        # X values
+        if coordinate == "x": 
+           x_p = np.unique(datax[:, 9])
+        if coordinate == "y": 
+           x_p = np.unique(datax[:, 10])
+        if coordinate == "z": 
+           x_p = np.unique(datax[:, 11])
+         
+        # Refinement levels	
+        rl = np.unique(datax[:, 2])
+        print('N points in x_p:')
+        print(len(x_p))
+        rl_n = len(rl)
+        print("Total number of refinement levels:", rl_n)
+
+        if t0<t[-1] and t0!=0:
+            t=t[t>t0]
+            t_n = len(t)
+            print("Number of different time values:", t_n)
+
+        # Points
+            x_p_n = len(x_p)
+            print("Total number of points:", x_p_n)
+
+
+            points_per_rl = []
+            rl_max_point = []
+            for i in range(rl_n):
+                x_in_rl = np.unique(datax[datax[:, 2] == rl[i], 9])
+                points_in_rl = len(x_in_rl)
+                print("Number of points in refinement level", i, ":", points_in_rl)
+                rl_max_point.append(np.max(x_in_rl))
+                points_per_rl.append(points_in_rl)
+       # rl_max_point.append(0.0)
+        
+        return t,x_p,rl,rl_n,datax
+
+def get_1d_slice(tk1, xk1, datax, itd, coordinate):
+
+    #print(f"Getting 1d-{coordinate} slice at t = {tk1[itd]}")
+
+    t_index = datax[:,8] == tk1[itd] # get all values at fixed time t_i = tk1[itd]
+
+       # get data  as t,coordinate,f(t,coordinate) 
+    if coordinate == "x": 
+       f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,9]  , datax[t_index,12]  ))
+    if coordinate == "y": 
+       f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,10]  , datax[t_index,12]  ))
+    if coordinate == "z": 
+       f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,11]  , datax[t_index,12]  ))
+
+       # split into t_i, x_j, f(x_j,t_i) 
+    tj = (f_x_ti[0]).tolist()    # t_i should be all the same
+    xj = (f_x_ti[1]).tolist()    # array of {x,y,z} values
+    f_xi_tj = (f_x_ti[2]).tolist()
+
+    # Convert lists back to numpy arrays for sorting
+    xj = np.array(xj)
+    f_xi_tj = np.array(f_xi_tj)
+    # Sort the arrays based on xj
+    sorted_indices = np.argsort(xj)
+    # Reorder both xj and f_xi_tj based on sorted indices
+    xj_sorted = xj[sorted_indices]
+    f_xi_tj_sorted = f_xi_tj[sorted_indices]
+
+    return xj_sorted, f_xi_tj_sorted
+
+##### Solver Functions #####
 def eos(P,K,gamma):
     if P <= 0:
         return 0.0, 0.0
@@ -97,8 +185,6 @@ M, R, R_iso, r_int, m_int, P_int, phi_int, r_ext, phi_ext = solve_tov_full(rho_c
 
 print(f"Gravitational Mass: {M*2*1e30:.4e} (Kg), Radius: {R*1.47664:.4f} (Km), Isotropic Radius: {R_iso*1.47664:.4f} (Km)")
 
-
-plt.plot()
 rho_b_arr = (np.array(P_int)/K)**(1/gamma) # Baryon density
 epsilon_arr = rho_b_arr + np.array(P_int)/(gamma - 1) # Energy density
 enthalpy_arr = np.where(rho_b_arr > 0, (epsilon_arr + np.array(P_int))/np.array(rho_b_arr), 0.0) # Enthalpy
@@ -122,12 +208,12 @@ M_0 = 4 * np.pi * np.array(r_int)**2 * rho_b_arr / np.sqrt(1 - (2*np.array(m_int
 # plt.legend()
 # plt.show()
 
-plt.plot(r_int*1.47664, m_int*2*1e30, label="Mass Profile")
-plt.xlabel("Radius r(Km)")
-plt.ylabel("Enclosed Mass m(r) (Kg)")
-plt.legend()
-plt.savefig("mass_profile.png", dpi=300, bbox_inches='tight')
-plt.show()
+# plt.plot(r_int*1.47664, m_int*2*1e30, label="Mass Profile")
+# plt.xlabel("Radius r(Km)")
+# plt.ylabel("Enclosed Mass m(r) (Kg)")
+# plt.legend()
+# plt.savefig("mass_profile.png", dpi=300, bbox_inches='tight')
+# plt.show()
 
 # plt.plot(r_int, P_int, label="Pressure Profile")
 # plt.xlabel("Radius r")
@@ -185,13 +271,13 @@ alpha_ext = np.exp(phi_ext) # Lapse function in isotropic coords (Exterior)
 # plt.show()
 
 
-M = M*2*1e30
-R = R*1.47664  # Convert to km
-r_int = r_int * 1.47664  # Convert to km
-m_int = m_int * 2*1e30  # Convert to Kg
-R_iso = R_iso * 1.47664  # Convert to km
+# M = M*2*1e30
+# R = R*1.47664  # Convert to km
+# r_int = r_int * 1.47664  # Convert to km
+# m_int = m_int * 2*1e30  # Convert to Kg
+# R_iso = R_iso * 1.47664  # Convert to km
 
-
+#### matching values at the surface [check up]
 print("psi_int(R) =", psi_int_iso[-1])
 print("psi_ext(R) =", psi_ext_iso[0])
 print("alpha_int(R) =", alpha_int[-1])
@@ -199,3 +285,34 @@ print("alpha_ext(R) =", alpha_ext[0])
 print(r"\_bar(R) =", r_bar_int[-1]*1.47664, "Km")
 print(r"r_{int} = ", r_int[-1], "Km")
 print(r"m_{int} = ", m_int[-1])
+
+
+################################################
+ # ETK output data for comparison
+################################################
+
+# constants, in SI
+G = 6.673e-11       # m^3/(kg s^2)
+c = 299792458       # m/s
+M_sol = 1.98892e30  # kg
+# convertion factors
+M_to_ms = 1./(1000*M_sol*G/(c*c*c))
+M_to_density = c**5 / (G**3 * M_sol**2) # kg/m^3
+
+ixd = 0  # index of the x point for time series
+itd = 0  # index of the time point for 1D slice
+
+t_h,x_p_h,rl_h,rl_n_h,datax_h = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_high/output-0000/tov_ET",0.0,"x")
+xj_sorted_h, f_xi_tj_sorted_h = get_1d_slice(t_h, x_p_h, datax_h, itd, coordinate="x")
+
+print(f"solver legth = {len(r_int)}")
+print(f"data legth = {len(xj_sorted_h)}")
+
+plt.figure(figsize=(8,5))
+
+plt.plot(r_int, rho_b_arr, label=r"Baryon density $\rho_b(r)$ from the solver")
+plt.plot(xj_sorted_h, f_xi_tj_sorted_h, color='k', label=r"Baryon density $\rho_b(r)$ from ETK data")
+plt.xlabel(r"Radius $r$")
+plt.ylabel(r"$\rho_b(r)$")
+plt.legend()
+plt.show()
