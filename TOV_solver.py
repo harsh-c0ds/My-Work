@@ -232,8 +232,9 @@ plt.scatter(radius_etk, baryonic_mass_etk, color='k', label="ETK data")
 plt.xlabel("Radius R (km)")
 plt.ylabel("Baryonic Mass")
 plt.legend()    
-
 plt.show()
+
+plt.savefig("RvsM")
 
 sys.exit()
 
