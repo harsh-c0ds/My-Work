@@ -234,7 +234,7 @@ plt.ylabel("Baryonic Mass")
 plt.legend()    
 plt.show()
 
-plt.savefig("RvsM")
+#plt.savefig("RvsM")
 
 sys.exit()
 

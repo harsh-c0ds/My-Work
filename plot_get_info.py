@@ -148,11 +148,13 @@ itd = 0  # index of the time point for 1D slice
 
 # print(f"x_index for resolution {res} is {x_index:.2f}")
 
-t_l,x_p_l,rl_l,rl_n_l,datax_l = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_low/output-0000/tov_ET",0.0,"x")
-t_m,x_p_m,rl_m,rl_n_m,datax_m = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_mid/output-0000/tov_ET",0.0,"x")
-t_h,x_p_h,rl_h,rl_n_h,datax_h = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_high/output-0000/tov_ET",0.0,"x")
+# t_l,x_p_l,rl_l,rl_n_l,datax_l = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_low/output-0000/tov_ET",0.0,"x")
+# t_m,x_p_m,rl_m,rl_n_m,datax_m = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_mid/output-0000/tov_ET",0.0,"x")
+# t_h,x_p_h,rl_h,rl_n_h,datax_h = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_high/output-0000/tov_ET",0.0,"x")
 # out_dir = "/home/harsh/Masters Thesis/Programs/blender_data"
 # os.makedirs(out_dir, exist_ok=True)
+
+t_rns,x_p_rns,rl_rns,rl_n_rns,datax_rns = get_info("hydrobase","rho","/home/harsh/simulations/hydro_rns/output-0000/tov_ET",0.0,"x")
 
 # for itd in range(len(t)):
 #     xj_sorted, f_xi_tj_sorted = get_1d_slice(t, x_p, datax, itd, coordinate="x")
@@ -164,14 +166,14 @@ t_h,x_p_h,rl_h,rl_n_h,datax_h = get_info("hydrobase","rho","/home/harsh/simulati
 #         comments=""
 #     )
 
-# time_values_l,f_xt_values_l = fx_timeseries(t_l,x_p_l,datax_l,ixd,coordinate="x")
-# xj_sorted_l, f_xi_tj_sorted_l = get_1d_slice(t_l, x_p_l, datax_l, itd, coordinate="x")
+time_values_rns,f_xt_values_rns = fx_timeseries(t_rns,x_p_rns,datax_rns,ixd,coordinate="x")
+xj_sorted_rns, f_xi_tj_sorted_rns = get_1d_slice(t_rns, x_p_rns, datax_rns, itd, coordinate="x")
 
 # time_values_m,f_xt_values_m = fx_timeseries(t_m,x_p_m,datax_m,ixd,coordinate="x")
 # xj_sorted_m, f_xi_tj_sorted_m = get_1d_slice(t_m, x_p_m, datax_m, itd, coordinate="x")
 
-time_values_h,f_xt_values_h = fx_timeseries(t_h,x_p_h,datax_h,ixd,coordinate="x")
-xj_sorted_h, f_xi_tj_sorted_h = get_1d_slice(t_h, x_p_h, datax_h, itd, coordinate="x")
+# time_values_h,f_xt_values_h = fx_timeseries(t_h,x_p_h,datax_h,ixd,coordinate="x")
+# xj_sorted_h, f_xi_tj_sorted_h = get_1d_slice(t_h, x_p_h, datax_h, itd, coordinate="x")
 #print(f"time length = {len(xj_sorted_h)}")
 
 # Plotting time series for different resolutions
@@ -180,7 +182,7 @@ plt.figure(figsize=(8,5))  # optional, makes figure larger
 
 # plt.plot(time_values_l, f_xt_values_l, color='r', label=f"Low (x={ixd*2})")
 # plt.plot(time_values_m, f_xt_values_m, color='b', label=f"Mid (x={ixd})")
-plt.plot(xj_sorted_h[0:61], f_xi_tj_sorted_h[0:61], color='k', label=f"High (x={ixd*0.5})")
+plt.plot(xj_sorted_rns[0:61], f_xi_tj_sorted_rns[0:61], color='k', label=f"High (x={ixd*0.5})")
 
 plt.xlabel("Time")
 plt.ylabel("Rho")
@@ -231,7 +233,7 @@ last_or_first = 0 # 0 or -1
 x_value = surface [last_or_first]
 sims_dir = "/home/harsh/simulations/"  # Adjust this path as needed
 # Directory and plotting setup
-direc = "/home/harsh/simulations/tov_ET_high/output-0000/tov_ET/"
+direc = "/home/harsh/simulations/hydro_rns/output-0000/tov_ET/"
 thorns = ["hydrobase"]
 quantities = ["rho"]
 ax_lims = [[(-10,10),(-0.01, 0.005)],
