@@ -240,9 +240,9 @@ plt.xlabel("Radius R (km)")
 plt.ylabel("Density")
 plt.legend()
 
-plt.show()
+#plt.show()
 
-#plt.savefig("RvsM")
+plt.savefig("RvsM")
 
 
 t_rns,x_p_rns,rl_rns,rl_n_rns,datax_rns = get_info("hydrobase","rho","/home/harsh/simulations/hydro_rns/output-0006/tov_ET",0.0,"x")
@@ -260,7 +260,6 @@ plt.legend()
 plt.show()
 
 #sys.exit()
-
 
 # M = M*2*1e30
 # R = R*1.47664  # Convert to km
