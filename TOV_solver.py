@@ -259,7 +259,7 @@ plt.ylabel(r"$\rho_b(r)$")
 plt.legend()
 plt.show()
 
-sys.exit()
+#sys.exit()
 
 
 # M = M*2*1e30
@@ -423,3 +423,4 @@ plt.ylabel(r"$\rho_b(r)$")
 plt.legend()
 plt.savefig("/home/harsh/m_thesis/Programs/Harsh_thesis/output_plots/ETK_solver_rho_comparison.png", dpi=300, bbox_inches='tight')
 plt.show()
+print("The code works!!!")
