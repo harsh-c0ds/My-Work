@@ -219,21 +219,21 @@ R_solver *= 1.47664  # Convert to km
 
 plt.figure(figsize=(8,5))
 
-plt.subplot(1,3,1)
+plt.subplot(2,2,1)
 plt.plot(R_solver, M_solver, label="Solver")
 plt.scatter(radius_etk, grav_mass_etk, color='k', label="ETK data")
 plt.xlabel("Radius R (km)")
 plt.ylabel("Gravitational Mass")
 plt.legend()
 
-plt.subplot(1,3,2)
+plt.subplot(2,2,2)
 plt.plot(R_solver, M_baryonic_solver, label="Solver")
 plt.scatter(radius_etk, baryonic_mass_etk, color='k', label="ETK data")
 plt.xlabel("Radius R (km)")
 plt.ylabel("Baryonic Mass")
 plt.legend()    
 
-plt.subplot(1,3,3)
+plt.subplot(2,2,3)
 plt.plot(R_solver, rho_c_arr, label="Solver")
 plt.scatter(radius_etk, rho_c_arr, color='k', label="ETK data")
 plt.xlabel("Radius R (km)")
@@ -242,7 +242,7 @@ plt.legend()
 
 #plt.show()
 
-plt.savefig("RvsM")
+#plt.savefig("RvsM")
 
 
 t_rns,x_p_rns,rl_rns,rl_n_rns,datax_rns = get_info("hydrobase","rho","/home/harsh/simulations/hydro_rns/output-0006/tov_ET",0.0,"x")
@@ -252,14 +252,20 @@ M, R, R_iso, r_int, m_int, P_int, phi_int, r_ext, phi_ext = solve_tov_full(rho_c
 r_bar_int, psi_int_iso = convert_to_isotropic(r_int, m_int)
 rho_b_arr = (np.array(P_int)/K)**(1/gamma) # Baryon density
 
-plt.plot(xj_sorted_rns, f_xi_tj_sorted_rns, label=r"Baryon density $\rho_b(r)$ from ETK data")
-plt.plot(r_bar_int, rho_b_arr, '--', label=r"Baryon density $\rho_b(r)$ from the solver")
+plt.subplot(2,2,4)
+
+plt.plot(xj_sorted_rns*1.47664, f_xi_tj_sorted_rns, label=r"Baryon density $\rho_b(r)$ from ETK data")
+plt.plot(r_bar_int*1.47664, rho_b_arr, '--', label=r"Baryon density $\rho_b(r)$ from the solver")
 plt.xlabel(r"Radius $r$ (Km)")
 plt.ylabel(r"$\rho_b(r)$")
 plt.legend()
+
+plt.title(r"Comparison for 1.4 $M_{\odot}$ model", fontsize=12)
+plt.tight_layout(rect=[0, 0, 1, 0.95])
+
 plt.show()
 
-#sys.exit()
+sys.exit()
 
 # M = M*2*1e30
 # R = R*1.47664  # Convert to km
