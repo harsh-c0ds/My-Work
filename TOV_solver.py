@@ -119,7 +119,14 @@ def rk4_step(r, y, dr, K, gamma):
     
     dm = (k1[0] + 2*k2[0] + 2*k3[0] + k4[0]) / 6
     dP = (k1[1] + 2*k2[1] + 2*k3[1] + k4[1]) / 6
-    dphi = (k1[2] + 2*k2[2] + 2*k3[2] + k4[2]) / 6
+    dphi = (k1[2] + 2*k2[2] + 2*k3[2] + k4[2]) / 6\
+    
+    P_new = P + dr*dP
+    # prevent small negative pressures due to overshoot
+    if P_new < 0:
+        P_new = 0.0
+
+    return np.array([m + dr*dm, P_new, phi + dr*dphi])
 
     return np.array([m + dr*dm, P + dr*dP, phi + dr*dphi])
 
@@ -219,41 +226,40 @@ R_solver *= 1.47664  # Convert to km
 
 plt.figure(figsize=(8,5))
 
-plt.subplot(2,2,1)
+plt.subplot(1,3,1)
 plt.plot(R_solver, M_solver, label="Solver")
 plt.scatter(radius_etk, grav_mass_etk, color='k', label="ETK data")
 plt.xlabel("Radius R (km)")
 plt.ylabel("Gravitational Mass")
 plt.legend()
 
-plt.subplot(2,2,2)
+plt.subplot(1,3,2)
 plt.plot(R_solver, M_baryonic_solver, label="Solver")
 plt.scatter(radius_etk, baryonic_mass_etk, color='k', label="ETK data")
 plt.xlabel("Radius R (km)")
 plt.ylabel("Baryonic Mass")
 plt.legend()    
 
-plt.subplot(2,2,3)
+plt.subplot(1,3,3)
 plt.plot(R_solver, rho_c_arr, label="Solver")
 plt.scatter(radius_etk, rho_c_arr, color='k', label="ETK data")
 plt.xlabel("Radius R (km)")
 plt.ylabel("Density")
 plt.legend()
 
-#plt.show()
+plt.show()
 
 #plt.savefig("RvsM")
 
 
-t_rns,x_p_rns,rl_rns,rl_n_rns,datax_rns = get_info("hydrobase","rho","/home/harsh/simulations/hydro_rns/output-0006/tov_ET",0.0,"x")
+t_rns,x_p_rns,rl_rns,rl_n_rns,datax_rns = get_info("hydrobase","rho","/home/harsh/simulations/hydro_ideal/output-0001/tov_ET",0.0,"x")
 xj_sorted_rns, f_xi_tj_sorted_rns = get_1d_slice(t_rns, x_p_rns, datax_rns, itd = 0, coordinate="x")
 
 M, R, R_iso, r_int, m_int, P_int, phi_int, r_ext, phi_ext = solve_tov_full(rho_c_arr[5])
 r_bar_int, psi_int_iso = convert_to_isotropic(r_int, m_int)
 rho_b_arr = (np.array(P_int)/K)**(1/gamma) # Baryon density
 
-plt.subplot(2,2,4)
-
+plt.figure(figsize=(8,5))
 plt.plot(xj_sorted_rns*1.47664, f_xi_tj_sorted_rns, label=r"Baryon density $\rho_b(r)$ from ETK data")
 plt.plot(r_bar_int*1.47664, rho_b_arr, '--', label=r"Baryon density $\rho_b(r)$ from the solver")
 plt.xlabel(r"Radius $r$ (Km)")
@@ -264,6 +270,7 @@ plt.title(r"Comparison for 1.4 $M_{\odot}$ model", fontsize=12)
 plt.tight_layout(rect=[0, 0, 1, 0.95])
 
 plt.show()
+
 
 sys.exit()
 
@@ -429,3 +436,9 @@ plt.legend()
 plt.savefig("/home/harsh/m_thesis/Programs/Harsh_thesis/output_plots/ETK_solver_rho_comparison.png", dpi=300, bbox_inches='tight')
 plt.show()
 print("The code works!!!")
+
+print("last few P_int:", P_int[-6:])
+print("last few r_int:", r_int[-6:])
+print("last few m_int:", m_int[-6:])
+print("R (areal) = ", R, "R_iso =", R_iso)
+
