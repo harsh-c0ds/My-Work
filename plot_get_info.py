@@ -135,26 +135,10 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 
     return xj_sorted, f_xi_tj_sorted
 
-ixd = 4  # index of the x point for time series
+ixd = 0  # index of the x point for time series
 itd = 0  # index of the time point for 1D slice
-#res = "h" # resolution: low, mid, high
 
-# if res == "l":
-#     x_index = ixd*2
-# elif res == "m":
-#     x_index = ixd
-# elif res == "h":
-#     x_index = ixd*0.5
-
-# print(f"x_index for resolution {res} is {x_index:.2f}")
-
-# t_l,x_p_l,rl_l,rl_n_l,datax_l = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_low/output-0000/tov_ET",0.0,"x")
-# t_m,x_p_m,rl_m,rl_n_m,datax_m = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_mid/output-0000/tov_ET",0.0,"x")
-# t_h,x_p_h,rl_h,rl_n_h,datax_h = get_info("hydrobase","rho","/home/harsh/simulations/tov_ET_high/output-0000/tov_ET",0.0,"x")
-# out_dir = "/home/harsh/Masters Thesis/Programs/blender_data"
-# os.makedirs(out_dir, exist_ok=True)
-
-t_rns,x_p_rns,rl_rns,rl_n_rns,datax_rns = get_info("hydrobase","rho","/home/harsh/simulations/hydro_rns/output-0000/tov_ET",0.0,"x")
+t_rns,x_p_rns,rl_rns,rl_n_rns,datax_rns = get_info("hydrobase","rho","/home/harsh/simulations/hydro_rns_2/output-0000/tov_ET",0.0,"x")
 
 # for itd in range(len(t)):
 #     xj_sorted, f_xi_tj_sorted = get_1d_slice(t, x_p, datax, itd, coordinate="x")
@@ -182,14 +166,14 @@ plt.figure(figsize=(8,5))  # optional, makes figure larger
 
 # plt.plot(time_values_l, f_xt_values_l, color='r', label=f"Low (x={ixd*2})")
 # plt.plot(time_values_m, f_xt_values_m, color='b', label=f"Mid (x={ixd})")
-plt.plot(time_values_rns, f_xt_values_rns, color='k', label=f"High (x={ixd*0.5})")
+plt.plot(time_values_rns, f_xt_values_rns, color='k', label=f"mid (x={ixd*0.5})")
 
 plt.xlabel("Time")
 plt.ylabel("Rho")
 plt.title("rho vs time at x index")
 plt.legend()
 plt.grid(True)  # optional, makes reading easier
-plt.savefig("/home/harsh/m_thesis/Programs/output_plots/rho_x.png", dpi=300)
+#plt.savefig("/home/harsh/m_thesis/Programs/output_plots/rho_x.png", dpi=300)
 plt.show()
 sys.exit()
 #plt.close()  # closes the figure
