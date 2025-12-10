@@ -152,12 +152,14 @@ xj_21, lapse_1 = get_1d_slice(t_2, x_p_2, datax_2, 10, "x")
 
 time = 10/204
 
+rho = rho/rho[0]
+
 plt.figure()
 
 plt.plot(xj_sorted_1, rho, color = "blue", label='Density at t=0')
 plt.plot(xj_sorted_2, lapse, color = "red", label='Lapse at t=0')
-plt.plot(xj_11, rho_1, color = "blue", linestyle = "--", label='Density at t={:.3f}'.format(time))
-plt.plot(xj_21, lapse_1, color = "red", linestyle = "--", label='Lapse at t={:.3f}'.format(time))
+#plt.plot(xj_11, rho_1, color = "blue", linestyle = "--", label='Density at t={:.3f}'.format(time))
+#plt.plot(xj_21, lapse_1, color = "red", linestyle = "--", label='Lapse at t={:.3f}'.format(time))
 plt.xlabel('Distance')
 plt.ylabel('Values')
 plt.title('1D Slice of Density and Lapse')
