@@ -154,15 +154,37 @@ time = 10/204
 
 rho = rho/rho[0]
 
-plt.figure()
 
-plt.plot(xj_sorted_1, rho, color = "blue", label='Density at t=0')
-plt.plot(xj_sorted_2, lapse, color = "red", label='Lapse at t=0')
-#plt.plot(xj_11, rho_1, color = "blue", linestyle = "--", label='Density at t={:.3f}'.format(time))
-#plt.plot(xj_21, lapse_1, color = "red", linestyle = "--", label='Lapse at t={:.3f}'.format(time))
-plt.xlabel('Distance')
-plt.ylabel('Values')
-plt.title('1D Slice of Density and Lapse')
-plt.legend()
-plt.grid()
-plt.savefig(output_dir+'tov_density_lapse.png')
+plt.figure(figsize=(8,6))
+
+# --- Left axis (density ρ) ---
+ax1 = plt.gca()
+ax1.set_xlabel("x (km)")
+ax1.set_ylabel(r"$\rho/\rho_{c,0}$")
+ax1.set_ylim(0, 1.2)   # match your figure
+
+# Plot density
+ax1.plot(xj_sorted_1, rho, color="black", linewidth=1.5, label="ρ, t = 0")
+ax1.plot(xj_11, rho_1, color="black", linestyle="--", linewidth=1.5,
+         label="ρ, t = {:.3f} ms".format(time*1000))
+
+# --- Right axis (lapse α) ---
+ax2 = ax1.twinx()
+ax2.set_ylabel(r"$\alpha$")
+ax2.set_ylim(0.60, 0.90)   # right-axis limits from your paper
+
+# Plot lapse
+ax2.plot(xj_sorted_2, lapse, color="gray", linewidth=1.5, label="α, t = 0")
+ax2.plot(xj_21, lapse_1, color="gray", linestyle="--", linewidth=1.5,
+         label="α, t = {:.3f} ms".format(time*1000))
+
+# --- Add grid, legend, etc. ---
+ax1.grid(True, linestyle=":")
+plt.title("1D Slice of Density and Lapse")
+
+# Combine legends from both axes
+lines1, labels1 = ax1.get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+plt.legend(lines1 + lines2, labels1 + labels2, loc="upper right")
+
+plt.savefig(output_dir + "tov_density_lapse.png", dpi=300)
