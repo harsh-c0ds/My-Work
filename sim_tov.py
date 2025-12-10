@@ -138,7 +138,7 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 ixd = 0  # index of the x point for time series
 itd = 0  # index of the time point for 1D slice
 
-sim_dir = SimDir("/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET")
+sim_dir = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
 
 t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir,0.0,"x")
 
