@@ -139,7 +139,28 @@ ixd = 0  # index of the x point for time series
 itd = 0  # index of the time point for 1D slice
 
 sim_dir = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
+output_dir = "/home/hsolanki/Programs/Output/"
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir,0.0,"x")
+t_1,x_p_1,rl_1,rl_n_1,datax_1 = get_info("hydrobase","rho",sim_dir,0.0,"x")
+t_2,x_p_2,rl_2,rl_n_2,datax_2 = get_info("admbase","lapse",sim_dir,0.0,"x")
 
-print("This works!")
+xj_sorted_1, rho = get_1d_slice(t_1, x_p_1, datax_1, itd, "x")
+xj_sorted_2, lapse = get_1d_slice(t_2, x_p_2, datax_2, itd, "x")
+
+xj_11, rho_1 = get_1d_slice(t_1, x_p_1, datax_1, 10, "x")
+xj_21, lapse_1 = get_1d_slice(t_2, x_p_2, datax_2, 10, "x")
+
+time = 10/204
+
+plt.figure()
+
+plt.plot(xj_sorted_1, rho, color = "blue", label='Density at t=0')
+plt.plot(xj_sorted_2, lapse, color = "red", label='Lapse at t=0')
+plt.plot(xj_11, rho_1, color = "blue", linestyle = "--", label='Density at t={:.3f}'.format(time))
+plt.plot(xj_21, lapse_1, color = "red", linestyle = "--", label='Lapse at t={:.3f}'.format(time))
+plt.xlabel('Distance')
+plt.ylabel('Values')
+plt.title('1D Slice of Density and Lapse')
+plt.legend()
+plt.grid()
+plt.savefig(output_dir+'tov_density_lapse.png')
