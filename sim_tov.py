@@ -138,7 +138,9 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 ixd = 0  # index of the x point for time series
 itd = 0  # index of the time point for 1D slice
 
-sim_dir = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
+#sim_dir = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
+sim_dir = "/home/harsh/simulations/tov_ET_1/output-0000/tov_ET"
+
 output_dir = "/home/hsolanki/Programs/Output/"
 
 t_1,x_p_1,rl_1,rl_n_1,datax_1 = get_info("hydrobase","rho",sim_dir,0.0,"x")
@@ -186,5 +188,5 @@ plt.title("1D Slice of Density and Lapse")
 lines1, labels1 = ax1.get_legend_handles_labels()
 lines2, labels2 = ax2.get_legend_handles_labels()
 plt.legend(lines1 + lines2, labels1 + labels2, loc="upper right")
-
-plt.savefig(output_dir + "tov_density_lapse.png", dpi=300)
+plt.show()
+#plt.savefig(output_dir + "tov_density_lapse.png", dpi=300)
