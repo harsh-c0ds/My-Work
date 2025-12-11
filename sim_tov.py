@@ -181,6 +181,9 @@ ax1.set_ylim(0, 1.2)   # match your figure
 ax1.plot(xj_sorted_1, rho, color="black", linewidth=1.5, label="ρ, t = 0")
 ax1.plot(xj_11, rho_1, color="black", linestyle="--", linewidth=1.5,
          label="ρ, t = {:.3f} ms".format(time))
+ax1.set_xticks()
+ax1.set_yticks()
+ax1.minorticks_on()
 
 # --- Right axis (lapse α) ---
 ax2 = ax1.twinx()
@@ -191,7 +194,9 @@ ax2.set_ylim(0.60, 0.90)   # right-axis limits from your paper
 ax2.plot(xj_sorted_2, lapse, color="gray", linewidth=1.5, label="α, t = 0")
 ax2.plot(xj_21, lapse_1, color="gray", linestyle="--", linewidth=1.5,
          label="α, t = {:.3f} ms".format(time))
-
+ax2.set_xticks()
+ax2.set_yticks()
+ax2.minorticks_on()
 # --- Add grid, legend, etc. ---
 ax1.grid(True, linestyle=":")
 plt.title("1D Slice of Density and Lapse")
@@ -211,10 +216,15 @@ idxx = np.argmax(time_values >= 7)
 time_values = time_values[:idxx]
 rho_ts = rho_ts[:idxx]
 
+ax = plt.gca()
+
 plt.figure(figsize=(8,6))
 plt.plot(time_values, rho_ts, color="blue", linewidth=1.5)
 plt.xlabel("Time (ms)")
 plt.ylabel(r"$\rho/\rho_{c,0}$")
 plt.title(r"Time Series of Density")
 plt.grid(True, linestyle=":")
+ax.set_xticks()
+ax.set_yticks()
+ax.minorticks_on()
 plt.savefig(output_dir + "density_timeseries.png", dpi=300)
