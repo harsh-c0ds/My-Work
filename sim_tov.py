@@ -207,10 +207,9 @@ time_values,f_xt_values = fx_timeseries(t_1,x_p_1,datax_1,ixd,"x")
 
 time_values = np.array(time_values)/203  # convert to ms
 rho_ts = np.array(f_xt_values)/f_xt_values[0]  # normalize density
-
-idx = np.argmax(time_values >= 7)
-time_values = time_values[:idx]
-rho_ts = rho_ts[:idx]
+idxx = np.argmax(time_values >= 7)
+time_values = time_values[:idxx]
+rho_ts = rho_ts[:idxx]
 
 plt.figure(figsize=(8,6))
 plt.plot(time_values, rho_ts, color="blue", linewidth=1.5)
