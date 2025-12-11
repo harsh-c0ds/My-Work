@@ -205,8 +205,8 @@ plt.savefig(output_dir + "density_lapse.png", dpi=300)
 ixd = 10
 time_values,f_xt_values = fx_timeseries(t_1,x_p_1,datax_1,ixd,"x")
 
-time_values = time_values/203  # convert to ms
-rho_ts = f_xt_values/f_xt_values[0]  # normalize density
+time_values = np.array(time_values)/203  # convert to ms
+rho_ts = np.array(f_xt_values)/f_xt_values[0]  # normalize density
 
 plt.figure(figsize=(8,6))
 plt.plot(time_values, rho_ts, color="blue", linewidth=1.5)
