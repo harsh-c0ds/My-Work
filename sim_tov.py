@@ -68,7 +68,7 @@ def get_info(thorn,quantity, folder,t0,coordinate="x"):
         
         return t,x_p,rl,rl_n,datax
 
-def fx_timeseries(t,x_p,datax,ixd=0, coordinate="x"):     #index value of x as input
+def fx_timeseries(t,x_p,datax,ixd, coordinate="x"):     #index value of x as input
     #create output lists
     print(os.getcwd())
     t_n = len(t)
@@ -201,3 +201,17 @@ lines1, labels1 = ax1.get_legend_handles_labels()
 lines2, labels2 = ax2.get_legend_handles_labels()
 plt.legend(lines1 + lines2, labels1 + labels2, loc="upper right")
 plt.savefig(output_dir + "density_lapse.png", dpi=300)
+
+ixd = 10
+time_values,f_xt_values = fx_timeseries(t_1,x_p_1,datax_1,ixd,"x")
+
+time_values = time_values/203  # convert to ms
+rho_ts = f_xt_values/f_xt_values[0]  # normalize density
+
+plt.figure(figsize=(8,6))
+plt.plot(time_values, rho_ts, color="blue", linewidth=1.5)
+plt.xlabel("Time (ms)")
+plt.ylabel(r"$\rho/\rho_{c,0}$")
+plt.title(r"Time Series of Density")
+plt.grid(True, linestyle=":")
+plt.savefig(output_dir + "density_timeseries.png", dpi=300)
