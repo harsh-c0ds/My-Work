@@ -150,7 +150,7 @@ xj_sorted_2, lapse = get_1d_slice(t_2, x_p_2, datax_2, itd, "x")
 xj_11, rho_1 = get_1d_slice(t_1, x_p_1, datax_1, 10, "x")
 xj_21, lapse_1 = get_1d_slice(t_2, x_p_2, datax_2, 10, "x")
 
-time = 5/204
+time = 1250/204
 
 rho = rho/rho[0]  # normalize density
 
