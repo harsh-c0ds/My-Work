@@ -152,9 +152,14 @@ xj_sorted_2, lapse = get_1d_slice(t_2, x_p_2, datax_2, itd, "x")
 xj_11, rho_1 = get_1d_slice(t_1, x_p_1, datax_1, 10, "x")
 xj_21, lapse_1 = get_1d_slice(t_2, x_p_2, datax_2, 10, "x")
 
-time = 10/204
+time = 5/204
 
-rho = rho/rho[0]
+rho = rho/rho[0]  # normalize density
+
+xj_sorted_1 = xj_sorted_1 * 1.477  # convert to km
+xj_sorted_2 = xj_sorted_2 * 1.477  # convert to km
+xj_11 = xj_11 * 1.477  # convert to km
+xj_21 = xj_21 * 1.477  # convert to km
 
 
 plt.figure(figsize=(8,6))
@@ -168,7 +173,7 @@ ax1.set_ylim(0, 1.2)   # match your figure
 # Plot density
 ax1.plot(xj_sorted_1, rho, color="black", linewidth=1.5, label="ρ, t = 0")
 ax1.plot(xj_11, rho_1, color="black", linestyle="--", linewidth=1.5,
-         label="ρ, t = {:.3f} ms".format(time*1000))
+         label="ρ, t = {:.3f} ms".format(time))
 
 # --- Right axis (lapse α) ---
 ax2 = ax1.twinx()
@@ -178,7 +183,7 @@ ax2.set_ylim(0.60, 0.90)   # right-axis limits from your paper
 # Plot lapse
 ax2.plot(xj_sorted_2, lapse, color="gray", linewidth=1.5, label="α, t = 0")
 ax2.plot(xj_21, lapse_1, color="gray", linestyle="--", linewidth=1.5,
-         label="α, t = {:.3f} ms".format(time*1000))
+         label="α, t = {:.3f} ms".format(time))
 
 # --- Add grid, legend, etc. ---
 ax1.grid(True, linestyle=":")
