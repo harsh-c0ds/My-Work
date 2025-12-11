@@ -159,6 +159,15 @@ xj_sorted_2 = xj_sorted_2 * 1.477  # convert to km
 xj_11 = xj_11 * 1.477  # convert to km
 xj_21 = xj_21 * 1.477  # convert to km
 
+idx = np.argmax(xj_sorted_1 >= 15)
+xj_sorted_1 = xj_sorted_1[:idx]
+xj_sorted_2 = xj_sorted_2[:idx]
+rho = rho[:idx]
+lapse = lapse[:idx]
+xj_11 = xj_11[:idx]
+xj_21 = xj_21[:idx]
+rho_1 = rho_1[:idx]
+lapse_1 = lapse_1[:idx]
 
 plt.figure(figsize=(8,6))
 
