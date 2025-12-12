@@ -163,7 +163,7 @@ plt.title("Spectrum Velocity Time Series")
 plt.grid(True, linestyle=":")
 plt.savefig(output_dir + "velocity_spectrum.png", dpi=300)
 
-sys.exit()
+#sys.exit()
 ###### Density and Lapse 1D Slice ########
 
 t_1,x_p_1,rl_1,rl_n_1,datax_1 = get_info("hydrobase","rho",sim_dir,0.0,"x")
