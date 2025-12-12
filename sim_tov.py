@@ -149,7 +149,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir,0.0,"x")
 time_values_vel,vel_values = fx_timeseries(t,x_p,datax,10,"x")
 
-time_values_vel = np.array(time_values_vel)/(203*100)  # convert to ms
+time_values_vel = np.array(time_values_vel)/(203*1000)  # convert to s
 vel_values = np.array(vel_values)  # in units of c
 
 frequency_vel = np.linspace(0.01, 9000, 5000)  # 0–16 kHz
