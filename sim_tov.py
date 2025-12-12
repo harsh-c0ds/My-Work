@@ -228,3 +228,16 @@ ax.xaxis.set_major_locator(plt.AutoLocator())
 ax.yaxis.set_major_locator(plt.AutoLocator())
 ax.minorticks_on()
 plt.savefig(output_dir + "density_timeseries.png", dpi=300)
+
+
+rho_ts_fft = np.fft.rfft(rho_ts)
+power = np.abs(rho_ts_fft)**2
+freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[1]-time_values[0]))
+
+plt.figure(figsize=(8,6))
+plt.plot(freq, power, color="red", linewidth=1.5)
+plt.xlabel("Frequency (kHz)")
+plt.ylabel("Power")
+plt.title("Power Spectrum of Density Time Series")
+plt.legend()
+plt.savefig(output_dir + "density_power_spectrum.png", dpi=300)
