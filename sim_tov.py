@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
 from kuibit.simdir import SimDir 
-from kuibit.grid_data import UniformGrid  
+from kuibit.grid_data import UniformGrid
+from astropy.timeseries import LombScargle  
 
 ################################################
  # Define constants and conversion factors
@@ -230,15 +231,21 @@ ax.minorticks_on()
 plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 
 
-rho_ts_fft = np.fft.rfft(rho_ts)
-power = np.abs(rho_ts_fft)**2
-freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
+# rho_ts_fft = np.fft.rfft(rho_ts)
+# power = np.abs(rho_ts_fft)**2
+# freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
+
+t_s = time_values / 1000  # ms -> s
+frequency = np.linspace(0, 16000, 5000)  # 0–16 kHz
+power = LombScargle(t_s, rho_ts).power(frequency)
+
 
 # print(f"dt = {time_values[11]-time_values[10]} ms")
 # print(f"Number of time samples = {len(rho_ts)}")
 plt.figure(figsize=(8,6))
-plt.plot(freq, power, color="red", linewidth=1.5)
+plt.plot(frequency, power, color="red", linewidth=1.5)
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
-plt.title("Power Spectrum of Density Time Series")
+plt.title("Lomb-Scargle Power Spectrum of Density Time Series")
+plt.grid(True, linestyle=":")
 plt.savefig(output_dir + "density_power_spectrum.png", dpi=300)
