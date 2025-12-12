@@ -157,7 +157,7 @@ vel = LombScargle(time_values_vel, vel_values).power(frequency_vel)
 
 plt.figure(figsize=(8,6))
 plt.plot(frequency_vel, vel, color="red", linewidth=1.5)
-plt.xlabel("Frequency (Hz)")
+plt.xlabel("Frequency (kHz)")
 plt.ylabel("Radial Velocity")
 plt.title("Spectrum Velocity Time Series")
 plt.grid(True, linestyle=":")
@@ -262,7 +262,7 @@ plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 # freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
 
 #t_s = time_values / 1000  # ms -> s
-frequency = np.linspace(0.01, 16000, 5000)  # 0–16 kHz
+frequency = np.linspace(0.01, 16, 5000)  # 0–16 kHz
 power = LombScargle(time_values, rho_ts).power(frequency)
 
 
