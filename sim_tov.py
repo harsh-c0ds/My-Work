@@ -234,7 +234,7 @@ rho_ts_fft = np.fft.rfft(rho_ts)
 power = np.abs(rho_ts_fft)**2
 freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[1]-time_values[0]))
 
-print(f"dt = {time_values[1]-time_values[0]} ms")
+print(f"dt = {time_values[10]-time_values[9]} ms")
 print(f"Number of time samples = {len(rho_ts)}")
 # plt.figure(figsize=(8,6))
 # plt.plot(freq, power, color="red", linewidth=1.5)
