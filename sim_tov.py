@@ -235,9 +235,9 @@ plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 # power = np.abs(rho_ts_fft)**2
 # freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
 
-t_s = time_values / 1000  # ms -> s
+#t_s = time_values / 1000  # ms -> s
 frequency = np.linspace(0.01, 16000, 5000)  # 0–16 kHz
-power = LombScargle(t_s, rho_ts).power(frequency)
+power = LombScargle(time_values, rho_ts).power(frequency)
 
 
 # print(f"dt = {time_values[11]-time_values[10]} ms")
