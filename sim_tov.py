@@ -230,7 +230,7 @@ ax.minorticks_on()
 plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 
 
-rho_ts_fft = np.fft.fft(rho_ts)
+rho_ts_fft = np.fft.rfft(rho_ts)
 # power = np.abs(rho_ts_fft)**2
 freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
 
