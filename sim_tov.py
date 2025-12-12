@@ -232,12 +232,12 @@ plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 
 rho_ts_fft = np.fft.rfft(rho_ts)
 power = np.abs(rho_ts_fft)**2
-#freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[1]-time_values[0]))
+freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
 
 # print(f"dt = {time_values[11]-time_values[10]} ms")
 # print(f"Number of time samples = {len(rho_ts)}")
 plt.figure(figsize=(8,6))
-plt.plot(power, color="red", linewidth=1.5)
+plt.plot(freq, power, color="red", linewidth=1.5)
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
 plt.title("Power Spectrum of Density Time Series")
