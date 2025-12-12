@@ -231,6 +231,8 @@ ax.minorticks_on()
 plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 
 
+####### Power Spectrum Calculation ########
+
 # rho_ts_fft = np.fft.rfft(rho_ts)
 # power = np.abs(rho_ts_fft)**2
 # freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
@@ -249,3 +251,24 @@ plt.ylabel("Power")
 plt.title("Power Spectrum of Density Time Series")
 plt.grid(True, linestyle=":")
 plt.savefig(output_dir + "density_power_spectrum.png", dpi=300)
+
+
+###### Radial Velocity FFT ########
+
+
+t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir,0.0,"x")
+time_values_vel,vel_values = fx_timeseries(t,x_p,datax,ixd=10,"x")
+
+time_values_vel = np.array(time_values_vel)/203  # convert to ms
+vel_values = np.array(vel_values)  # in units of c
+
+frequency_vel = np.linspace(0.01, 9000, 5000)  # 0–16 kHz
+vel = LombScargle(time_values_vel, vel_values).power(frequency_vel)
+
+plt.figure(figsize=(8,6))
+plt.plot(frequency_vel, vel, color="red", linewidth=1.5)
+plt.xlabel("Frequency (Hz)")
+plt.ylabel("Radial Velocity")
+plt.title("Spectrum Velocity Time Series")
+plt.grid(True, linestyle=":")
+plt.savefig(output_dir + "velocity_spectrum.png", dpi=300)
