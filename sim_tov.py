@@ -257,7 +257,7 @@ plt.savefig(output_dir + "density_power_spectrum.png", dpi=300)
 
 
 t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir,0.0,"x")
-time_values_vel,vel_values = fx_timeseries(t,x_p,datax,ixd=10,"x")
+time_values_vel,vel_values = fx_timeseries(t,x_p,datax,10,"x")
 
 time_values_vel = np.array(time_values_vel)/203  # convert to ms
 vel_values = np.array(vel_values)  # in units of c
