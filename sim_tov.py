@@ -276,15 +276,21 @@ t_unique, inv = np.unique(time_ms, return_inverse=True)
 rho_ts = np.array([rho_ts[inv == i].mean() for i in range(len(t_unique))])
 time_ms = t_unique
 
-rho_ts = rho_ts / rho_ts[0]
-rho_ts = rho_ts - np.mean(rho_ts)
-rho_ts = rho_ts * np.hanning(len(rho_ts))
-
 dt = np.diff(time_ms)
-frequency = np.linspace(0.1, 0.5 / dt.min(), 5000)
+mask = dt > 1e-6
+time_ms = time_ms[np.insert(mask, 0, True)]
+rho_ts = rho_ts[np.insert(mask, 0, True)]
+
+rho_ts = rho_ts / rho_ts[0]
+rho_ts -= np.mean(rho_ts)
+rho_ts *= np.hanning(len(rho_ts))
+
+dt_eff = np.median(np.diff(time_ms))
+frequency = np.linspace(0.1, 0.5 / dt_eff, 5000)
 
 power = LombScargle(time_ms, rho_ts, center_data=False, fit_mean=False).power(frequency)
 
+print("dt min / median / max =", np.min(dt), np.median(dt), np.max(dt))
 # print(f"dt = {time_values[11]-time_values[10]} ms")
 # print(f"Number of time samples = {len(rho_ts)}")
 plt.figure(figsize=(8,6))
