@@ -262,15 +262,34 @@ plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 # freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
 
 #t_s = time_values / 1000  # ms -> s
-frequency = np.linspace(1, 16, 5000)  # 0–16 kHz
-power = LombScargle(time_values, rho_ts).power(frequency)
+# frequency = np.linspace(1, 16, 5000)  # 0–16 kHz
+# power = LombScargle(time_values, rho_ts).power(frequency)
 
+time_ms = np.array(time_values) / 203
+rho_ts = np.array(f_xt_values)
+
+order = np.argsort(time_ms)
+time_ms = time_ms[order]
+rho_ts = rho_ts[order]
+
+t_unique, inv = np.unique(time_ms, return_inverse=True)
+rho_ts = np.array([rho_ts[inv == i].mean() for i in range(len(t_unique))])
+time_ms = t_unique
+
+rho_ts = rho_ts / rho_ts[0]
+rho_ts = rho_ts - np.mean(rho_ts)
+rho_ts = rho_ts * np.hanning(len(rho_ts))
+
+dt = np.diff(time_ms)
+frequency = np.linspace(0.1, 0.5 / dt.min(), 5000)
+
+power = LombScargle(time_ms, rho_ts, center_data=False, fit_mean=False).power(frequency)
 
 # print(f"dt = {time_values[11]-time_values[10]} ms")
 # print(f"Number of time samples = {len(rho_ts)}")
 plt.figure(figsize=(8,6))
 plt.plot(frequency, power, color="red", linewidth=1.5)
-plt.xlabel("Frequency (Hz)")
+plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
 plt.title("Power Spectrum of Density Time Series")
 plt.grid(True, linestyle=":")
