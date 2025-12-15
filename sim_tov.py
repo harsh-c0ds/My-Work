@@ -232,7 +232,7 @@ lines2, labels2 = ax2.get_legend_handles_labels()
 plt.legend(lines1 + lines2, labels1 + labels2, loc="upper right")
 plt.savefig(output_dir + "density_lapse.png", dpi=300)
 
-ixd = 10
+ixd = 0
 time_values,f_xt_values = fx_timeseries(t_1,x_p_1,datax_1,ixd,"x")
 
 time_values = np.array(time_values)/203  # convert to ms
