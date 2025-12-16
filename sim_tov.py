@@ -267,34 +267,39 @@ plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 
 time_ms = np.array(time_values) / 203
 rho_ts = np.array(f_xt_values)
+frequency_rho = np.linspace(0.01, 16, 5000)  # 0–9 kHz
+rho_fft = LombScargle(time_ms, rho_ts).power(frequency_rho)
 
-order = np.argsort(time_ms)
-time_ms = time_ms[order]
-rho_ts = rho_ts[order]
 
-t_unique, inv = np.unique(time_ms, return_inverse=True)
-rho_ts = np.array([rho_ts[inv == i].mean() for i in range(len(t_unique))])
-time_ms = t_unique
+# order = np.argsort(time_ms)
+# time_ms = time_ms[order]
+# rho_ts = rho_ts[order]
 
-dt = np.diff(time_ms)
-mask = dt > 1e-6
-time_ms = time_ms[np.insert(mask, 0, True)]
-rho_ts = rho_ts[np.insert(mask, 0, True)]
+# t_unique, inv = np.unique(time_ms, return_inverse=True)
+# rho_ts = np.array([rho_ts[inv == i].mean() for i in range(len(t_unique))])
+# time_ms = t_unique
 
-rho_ts = rho_ts / rho_ts[0]
-rho_ts -= np.mean(rho_ts)
-rho_ts *= np.hanning(len(rho_ts))
+# dt = np.diff(time_ms)
+# mask = dt > 1e-6
+# time_ms = time_ms[np.insert(mask, 0, True)]
+# rho_ts = rho_ts[np.insert(mask, 0, True)]
 
-dt_eff = np.median(np.diff(time_ms))
-frequency = np.linspace(0.1, 0.5 / dt_eff, 5000)
+# rho_ts = rho_ts / rho_ts[0]
+# rho_ts -= np.mean(rho_ts)
+# rho_ts *= np.hanning(len(rho_ts))
 
-power = LombScargle(time_ms, rho_ts, center_data=False, fit_mean=False).power(frequency)
+# dt_eff = np.median(np.diff(time_ms))
+# frequency = np.linspace(0.1, 0.5 / dt_eff, 5000)
+
+# power = LombScargle(time_ms, rho_ts, center_data=False, fit_mean=False).power(frequency)
+
+
 
 print("dt min / median / max =", np.min(dt), np.median(dt), np.max(dt))
 # print(f"dt = {time_values[11]-time_values[10]} ms")
 # print(f"Number of time samples = {len(rho_ts)}")
 plt.figure(figsize=(8,6))
-plt.plot(frequency, power, color="red", linewidth=1.5)
+plt.plot(frequency_rho, rho_fft, color="red", linewidth=1.5)
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
 plt.title("Power Spectrum of Density Time Series")
