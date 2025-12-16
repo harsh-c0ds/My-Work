@@ -261,8 +261,8 @@ rho_ts_fft = np.fft.rfft(rho_ts)
 power = np.abs(rho_ts_fft)**2
 freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
 
-t_s = time_values / 1000  # ms -> s
-frequency = np.linspace(1, 16, 5000)  # 0–16 kHz
+t_s = time_values  # ms -> s
+frequency = np.linspace(0.01, 16, 5000)  # 0–16 kHz
 power = LombScargle(t_s, rho_ts).power(frequency)
 
 
@@ -295,7 +295,7 @@ power = LombScargle(t_s, rho_ts).power(frequency)
 # print(f"Number of time samples = {len(rho_ts)}")
 plt.figure(figsize=(8,6))
 plt.plot(frequency, power, color="red", linewidth=1.5)
-plt.xlabel("Frequency (Hz)")
+plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
 plt.title("Power Spectrum of Density Time Series")
 plt.grid(True, linestyle=":")
