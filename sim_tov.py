@@ -262,7 +262,7 @@ power = np.abs(rho_ts_fft)**2
 freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
 
 t_s = time_values  # ms -> s
-frequency = np.linspace(0.01, 16, 5000)  # 0–16 kHz
+frequency = np.linspace(0.01, 9, 5000)  # 0–16 kHz
 power = LombScargle(t_s, rho_ts).power(frequency)
 
 
