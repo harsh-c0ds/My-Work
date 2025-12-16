@@ -295,7 +295,7 @@ rho_fft = LombScargle(time_ms, rho_ts).power(frequency_rho)
 
 
 
-print("dt min / median / max =", np.min(dt), np.median(dt), np.max(dt))
+#print("dt min / median / max =", np.min(dt), np.median(dt), np.max(dt))
 # print(f"dt = {time_values[11]-time_values[10]} ms")
 # print(f"Number of time samples = {len(rho_ts)}")
 plt.figure(figsize=(8,6))
