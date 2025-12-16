@@ -266,8 +266,8 @@ plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 # power = LombScargle(time_values, rho_ts).power(frequency)
 
 time_ms = np.array(time_values) / 203
-rho_ts = np.array(f_xt_values[:idxx])/f_xt_values[0]  # normalize density
-rho_ts = np.abs(rho_ts**2)
+rho_ts = np.array(f_xt_values[:idxx])/f_xt_values[0]  - np.mean(f_xt_values[:idxx])# normalize density
+rho_ts = np.abs(rho_ts**2) 
 frequency_rho = np.linspace(0.01, 16, 5000)  # 0–16 kHz
 rho_fft = LombScargle(time_ms, rho_ts).power(frequency_rho)
 
