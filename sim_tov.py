@@ -260,8 +260,7 @@ rho_ts = rho_ts - np.mean(rho_ts)
 
 t_s = time_values  # ms -> s
 frequency = np.linspace(0.01, 9, 5000)  # 0–9 kHz
-omega = 2 * np.pi * frequency
-power = LombScargle(t_s, rho_ts, omega)
+power = LombScargle(t_s, rho_ts).power(frequency)
 
 
 # order = np.argsort(time_ms)
