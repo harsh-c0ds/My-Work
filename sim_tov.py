@@ -139,120 +139,120 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 ixd = 0  # index of the x point for time series
 itd = 0  # index of the time point for 1D slice
 
-sim_dir = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
+sim_dir = "/home/hsolanki/simulations/tov_ET_IF/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 
 ###### Radial Velocity FFT ########
 
-ixd = 0
-t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir,0.0,"x")
-time_values_vel,vel_values = fx_timeseries(t,x_p,datax,ixd,"x")
+# ixd = 0
+# t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir,0.0,"x")
+# time_values_vel,vel_values = fx_timeseries(t,x_p,datax,ixd,"x")
 
-time_values_vel = np.array(time_values_vel)/203  # convert to ms
-vel_values = np.array(vel_values)  # in units of c
+# time_values_vel = np.array(time_values_vel)/203  # convert to ms
+# vel_values = np.array(vel_values)  # in units of c
 
-frequency_vel = np.linspace(0.01, 9, 5000)  # 0–9 kHz
-vel = LombScargle(time_values_vel, vel_values).power(frequency_vel)
+# frequency_vel = np.linspace(0.01, 9, 5000)  # 0–9 kHz
+# vel = LombScargle(time_values_vel, vel_values).power(frequency_vel)
 
-plt.figure(figsize=(8,6))
-plt.plot(frequency_vel, vel, color="red", linewidth=1.5)
-plt.xlabel("Frequency (kHz)")
-plt.ylabel("Radial Velocity")
-plt.title("Spectrum Velocity Time Series")
-plt.grid(True, linestyle=":")
-plt.savefig(output_dir + "velocity_spectrum.png", dpi=300)
+# plt.figure(figsize=(8,6))
+# plt.plot(frequency_vel, vel, color="red", linewidth=1.5)
+# plt.xlabel("Frequency (kHz)")
+# plt.ylabel("Radial Velocity")
+# plt.title("Spectrum Velocity Time Series")
+# plt.grid(True, linestyle=":")
+# plt.savefig(output_dir + "velocity_spectrum.png", dpi=300)
 
 #sys.exit()
 ###### Density and Lapse 1D Slice ########
 
 t_1,x_p_1,rl_1,rl_n_1,datax_1 = get_info("hydrobase","rho",sim_dir,0.0,"x")
-t_2,x_p_2,rl_2,rl_n_2,datax_2 = get_info("admbase","lapse",sim_dir,0.0,"x")
+# t_2,x_p_2,rl_2,rl_n_2,datax_2 = get_info("admbase","lapse",sim_dir,0.0,"x")
 
-xj_sorted_1, rho = get_1d_slice(t_1, x_p_1, datax_1, itd, "x")
-xj_sorted_2, lapse = get_1d_slice(t_2, x_p_2, datax_2, itd, "x")
+# xj_sorted_1, rho = get_1d_slice(t_1, x_p_1, datax_1, itd, "x")
+# xj_sorted_2, lapse = get_1d_slice(t_2, x_p_2, datax_2, itd, "x")
 
-xj_11, rho_1 = get_1d_slice(t_1, x_p_1, datax_1, 10, "x")
-xj_21, lapse_1 = get_1d_slice(t_2, x_p_2, datax_2, 10, "x")
+# xj_11, rho_1 = get_1d_slice(t_1, x_p_1, datax_1, 10, "x")
+# xj_21, lapse_1 = get_1d_slice(t_2, x_p_2, datax_2, 10, "x")
 
-time = 1250/204
+# time = 1250/204
 
-rho = rho/rho[0]  # normalize density
+# rho = rho/rho[0]  # normalize density
 
-xj_sorted_1 = xj_sorted_1 * 1.477  # convert to km
-xj_sorted_2 = xj_sorted_2 * 1.477  # convert to km
-xj_11 = xj_11 * 1.477  # convert to km
-xj_21 = xj_21 * 1.477  # convert to km
+# xj_sorted_1 = xj_sorted_1 * 1.477  # convert to km
+# xj_sorted_2 = xj_sorted_2 * 1.477  # convert to km
+# xj_11 = xj_11 * 1.477  # convert to km
+# xj_21 = xj_21 * 1.477  # convert to km
 
-idx = np.argmax(xj_sorted_1 >= 15)
-xj_sorted_1 = xj_sorted_1[:idx]
-xj_sorted_2 = xj_sorted_2[:idx]
-rho = rho[:idx]
-lapse = lapse[:idx]
-xj_11 = xj_11[:idx]
-xj_21 = xj_21[:idx]
-rho_1 = rho_1[:idx]
-lapse_1 = lapse_1[:idx]
+# idx = np.argmax(xj_sorted_1 >= 15)
+# xj_sorted_1 = xj_sorted_1[:idx]
+# xj_sorted_2 = xj_sorted_2[:idx]
+# rho = rho[:idx]
+# lapse = lapse[:idx]
+# xj_11 = xj_11[:idx]
+# xj_21 = xj_21[:idx]
+# rho_1 = rho_1[:idx]
+# lapse_1 = lapse_1[:idx]
 
-plt.figure(figsize=(8,6))
+# plt.figure(figsize=(8,6))
 
-# --- Left axis (density ρ) ---
-ax1 = plt.gca()
-ax1.set_xlabel("x (km)")
-ax1.set_ylabel(r"$\rho/\rho_{c,0}$")
-ax1.set_ylim(0, 1.2)   # match your figure
+# # --- Left axis (density ρ) ---
+# ax1 = plt.gca()
+# ax1.set_xlabel("x (km)")
+# ax1.set_ylabel(r"$\rho/\rho_{c,0}$")
+# ax1.set_ylim(0, 1.2)   # match your figure
 
-# Plot density
-ax1.plot(xj_sorted_1, rho, color="black", linewidth=1.5, label="ρ, t = 0")
-ax1.plot(xj_11, rho_1, color="black", linestyle="--", linewidth=1.5,
-         label="ρ, t = {:.3f} ms".format(time))
-ax1.xaxis.set_major_locator(plt.AutoLocator())
-ax1.yaxis.set_major_locator(plt.AutoLocator())
-ax1.minorticks_on()
+# # Plot density
+# ax1.plot(xj_sorted_1, rho, color="black", linewidth=1.5, label="ρ, t = 0")
+# ax1.plot(xj_11, rho_1, color="black", linestyle="--", linewidth=1.5,
+#          label="ρ, t = {:.3f} ms".format(time))
+# ax1.xaxis.set_major_locator(plt.AutoLocator())
+# ax1.yaxis.set_major_locator(plt.AutoLocator())
+# ax1.minorticks_on()
 
-# --- Right axis (lapse α) ---
-ax2 = ax1.twinx()
-ax2.set_ylabel(r"$\alpha$")
-ax2.set_ylim(0.60, 0.90)   # right-axis limits from your paper
+# # --- Right axis (lapse α) ---
+# ax2 = ax1.twinx()
+# ax2.set_ylabel(r"$\alpha$")
+# ax2.set_ylim(0.60, 0.90)   # right-axis limits from your paper
 
-# Plot lapse
-ax2.plot(xj_sorted_2, lapse, color="gray", linewidth=1.5, label="α, t = 0")
-ax2.plot(xj_21, lapse_1, color="gray", linestyle="--", linewidth=1.5,
-         label="α, t = {:.3f} ms".format(time))
-ax2.xaxis.set_major_locator(plt.AutoLocator())
-ax2.yaxis.set_major_locator(plt.AutoLocator())
-ax2.minorticks_on()
-# --- Add grid, legend, etc. ---
-ax1.grid(True, linestyle=":")
-plt.title("1D Slice of Density and Lapse")
+# # Plot lapse
+# ax2.plot(xj_sorted_2, lapse, color="gray", linewidth=1.5, label="α, t = 0")
+# ax2.plot(xj_21, lapse_1, color="gray", linestyle="--", linewidth=1.5,
+#          label="α, t = {:.3f} ms".format(time))
+# ax2.xaxis.set_major_locator(plt.AutoLocator())
+# ax2.yaxis.set_major_locator(plt.AutoLocator())
+# ax2.minorticks_on()
+# # --- Add grid, legend, etc. ---
+# ax1.grid(True, linestyle=":")
+# plt.title("1D Slice of Density and Lapse")
 
-# Combine legends from both axes
-lines1, labels1 = ax1.get_legend_handles_labels()
-lines2, labels2 = ax2.get_legend_handles_labels()
-plt.legend(lines1 + lines2, labels1 + labels2, loc="upper right")
-plt.savefig(output_dir + "density_lapse.png", dpi=300)
+# # Combine legends from both axes
+# lines1, labels1 = ax1.get_legend_handles_labels()
+# lines2, labels2 = ax2.get_legend_handles_labels()
+# plt.legend(lines1 + lines2, labels1 + labels2, loc="upper right")
+# plt.savefig(output_dir + "density_lapse.png", dpi=300)
 
 
-time_values,f_xt_values = fx_timeseries(t_1,x_p_1,datax_1,ixd,"x")
+time_values,f_xt_values = fx_timeseries(t_1,x_p_1,datax_1,ixd==10,"x")
 
 time_values = np.array(time_values)/203  # convert to ms
 rho_ts = np.array(f_xt_values)/f_xt_values[0]  # normalize density
-idxx = np.argmax(time_values >= 7)
-time_values = time_values[:idxx]
-rho_ts = rho_ts[:idxx]
+#idxx = np.argmax(time_values >= 7)
+#time_values = time_values[:idxx]
+#rho_ts = rho_ts[:idxx]
 
-ax = plt.gca()
+# ax = plt.gca()
 
-plt.figure(figsize=(8,6))
-plt.plot(time_values, rho_ts, color="blue", linewidth=1.5)
-plt.xlabel("Time (ms)")
-plt.ylabel(r"$\rho/\rho_{c,0}$")
-plt.title(r"Time Series of Density")
-plt.grid(True, linestyle=":")
-ax.xaxis.set_major_locator(plt.AutoLocator())
-ax.yaxis.set_major_locator(plt.AutoLocator())
-ax.minorticks_on()
-plt.savefig(output_dir + "density_timeseries.png", dpi=300)
+# plt.figure(figsize=(8,6))
+# plt.plot(time_values, rho_ts, color="blue", linewidth=1.5)
+# plt.xlabel("Time (ms)")
+# plt.ylabel(r"$\rho/\rho_{c,0}$")
+# plt.title(r"Time Series of Density")
+# plt.grid(True, linestyle=":")
+# ax.xaxis.set_major_locator(plt.AutoLocator())
+# ax.yaxis.set_major_locator(plt.AutoLocator())
+# ax.minorticks_on()
+# plt.savefig(output_dir + "density_timeseries.png", dpi=300)
 
 
 ####### Power Spectrum Calculation ########
@@ -299,4 +299,4 @@ plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
 plt.title("Power Spectrum of Density Time Series")
 plt.grid(True, linestyle=":")
-plt.savefig(output_dir + "density_power_spectrum.png", dpi=300)
+plt.savefig(output_dir + "power_fft.png", dpi=300)
