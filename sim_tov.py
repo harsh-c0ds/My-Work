@@ -259,7 +259,7 @@ rho_ts = rho_ts - np.mean(rho_ts)
 ####### Power Spectrum Calculation ########
 
 t_s = time_values  # ms -> s
-frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
+frequency = np.linspace(0.1, 9, 5000)  # 0–9 kHz
 power = LombScargle(t_s, rho_ts).power(frequency)
 
 
