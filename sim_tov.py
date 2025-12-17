@@ -241,6 +241,7 @@ idxx = np.argmax(time_values >= 7)
 time_values = time_values[:idxx]
 rho_ts = rho_ts[:idxx]
 
+rho_ts = rho_ts - np.mean(rho_ts)
 # ax = plt.gca()
 
 # plt.figure(figsize=(8,6))
@@ -257,13 +258,10 @@ rho_ts = rho_ts[:idxx]
 
 ####### Power Spectrum Calculation ########
 
-rho_ts_fft = np.fft.rfft(rho_ts)
-power = np.abs(rho_ts_fft)**2
-freq = np.fft.rfftfreq(len(rho_ts), d=(time_values[10]-time_values[9]))
-
 t_s = time_values  # ms -> s
-frequency = np.linspace(0.01, 9, 5000)  # 0–16 kHz
-power = LombScargle(t_s, rho_ts).power(frequency)
+frequency = np.linspace(0.01, 9, 5000)  # 0–9 kHz
+omega = 2 * np.pi * frequency
+power = LombScargle(t_s, rho_ts, omega)
 
 
 # order = np.argsort(time_ms)
