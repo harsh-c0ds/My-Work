@@ -268,7 +268,7 @@ plt.grid(True, linestyle=":")
 plt.legend()
 plt.savefig(output_dir + "density_timeseries_comparison.png", dpi=300)
 
-
+sys.exit()
 
 
 # ax = plt.gca()
