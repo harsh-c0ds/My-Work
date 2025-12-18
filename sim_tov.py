@@ -139,7 +139,8 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 ixd = 0  # index of the x point for time series
 itd = 0  # index of the time point for 1D slice
 
-sim_dir = "/home/hsolanki/simulations/tov_ET_IF/output-0000/tov_ET"
+sim_dir_if = "/home/hsolanki/simulations/tov_ET_IF/output-0000/tov_ET"
+sim_dir_p = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 
@@ -166,7 +167,8 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 #sys.exit()
 ###### Density and Lapse 1D Slice ########
 
-t_1,x_p_1,rl_1,rl_n_1,datax_1 = get_info("hydrobase","rho",sim_dir,0.0,"x")
+t_if,x_p_if,rl_if,rl_n_if,datax_if = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
+t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 # t_2,x_p_2,rl_2,rl_n_2,datax_2 = get_info("admbase","lapse",sim_dir,0.0,"x")
 
 # xj_sorted_1, rho = get_1d_slice(t_1, x_p_1, datax_1, itd, "x")
@@ -233,15 +235,42 @@ t_1,x_p_1,rl_1,rl_n_1,datax_1 = get_info("hydrobase","rho",sim_dir,0.0,"x")
 # plt.savefig(output_dir + "density_lapse.png", dpi=300)
 
 
-time_values,f_xt_values = fx_timeseries(t_1,x_p_1,datax_1,ixd==10,"x")
+time_values_if,f_xt_values_if = fx_timeseries(t_if,x_p_if,datax_if,ixd==10,"x")
+time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd==10,"x")
 
-time_values = np.array(time_values)/203  # convert to ms
-rho_ts = np.array(f_xt_values)/f_xt_values[0]  # normalize density
-idxx = np.argmax(time_values >= 7)
-time_values = time_values[:idxx]
-rho_ts = rho_ts[:idxx]
+#### Polytropic #####
 
-rho_ts = rho_ts - np.mean(rho_ts)
+
+time_values_p = np.array(time_values_p)/203  # convert to ms
+rho_ts_p = np.array(f_xt_values_p)/f_xt_values_p[0]  # normalize density
+idxx = np.argmax(time_values_p >= 7)
+time_values_p = time_values_p[:idxx]
+rho_ts_p = rho_ts_p[:idxx]
+rho_ts_p = rho_ts_p - np.mean(rho_ts_p)
+
+#### Ideal Fluid #####
+
+time_values_if = np.array(time_values_if)/203  # convert to ms
+rho_ts_if = np.array(f_xt_values_if)/f_xt_values_if[0]  # normalize density
+idxx = np.argmax(time_values_if >= 7)
+time_values_if = time_values_if[:idxx]
+rho_ts_if = rho_ts_if[:idxx]
+
+rho_ts_if = rho_ts_if - np.mean(rho_ts_if)
+
+plt.figure(figsize=(8,6))
+plt.plot(time_values_p, rho_ts_p, color="blue", linewidth=1.5, label="Polytropic EOS")
+plt.plot(time_values_if, rho_ts_if, color="red", linewidth=1.5, label="Ideal Fluid EOS")
+plt.xlabel("Time (ms)")
+plt.ylabel(r"$\rho/\rho_{c,0}$")
+plt.title(r"Time Series of Density")
+plt.grid(True, linestyle=":")
+plt.legend()
+plt.savefig(output_dir + "density_timeseries_comparison.png", dpi=300)
+
+
+
+
 # ax = plt.gca()
 
 # plt.figure(figsize=(8,6))
@@ -258,9 +287,9 @@ rho_ts = rho_ts - np.mean(rho_ts)
 
 ####### Power Spectrum Calculation ########
 
-t_s = time_values  # ms -> s
+t_s = time_values_if  # ms -> s
 frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
-power = LombScargle(t_s, rho_ts).power(frequency)
+power = LombScargle(t_s, rho_ts_if).power(frequency)
 
 
 # order = np.argsort(time_ms)
