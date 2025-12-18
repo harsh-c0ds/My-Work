@@ -260,7 +260,7 @@ rho_ts_if = rho_ts_if - np.mean(rho_ts_if)
 
 plt.figure(figsize=(8,6))
 plt.plot(time_values_p, rho_ts_p, color="blue", linewidth=1.5, label="Polytropic EOS")
-plt.plot(time_values_if, rho_ts_if, color="red", linewidth=1.5, label="Ideal Fluid EOS")
+#plt.plot(time_values_if, rho_ts_if, color="red", linewidth=1.5, label="Ideal Fluid EOS")
 plt.xlabel("Time (ms)")
 plt.ylabel(r"$\rho/\rho_{c,0}$")
 plt.title(r"Time Series of Density")
