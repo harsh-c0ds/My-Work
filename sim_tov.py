@@ -243,7 +243,7 @@ time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd==10,"x")
 
 time_values_p = np.array(time_values_p)/203  # convert to ms
 rho_ts_p = np.array(f_xt_values_p)/f_xt_values_p[0]  # normalize density
-idxx = np.argmax(time_values_p >= 7)
+idxx = np.argmax(time_values_p >= 4)
 time_values_p = time_values_p[:idxx]
 rho_ts_p = rho_ts_p[:idxx]
 #rho_ts_p = rho_ts_p - np.mean(rho_ts_p)
