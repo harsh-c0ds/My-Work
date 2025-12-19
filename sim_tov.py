@@ -139,7 +139,7 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 ixd = 0  # index of the x point for time series
 itd = 0  # index of the time point for 1D slice
 
-sim_dir_if = "/home/hsolanki/simulations/tov_ET_IF/output-0000/tov_ET"
+sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
