@@ -143,7 +143,7 @@ sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
-sim = "both"  # "if", "p", "both"
+sim = "if"  # "if", "p", "both"
 
 if sim == "if":
    t_if,x_p_if,rl_if,rl_n_if,datax_if = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
@@ -168,6 +168,16 @@ if sim == "if":
    plt.grid(True, linestyle=":")
    plt.legend()
    plt.savefig(output_dir + "fft_density_IF.png", dpi=300)
+
+
+   plt.figure(figsize=(8,6))
+   plt.plot(time_values_if, rho_ts_if, color="red", linewidth=1.5, label="Ideal Fluid EOS")
+   plt.xlabel("Time (ms)")
+   plt.ylabel(r"$\rho/\rho_{c,0}$")
+   plt.title(r"Timeseries of Density")
+   plt.grid(True, linestyle=":")
+   plt.legend()
+   plt.savefig(output_dir + "time_series_density_IF.png", dpi=300)
 
 elif sim == "p":
    t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
