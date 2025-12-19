@@ -143,31 +143,99 @@ sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
+sim = "if"
 
-###### Radial Velocity FFT ########
+if sim == "if":
+   t_if,x_p_if,rl_if,rl_n_if,datax_if = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
+   time_values_if,f_xt_values_if = fx_timeseries(t_if,x_p_if,datax_if,ixd==10,"x")
 
-# ixd = 0
-# t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir,0.0,"x")
-# time_values_vel,vel_values = fx_timeseries(t,x_p,datax,ixd,"x")
+   time_values_if = np.array(time_values_if)/203  # convert to ms
+   rho_ts_if = (np.array(f_xt_values_if) - f_xt_values_if[0]) /f_xt_values_if[0]  # normalize density
+   idxx = np.argmax(time_values_if >= 4)
+   time_values_if = time_values_if[:idxx]
+   rho_ts_if = rho_ts_if[:idxx]
 
-# time_values_vel = np.array(time_values_vel)/203  # convert to ms
-# vel_values = np.array(vel_values)  # in units of c
+#### remove this block for timeseries plotting #####
+   t_s = time_values_if  # ms
+   frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
+   power = LombScargle(t_s, rho_ts_if).power(frequency)
 
-# frequency_vel = np.linspace(0.01, 9, 5000)  # 0–9 kHz
-# vel = LombScargle(time_values_vel, vel_values).power(frequency_vel)
+   plt.figure(figsize=(8,6))
+   plt.plot(frequency, power, color="red", linewidth=1.5, label="Ideal Fluid EOS")
+   plt.xlabel("Frequency (kHz)")
+   plt.ylabel(r"${|\rho/\rho_{c,0}|}^2$")
+   plt.title(r"FFT of Density")
+   plt.grid(True, linestyle=":")
+   plt.legend()
+   plt.savefig(output_dir + "fft_density_IF.png", dpi=300)
 
-# plt.figure(figsize=(8,6))
-# plt.plot(frequency_vel, vel, color="red", linewidth=1.5)
-# plt.xlabel("Frequency (kHz)")
-# plt.ylabel("Radial Velocity")
-# plt.title("Spectrum Velocity Time Series")
-# plt.grid(True, linestyle=":")
-# plt.savefig(output_dir + "velocity_spectrum.png", dpi=300)
+elif sim == "p":
+   t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+   time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd==10,"x")
 
-#sys.exit()
+   time_values_p = np.array(time_values_p)/203  # convert to ms
+   rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
+   idxx = np.argmax(time_values_p >= 4)
+   time_values_p = time_values_p[:idxx]
+   rho_ts_p = rho_ts_p[:idxx]
+
+#### remove this block for timeseries plotting #####
+   t_s = time_values_p  # ms
+   frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
+   power = LombScargle(t_s, rho_ts_p).power(frequency)
+
+   plt.figure(figsize=(8,6))
+   plt.plot(frequency, power, color="blue", linewidth=1.5, label="Polytropic EOS")
+   plt.xlabel("Frequency (kHz)")
+   plt.ylabel(r"${|\rho/\rho_{c,0}|}^2$")
+   plt.title(r"FFT of Density")
+   plt.grid(True, linestyle=":")
+   plt.legend()
+   plt.savefig(output_dir + "fft_density_P.png", dpi=300)
+
+elif sim == "both":
+   t_if,x_p_if,rl_if,rl_n_if,datax_if = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
+   time_values_if,f_xt_values_if = fx_timeseries(t_if,x_p_if,datax_if,ixd==10,"x")
+
+   time_values_if = np.array(time_values_if)/203  # convert to ms
+   rho_ts_if = (np.array(f_xt_values_if) - f_xt_values_if[0]) /f_xt_values_if[0]  # normalize density
+   idxx = np.argmax(time_values_if >= 7)
+   time_values_if = time_values_if[:idxx]
+   rho_ts_if = rho_ts_if[:idxx]
+
+   t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+   time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd==10,"x")
+
+   time_values_p = np.array(time_values_p)/203  # convert to ms
+   rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
+   idxx = np.argmax(time_values_p >= 4)
+   time_values_p = time_values_p[:idxx]
+   rho_ts_p = rho_ts_p[:idxx]
+   rho_ts_p = rho_ts_p - np.mean(rho_ts_p)
+#### remove this block for timeseries plotting #####
+   t_s_if = time_values_if  # ms
+   frequency_if = np.linspace(1, 9, 5000)  # 0–9 kHz
+   power_if = LombScargle(t_s_if, rho_ts_if).power(frequency_if)
+
+   t_s_p = time_values_p  # ms
+   frequency_p = np.linspace(1, 9, 5000)  # 0–9 kHz
+   power_p = LombScargle(t_s_p, rho_ts_p).power(frequency_p)
+
+   plt.figure(figsize=(8,6))
+   plt.plot(frequency_if, power_if, color="red", linewidth=1.5, label="Ideal Fluid EOS")
+   plt.plot(frequency_p, power_p, color="blue", linewidth=1.5, label="Polytropic EOS")
+   plt.xlabel("Frequency (kHz)")
+   plt.ylabel(r"${|\rho/\rho_{c,0}|}^2$")
+   plt.title(r"FFT of Density")
+   plt.grid(True, linestyle=":")
+   plt.legend()
+   plt.savefig(output_dir + "fft_density_comparison.png", dpi=300)
+
+
+sys.exit()
+
 ###### Density and Lapse 1D Slice ########
 
-t_if,x_p_if,rl_if,rl_n_if,datax_if = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
 #t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 # t_2,x_p_2,rl_2,rl_n_2,datax_2 = get_info("admbase","lapse",sim_dir,0.0,"x")
 
@@ -235,40 +303,11 @@ t_if,x_p_if,rl_if,rl_n_if,datax_if = get_info("hydrobase","rho",sim_dir_if,0.0,"
 # plt.savefig(output_dir + "density_lapse.png", dpi=300)
 
 
-time_values_if,f_xt_values_if = fx_timeseries(t_if,x_p_if,datax_if,ixd==10,"x")
-#time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd==10,"x")
-
-#### Polytropic #####
-
-
-# time_values_p = np.array(time_values_p)/203  # convert to ms
-# rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
-# idxx = np.argmax(time_values_p >= 4)
-# time_values_p = time_values_p[:idxx]
-# rho_ts_p = rho_ts_p[:idxx]
-#rho_ts_p = rho_ts_p - np.mean(rho_ts_p)
-
-#### Ideal Fluid #####
-
-time_values_if = np.array(time_values_if)/203  # convert to ms
-rho_ts_if = (np.array(f_xt_values_if) - f_xt_values_if[0]) /f_xt_values_if[0]  # normalize density
-idxx = np.argmax(time_values_if >= 7)
-time_values_if = time_values_if[:idxx]
-rho_ts_if = rho_ts_if[:idxx]
 
 # rho_ts_if = rho_ts_if - np.mean(rho_ts_if)
 
-plt.figure(figsize=(8,6))
-#plt.plot(time_values_p, rho_ts_p, color="blue", linewidth=1.5, label="Polytropic EOS")
-plt.plot(time_values_if, rho_ts_if, color="red", linewidth=1.5, label="Ideal Fluid EOS")
-plt.xlabel("Time (ms)")
-plt.ylabel(r"$\rho/\rho_{c,0}$")
-plt.title(r"Time Series of Density")
-plt.grid(True, linestyle=":")
-plt.legend()
-plt.savefig(output_dir + "density_timeseries_comparison.png", dpi=300)
 
-sys.exit()
+
 
 
 # ax = plt.gca()
@@ -287,7 +326,7 @@ sys.exit()
 
 ####### Power Spectrum Calculation ########
 
-t_s = time_values_if  # ms -> s
+t_s = time_values_if  # ms
 frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
 power = LombScargle(t_s, rho_ts_if).power(frequency)
 
@@ -319,10 +358,31 @@ power = LombScargle(t_s, rho_ts_if).power(frequency)
 #print("dt min / median / max =", np.min(dt), np.median(dt), np.max(dt))
 # print(f"dt = {time_values[11]-time_values[10]} ms")
 # print(f"Number of time samples = {len(rho_ts)}")
-plt.figure(figsize=(8,6))
-plt.plot(frequency, power, color="red", linewidth=1.5)
-plt.xlabel("Frequency (kHz)")
-plt.ylabel("Power")
-plt.title("Power Spectrum of Density Time Series")
-plt.grid(True, linestyle=":")
-plt.savefig(output_dir + "power_fft.png", dpi=300)
+# plt.figure(figsize=(8,6))
+# plt.plot(frequency, power, color="red", linewidth=1.5)
+# plt.xlabel("Frequency (kHz)")
+# plt.ylabel("Power")
+# plt.title("Power Spectrum of Density Time Series")
+# plt.grid(True, linestyle=":")
+# plt.savefig(output_dir + "power_fft.png", dpi=300)
+
+
+###### Radial Velocity FFT ########
+
+# ixd = 0
+# t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir,0.0,"x")
+# time_values_vel,vel_values = fx_timeseries(t,x_p,datax,ixd,"x")
+
+# time_values_vel = np.array(time_values_vel)/203  # convert to ms
+# vel_values = np.array(vel_values)  # in units of c
+
+# frequency_vel = np.linspace(0.01, 9, 5000)  # 0–9 kHz
+# vel = LombScargle(time_values_vel, vel_values).power(frequency_vel)
+
+# plt.figure(figsize=(8,6))
+# plt.plot(frequency_vel, vel, color="red", linewidth=1.5)
+# plt.xlabel("Frequency (kHz)")
+# plt.ylabel("Radial Velocity")
+# plt.title("Spectrum Velocity Time Series")
+# plt.grid(True, linestyle=":")
+# plt.savefig(output_dir + "velocity_spectrum.png", dpi=300)
