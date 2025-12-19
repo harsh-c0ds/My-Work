@@ -155,7 +155,6 @@ if sim == "if":
    time_values_if = time_values_if[:idxx]
    rho_ts_if = rho_ts_if[:idxx]
 
-#### remove this block for timeseries plotting #####
    t_s = time_values_if  # ms
    frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
    power = LombScargle(t_s, rho_ts_if).power(frequency)
@@ -189,7 +188,6 @@ elif sim == "p":
    time_values_p = time_values_p[:idxx]
    rho_ts_p = rho_ts_p[:idxx]
 
-#### remove this block for timeseries plotting #####
    t_s = time_values_p  # ms
    frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
    power = LombScargle(t_s, rho_ts_p).power(frequency)
@@ -222,7 +220,7 @@ elif sim == "both":
    time_values_p = time_values_p[:idxx]
    rho_ts_p = rho_ts_p[:idxx]
    rho_ts_p = rho_ts_p - np.mean(rho_ts_p)
-#### remove this block for timeseries plotting #####
+
    t_s_if = time_values_if  # ms
    frequency_if = np.linspace(1, 9, 5000)  # 0–9 kHz
    power_if = LombScargle(t_s_if, rho_ts_if).power(frequency_if)
