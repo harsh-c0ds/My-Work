@@ -178,6 +178,30 @@ print("ixd range: 0 →", N_ixd-1)
 print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
 print("Surface x ≈", x_p[-1])
 
+
+t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+power_all = []
+
+for i in range(N_ixd):
+   ixd = i
+   time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd,"x")
+
+   time_values_p = np.array(time_values_p)/203  # convert to ms
+   rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
+   idxx = np.argmax(time_values_p >= 8)
+   time_values_p = time_values_p[:idxx]
+   rho_ts_p = rho_ts_p[:idxx]
+
+   t_s = time_values_p  # ms
+   frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
+   power = LombScargle(t_s, rho_ts_p).power(frequency)
+
+   power_all.append(power)
+
+power_all = np.array(power_all)
+
+print(f"shape of power_all = {power_all.shape}")
+
 sys.exit()
 
 ixd = 0  # index of the x point for time series
