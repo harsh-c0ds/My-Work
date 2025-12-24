@@ -180,9 +180,11 @@ print("Surface x ≈", x_p[-1])
 
 
 t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
-power_all = []
+frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
+filename = "power_spectra.txt"
+np.savetxt(filename, frequency[None, :], fmt="%.6e")
 
-for i in range(N_ixd):
+for i in range(1):
    ixd = i
    time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd,"x")
 
@@ -193,14 +195,12 @@ for i in range(N_ixd):
    rho_ts_p = rho_ts_p[:idxx]
 
    t_s = time_values_p  # ms
-   frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
    power = LombScargle(t_s, rho_ts_p).power(frequency)
 
-   power_all.append(power)
+   with open(filename, "a") as f:
+      np.savetxt(f, power[None, :], fmt="%.6e")
 
-power_all = np.array(power_all)
 
-print(f"shape of power_all = {power_all.shape}")
 
 sys.exit()
 
