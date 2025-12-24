@@ -136,12 +136,54 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 
     return xj_sorted, f_xi_tj_sorted
 
-ixd = 0  # index of the x point for time series
-itd = 0  # index of the time point for 1D slice
-
 sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
+
+#### figure out the total number of ixd ####
+
+filex = "hydrobase-rho.x.asc"
+folder = sim_dir_if
+
+print("Looking for files in the folder: {}".format(folder))
+os.chdir(folder)
+print("Opening file: {}.....".format(filex))
+datax = np.loadtxt(filex, comments='#')
+print("Reading file....")
+
+# --- pick initial time slice ---
+t0 = np.min(datax[:,8])
+mask_t0 = datax[:,8] == t0
+data_t0 = datax[mask_t0]
+
+# --- extract x and rho ---
+x   = data_t0[:,9]
+rho = data_t0[:,12]
+
+# --- remove atmosphere / vacuum ---
+rho_floor = 1e-10   # adjust if needed
+mask_star = rho > rho_floor
+
+x_star = x[mask_star]
+
+# --- unique spatial points define ixd ---
+x_p = np.unique(x_star)
+x_p.sort()
+
+# --- results ---
+N_ixd = len(x_p)
+
+print("Number of valid ixd points (center → surface):", N_ixd)
+print("ixd range: 0 →", N_ixd-1)
+print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
+print("Surface x ≈", x_p[-1])
+
+sys.exit()
+
+ixd = 0  # index of the x point for time series
+itd = 0  # index of the time point for 1D slice
+
+
 
 sim = "if"  # "if", "p", "both"
 
