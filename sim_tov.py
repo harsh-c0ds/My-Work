@@ -181,7 +181,7 @@ print("Surface x ≈", x_p[-1])
 
 t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
-filename = "power_spectra.txt"
+filename = "/home/hsolanki/Programs/My-Work/power_spectra.txt"
 np.savetxt(filename, frequency[None, :], fmt="%.6e")
 
 for i in range(1):
@@ -200,7 +200,10 @@ for i in range(1):
    with open(filename, "a") as f:
       np.savetxt(f, power[None, :], fmt="%.6e")
 
-
+loaded = np.loadtxt("/home/hsolanki/Programs/My-Work/power_spectra.txt")
+frequency_loaded = loaded[0, :]
+power_all_loaded = loaded[1:, :]
+print(frequency_loaded.shape, power_all_loaded.shape)
 
 sys.exit()
 
