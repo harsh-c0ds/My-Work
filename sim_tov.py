@@ -162,7 +162,7 @@ rho = data_t0[:,12]
 
 # --- remove atmosphere / vacuum ---
 rho_floor = 1e-10   # adjust if needed
-mask_star = rho_floor
+mask_star =rho > rho_floor
 
 x_star = x[mask_star]
 
