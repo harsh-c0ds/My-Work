@@ -136,9 +136,42 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 
     return xj_sorted, f_xi_tj_sorted
 
-sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
-sim_dir_p = "/home/hsolanki/simulations/tov_ET_1/output-0000/tov_ET"
+sim_dir_if = "/home/hsolanki/simulations/IF_sim/output-0000/tov_ET"
+sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
+
+### trial ###
+t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,10,"x")
+
+
+# # --- For Ideal Fluid (IF) ---
+# rho_if = (np.array(f_xt_values_if) - f_xt_values_if[0]) / f_xt_values_if[0]
+# rho_if -= np.mean(rho_if) # Keep this to remove the 0 Hz spike
+
+# ls_if = LombScargle(time_values_if, rho_if)
+# freq_if, power_if = ls_if.autopower(maximum_frequency=9.0)
+
+# --- For Polytropic (P) ---
+rho_p = (np.array(f_xt_values_p) - f_xt_values_p[0]) / f_xt_values_p[0]
+rho_p -= np.mean(rho_p) # Keep this to remove the 0 Hz spike
+
+ls_p = LombScargle(time_values_p, rho_p)
+freq_p, power_p = ls_p.autopower(maximum_frequency=9.0)
+
+# --- Plotting the Raw Comparison ---
+plt.figure(figsize=(10, 6))
+#plt.plot(freq_if, power_if, color="red", label="Ideal Fluid (Raw)", alpha=0.8)
+plt.plot(freq_p, power_p, color="blue", label="Polytropic (Raw)", alpha=0.8)
+
+plt.xlabel("Frequency (kHz)")
+plt.ylabel("Power")
+plt.title("Raw Density Power Spectrum (No Windowing)")
+plt.legend()
+plt.grid(True, linestyle=":", alpha=0.6)
+plt.savefig(output_dir + "P_spec.png", dpi=300)
+
+sys.exit()
 
 #### figure out the total number of ixd ####
 
@@ -205,11 +238,9 @@ frequency_loaded = loaded[0, :]
 power_all_loaded = loaded[1:, :]
 print(frequency_loaded.shape, power_all_loaded.shape)
 
-sys.exit()
 
 ixd = 0  # index of the x point for time series
 itd = 0  # index of the time point for 1D slice
-
 
 
 sim = "if"  # "if", "p", "both"
@@ -308,8 +339,6 @@ elif sim == "both":
    plt.legend()
    plt.savefig(output_dir + "fft_density_comparison.png", dpi=300)
 
-
-sys.exit()
 
 ###### Density and Lapse 1D Slice ########
 
