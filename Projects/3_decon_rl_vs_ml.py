@@ -1,65 +1,72 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.io import loadmat
 from scipy.signal import fftconvolve
-from scipy.ndimage import gaussian_filter
 from skimage import io
 from skimage.restoration import richardson_lucy, denoise_tv_chambolle
 from skimage.metrics import mean_squared_error, structural_similarity
 import os
 
+from utils_forward import load_psf, normalize
+
 # --------------------------------------------------
 # Paths
 # --------------------------------------------------
 figdir = r"D:\Projects\results\figures"
+os.makedirs(figdir, exist_ok=True)
+
+psf_path = os.path.join(figdir, 'psf_linear.mat')
 
 # --------------------------------------------------
 # Load ground truth
 # --------------------------------------------------
-gt = io.imread(os.path.join(figdir,'ground_truth.png'), as_gray=True)
-gt = gt.astype(np.float64)
-gt /= gt.max()
+gt = io.imread(os.path.join(figdir, 'ground_truth.png'), as_gray=True)
+gt = normalize(gt)
 
 # --------------------------------------------------
-# Load PSF
+# Load PSF (shared utility)
 # --------------------------------------------------
-PSF = loadmat(os.path.join(figdir,'psf_linear.mat'))['PSF']
-PSF = PSF.astype(np.float64)
-PSF /= PSF.sum()
-
-PSF = gaussian_filter(PSF, sigma=0.6)
-PSF /= PSF.sum()
+PSF = load_psf(psf_path)
 PSF_flip = PSF[::-1, ::-1]
 
 # --------------------------------------------------
 # Load noisy image
 # --------------------------------------------------
-y = io.imread(os.path.join(figdir,'noisy.png'), as_gray=True)
-y = y.astype(np.float64)
-y /= y.max()
+y = io.imread(os.path.join(figdir, 'noisy.png'), as_gray=True)
+y = normalize(y)
 
 # --------------------------------------------------
 # RL reconstruction
 # --------------------------------------------------
-rl = richardson_lucy(y, PSF, num_iter=12, clip=True)
-rl = np.clip(rl, 0, 1)
+rl = richardson_lucy(
+    y,
+    PSF,
+    num_iter=12,
+    clip=True
+)
+rl = normalize(rl)
 
 # --------------------------------------------------
 # ML + TV reconstruction
 # --------------------------------------------------
 x = y.copy()
-alpha = 0.8
+alpha = 0.15
 lam = 0.02
 niter = 50
 
 for _ in range(niter):
     Hx = fftconvolve(x, PSF, mode='same') + 1e-8
     grad = fftconvolve(1 - y / Hx, PSF_flip, mode='same')
+
     x -= alpha * grad
     x = np.clip(x, 0, None)
-    x = denoise_tv_chambolle(x, weight=lam, channel_axis=None)
 
-x /= x.max()
+    x = denoise_tv_chambolle(
+        x,
+        weight=lam,
+        channel_axis=None
+    )
+
+x = normalize(x)
 
 # --------------------------------------------------
 # Metrics
