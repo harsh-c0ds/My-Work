@@ -162,7 +162,7 @@ freq_p, power_p = ls_p.autopower(maximum_frequency=9.0)
 # --- Plotting the Raw Comparison ---
 plt.figure(figsize=(10, 6))
 #plt.plot(freq_if, power_if, color="red", label="Ideal Fluid (Raw)", alpha=0.8)
-plt.plot(freq_p, power_p, color="blue", label="Polytropic (Raw)", alpha=0.8)
+plt.semilogy(freq_p, power_p, color="blue", label="Polytropic (Raw)", alpha=0.8)
 
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
