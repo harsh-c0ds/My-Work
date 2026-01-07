@@ -141,39 +141,39 @@ sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 ### trial ###
-t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
-time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,10,"x")
+# t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
+# time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,10,"x")
 
 
-# # --- For Ideal Fluid (IF) ---
-# rho_if = (np.array(f_xt_values_if) - f_xt_values_if[0]) / f_xt_values_if[0]
-# rho_if -= np.mean(rho_if) # Keep this to remove the 0 Hz spike
+# # # --- For Ideal Fluid (IF) ---
+# # rho_if = (np.array(f_xt_values_if) - f_xt_values_if[0]) / f_xt_values_if[0]
+# # rho_if -= np.mean(rho_if) # Keep this to remove the 0 Hz spike
 
-# ls_if = LombScargle(time_values_if, rho_if)
-# freq_if, power_if = ls_if.autopower(maximum_frequency=9.0)
+# # ls_if = LombScargle(time_values_if, rho_if)
+# # freq_if, power_if = ls_if.autopower(maximum_frequency=9.0)
 
-# --- For Polytropic (P) ---
-rho_p = (np.array(f_xt_values_p) - f_xt_values_p[0]) / f_xt_values_p[0]
-rho_p -= np.mean(rho_p) # Keep this to remove the 0 Hz spike
-t_s = np.array(time_values_p)/203
-ls_p = LombScargle(time_values_p, rho_p)
-freq_p, power_p = ls_p.autopower(maximum_frequency=9.0)
+# # --- For Polytropic (P) ---
+# rho_p = (np.array(f_xt_values_p) - f_xt_values_p[0]) / f_xt_values_p[0]
+# rho_p -= np.mean(rho_p) # Keep this to remove the 0 Hz spike
+# t_s = np.array(time_values_p)/203
+# # ls_p = LombScargle(time_values_p, rho_p)
+# # freq_p, power_p = ls_p.autopower(maximum_frequency=9.0)
 # freq_p = np.linspace(1, 9, 5000)  # 0–9 kHz
 # power_p = LombScargle(t_s, rho_p).power(freq_p)
 
-# --- Plotting the Raw Comparison ---
-plt.figure(figsize=(10, 6))
-#plt.plot(freq_if, power_if, color="red", label="Ideal Fluid (Raw)", alpha=0.8)
-plt.semilogy(freq_p, power_p, color="blue", label="Polytropic (Raw)", alpha=0.8)
+# # --- Plotting the Raw Comparison ---
+# plt.figure(figsize=(10, 6))
+# #plt.plot(freq_if, power_if, color="red", label="Ideal Fluid (Raw)", alpha=0.8)
+# plt.semilogy(freq_p, power_p, color="blue", label="Polytropic (Raw)", alpha=0.8)
 
-plt.xlabel("Frequency (kHz)")
-plt.ylabel("Power")
-plt.title("Raw Density Power Spectrum (No Windowing)")
-plt.legend()
-plt.grid(True, linestyle=":", alpha=0.6)
-plt.savefig(output_dir + "IF_spec.png", dpi=300)
+# plt.xlabel("Frequency (kHz)")
+# plt.ylabel("Power")
+# plt.title("Raw Density Power Spectrum (No Windowing)")
+# plt.legend()
+# plt.grid(True, linestyle=":", alpha=0.6)
+# plt.savefig(output_dir + "IF_spec.png", dpi=300)
 
-sys.exit()
+# sys.exit()
 
 #### figure out the total number of ixd ####
 
@@ -213,36 +213,39 @@ print("ixd range: 0 →", N_ixd-1)
 print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
 print("Surface x ≈", x_p[-1])
 
-
-t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
-frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
-filename = "/home/hsolanki/Programs/My-Work/power_spectra.txt"
-np.savetxt(filename, frequency[None, :], fmt="%.6e")
-
-for i in range(1):
-   ixd = i
-   time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd,"x")
-
-   time_values_p = np.array(time_values_p)/203  # convert to ms
-   rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
-   idxx = np.argmax(time_values_p >= 8)
-   time_values_p = time_values_p[:idxx]
-   rho_ts_p = rho_ts_p[:idxx]
-
-   t_s = time_values_p  # ms
-   power = LombScargle(t_s, rho_ts_p).power(frequency)
-
-   with open(filename, "a") as f:
-      np.savetxt(f, power[None, :], fmt="%.6e")
-
-loaded = np.loadtxt("/home/hsolanki/Programs/My-Work/power_spectra.txt")
-frequency_loaded = loaded[0, :]
-power_all_loaded = loaded[1:, :]
-print(frequency_loaded.shape, power_all_loaded.shape)
+####### Power Spectrum Calculation for all ixd ########
 
 
-ixd = 0  # index of the x point for time series
-itd = 0  # index of the time point for 1D slice
+
+# t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+# frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
+# filename = "/home/hsolanki/Programs/My-Work/power_spectra.txt"
+# np.savetxt(filename, frequency[None, :], fmt="%.6e")
+
+# for i in range(1):
+#    ixd = i
+#    time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd,"x")
+
+#    time_values_p = np.array(time_values_p)/203  # convert to ms
+#    rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
+#    idxx = np.argmax(time_values_p >= 8)
+#    time_values_p = time_values_p[:idxx]
+#    rho_ts_p = rho_ts_p[:idxx]
+
+#    t_s = time_values_p  # ms
+#    power = LombScargle(t_s, rho_ts_p).power(frequency)
+
+#    with open(filename, "a") as f:
+#       np.savetxt(f, power[None, :], fmt="%.6e")
+
+# loaded = np.loadtxt("/home/hsolanki/Programs/My-Work/power_spectra.txt")
+# frequency_loaded = loaded[0, :]
+# power_all_loaded = loaded[1:, :]
+# print(frequency_loaded.shape, power_all_loaded.shape)
+
+
+ixd = 50  # index of the x point for time series
+itd = 10  # index of the time point for 1D slice
 
 
 sim = "if"  # "if", "p", "both"
@@ -253,7 +256,7 @@ if sim == "if":
 
    time_values_if = np.array(time_values_if)/203  # convert to ms
    rho_ts_if = (np.array(f_xt_values_if) - f_xt_values_if[0]) /f_xt_values_if[0]  # normalize density
-   idxx = np.argmax(time_values_if >= 4)
+   idxx = np.argmax(time_values_if >= 9)
    time_values_if = time_values_if[:idxx]
    rho_ts_if = rho_ts_if[:idxx]
 
@@ -268,7 +271,7 @@ if sim == "if":
    plt.title(r"FFT of Density")
    plt.grid(True, linestyle=":")
    plt.legend()
-   plt.savefig(output_dir + "fft_density_IF.png", dpi=300)
+   plt.savefig(output_dir + "fft_density_IF_new.png", dpi=300)
 
 
    plt.figure(figsize=(8,6))
@@ -278,7 +281,7 @@ if sim == "if":
    plt.title(r"Timeseries of Density")
    plt.grid(True, linestyle=":")
    plt.legend()
-   plt.savefig(output_dir + "time_series_density_IF.png", dpi=300)
+   plt.savefig(output_dir + "time_series_density_IF_new.png", dpi=300)
 
 elif sim == "p":
    t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
@@ -301,7 +304,7 @@ elif sim == "p":
    plt.title(r"FFT of Density")
    plt.grid(True, linestyle=":")
    plt.legend()
-   plt.savefig(output_dir + "fft_density_P.png", dpi=300)
+   plt.savefig(output_dir + "fft_density_P_new.png", dpi=300)
 
 elif sim == "both":
    t_if,x_p_if,rl_if,rl_n_if,datax_if = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
@@ -341,6 +344,7 @@ elif sim == "both":
    plt.legend()
    plt.savefig(output_dir + "fft_density_comparison.png", dpi=300)
 
+sys.exit()
 
 ###### Density and Lapse 1D Slice ########
 
