@@ -199,8 +199,6 @@ rho_p = np.array(f_xt_values)/ f_xt_values[0]
 t_s = np.array(time_values)/203
 print(len(t_s), len(rho_p))
 
-sys. exit()
-
 plt.figure(figsize=(8,6))
 plt.plot(t_s, rho_p, color="red", linewidth=1.5, label="data extracted")
 plt.plot(t, rho, color="blue", linewidth=1.5, label="data read")
