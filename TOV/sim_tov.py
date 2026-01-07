@@ -136,28 +136,49 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 
     return xj_sorted, f_xi_tj_sorted
 
-def manual_dft(t, rho, freq_range):
-    """
-    t: time array (ms)
-    rho: density array
-    freq_range: array of frequencies to test (kHz)
-    """
-    power = []
-    n = len(t)
-    
-    for f in freq_range:
-        # The DFT formula: Sum of [signal * exp(-2j * pi * f * t)]
-        # Since t is ms and f is kHz, the product (f * t) is dimensionless
-        arg = 2 * np.pi * f * t
-        cos_part = np.sum(rho * np.cos(arg))
-        sin_part = np.sum(rho * np.sin(arg))
-        
-        # Power is the squared magnitude of the complex result
-        p = (cos_part**2 + sin_part**2) / n
-        power.append(p)
-        
-    return np.array(power)
+def fourier_transform(time_ms, rho, n_freq=3000):
 
+
+    # Convert to numpy arrays
+    t = np.asarray(time_ms)
+    rho = np.asarray(rho)
+
+    # Sort by time
+    idx = np.argsort(t)
+    t = t[idx]
+    rho = rho[idx]
+
+    # Remove duplicate time stamps (ESSENTIAL)
+    unique_mask = np.diff(t, prepend=t[0] - 1.0) > 0
+    t = t[unique_mask]
+    rho = rho[unique_mask]
+
+    # Time differences
+    dt_all = np.diff(t)
+    dt_min = np.min(dt_all[dt_all > 0])
+
+    # Total duration (ms)
+    T = t[-1] - t[0]
+
+    # Frequency grid in kHz (1/ms)
+    f_min = 1.0 / T
+    f_max = 0.5 / dt_min
+    freq_kHz = np.linspace(f_min, 10, n_freq)
+
+    # Trapezoidal integration weights (ms)
+    dt = np.zeros_like(t)
+    dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+    dt[0] = t[1] - t[0]
+    dt[-1] = t[-1] - t[-2]
+
+    # Fourier transform (integral definition)
+    rho_tilde = np.array([
+        np.sum(rho * np.exp(-2j * np.pi * f * t) * dt)
+        for f in freq_kHz
+    ])
+
+    power = np.abs(rho_tilde)**2
+    return freq_kHz, power
 
 
 sim_dir_if = "/home/hsolanki/simulations/IF_sim/output-0000/tov_ET"
@@ -173,16 +194,12 @@ rho_p = (np.array(f_xt_values_p) - f_xt_values_p[0]) / f_xt_values_p[0]
 rho_p -= np.mean(rho_p) # Keep this to remove the 0 Hz spike
 t_s = np.array(time_values_p)/203
 
-avg_dt = np.mean(np.diff(t_s))
-f_max = 1 / (2 * avg_dt) 
-frequencies = np.linspace(0.01, f_max, 500)
-
-power_p = manual_dft(t_s, rho_p, frequencies)
+freq_p, power_p = fourier_transform(t_s, rho_p)
 
 # --- Plotting the Raw Comparison ---
 plt.figure(figsize=(10, 6))
 #plt.plot(freq_if, power_if, color="red", label="Ideal Fluid (Raw)", alpha=0.8)
-plt.plot(frequencies, power_p, color="blue", label="Polytropic", alpha=0.8)
+plt.plot(freq_p, power_p, color="blue", label="Polytropic", alpha=0.8)
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
 plt.title("Raw Density Power Spectrum (No Windowing)")
