@@ -156,10 +156,10 @@ time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,10,"x")
 rho_p = (np.array(f_xt_values_p) - f_xt_values_p[0]) / f_xt_values_p[0]
 rho_p -= np.mean(rho_p) # Keep this to remove the 0 Hz spike
 t_s = np.array(time_values_p)/203
-# ls_p = LombScargle(time_values_p, rho_p)
-# freq_p, power_p = ls_p.autopower(maximum_frequency=9.0)
-freq_p = np.linspace(1, 9, 5000)  # 0–9 kHz
-power_p = LombScargle(t_s, rho_p).power(freq_p)
+ls_p = LombScargle(time_values_p, rho_p)
+freq_p, power_p = ls_p.autopower(maximum_frequency=9.0)
+# freq_p = np.linspace(1, 9, 5000)  # 0–9 kHz
+# power_p = LombScargle(t_s, rho_p).power(freq_p)
 
 # --- Plotting the Raw Comparison ---
 plt.figure(figsize=(10, 6))
