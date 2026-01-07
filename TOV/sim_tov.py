@@ -189,17 +189,6 @@ t = np.array(t)/203  # convert to ms
 rho = np.array(rho)/ rho[0]  # normalize density
 
 print(len(t), len(rho))
-plt.figure(figsize=(8,6))
-#plt.plot(t_s, rho_p, color="red", linewidth=1.5, label="data extracted")
-plt.plot(t, rho, color="blue", linewidth=1.5, label="data read")
-plt.xlabel("Time (ms)")
-plt.ylabel(r"$\rho/\rho_{c,0}$")
-plt.title(r"Timeseries of Density")
-plt.grid(True, linestyle=":")
-plt.legend()
-plt.savefig(output_dir + "time_series_density_comp.png", dpi=300)
-
-sys.exit()
 
 ##### time series ####
 
@@ -208,6 +197,9 @@ time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
 rho_p = np.array(f_xt_values)/ f_xt_values[0]
 t_s = np.array(time_values)/203
+print(len(t_s), len(rho_p))
+
+sys. exit()
 
 plt.figure(figsize=(8,6))
 plt.plot(t_s, rho_p, color="red", linewidth=1.5, label="data extracted")
