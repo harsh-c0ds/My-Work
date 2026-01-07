@@ -248,7 +248,7 @@ ixd = 50  # index of the x point for time series
 itd = 10  # index of the time point for 1D slice
 
 
-sim = "if"  # "if", "p", "both"
+sim = "p"  # "if", "p", "both"
 
 if sim == "if":
    t_if,x_p_if,rl_if,rl_n_if,datax_if = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
@@ -256,9 +256,9 @@ if sim == "if":
 
    time_values_if = np.array(time_values_if)/203  # convert to ms
    rho_ts_if = (np.array(f_xt_values_if) - f_xt_values_if[0]) /f_xt_values_if[0]  # normalize density
-   idxx = np.argmax(time_values_if >= 9)
-   time_values_if = time_values_if[:idxx]
-   rho_ts_if = rho_ts_if[:idxx]
+   # idxx = np.argmax(time_values_if >= 9)
+   # time_values_if = time_values_if[:idxx]
+   # rho_ts_if = rho_ts_if[:idxx]
 
    t_s = time_values_if  # ms
    frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
@@ -289,9 +289,9 @@ elif sim == "p":
 
    time_values_p = np.array(time_values_p)/203  # convert to ms
    rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
-   idxx = np.argmax(time_values_p >= 4)
-   time_values_p = time_values_p[:idxx]
-   rho_ts_p = rho_ts_p[:idxx]
+   # idxx = np.argmax(time_values_p >= 4)
+   # time_values_p = time_values_p[:idxx]
+   # rho_ts_p = rho_ts_p[:idxx]
 
    t_s = time_values_p  # ms
    frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
