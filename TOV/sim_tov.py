@@ -136,44 +136,70 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 
     return xj_sorted, f_xi_tj_sorted
 
+def fourier_transform(time_ms, rho, n_freq=3000):
+    # Convert to numpy arrays
+    t = np.asarray(time_ms)
+    rho = np.asarray(rho)
+
+    # Sort by time
+    idx = np.argsort(t)
+    t = t[idx]
+    rho = rho[idx]
+
+    # Time span and minimum step (ms)
+    T = t[-1] - t[0]
+    dt_min = np.min(np.diff(t))
+
+    # Frequency grid in kHz (1/ms)
+    f_min = 1.0 / T
+    f_max = 0.5 / dt_min
+    freq_kHz = np.linspace(f_min, f_max, n_freq)
+
+    # Trapezoidal integration weights (ms)
+    dt = np.zeros_like(t)
+    dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+    dt[0] = t[1] - t[0]
+    dt[-1] = t[-1] - t[-2]
+
+    # Fourier transform (integral definition)
+    rho_tilde = np.array([
+        np.sum(rho * np.exp(-2j * np.pi * f * t) * dt)
+        for f in freq_kHz
+    ])
+
+    # Power spectrum
+    power = np.abs(rho_tilde)**2
+
+    return freq_kHz, power
+
+
 sim_dir_if = "/home/hsolanki/simulations/IF_sim/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 ### trial ###
-# t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
-# time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,10,"x")
-
-
-# # # --- For Ideal Fluid (IF) ---
-# # rho_if = (np.array(f_xt_values_if) - f_xt_values_if[0]) / f_xt_values_if[0]
-# # rho_if -= np.mean(rho_if) # Keep this to remove the 0 Hz spike
-
-# # ls_if = LombScargle(time_values_if, rho_if)
-# # freq_if, power_if = ls_if.autopower(maximum_frequency=9.0)
+t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,0,"x")
 
 # # --- For Polytropic (P) ---
-# rho_p = (np.array(f_xt_values_p) - f_xt_values_p[0]) / f_xt_values_p[0]
-# rho_p -= np.mean(rho_p) # Keep this to remove the 0 Hz spike
-# t_s = np.array(time_values_p)/203
-# # ls_p = LombScargle(time_values_p, rho_p)
-# # freq_p, power_p = ls_p.autopower(maximum_frequency=9.0)
-# freq_p = np.linspace(1, 9, 5000)  # 0–9 kHz
-# power_p = LombScargle(t_s, rho_p).power(freq_p)
+rho_p = (np.array(f_xt_values_p) - f_xt_values_p[0]) / f_xt_values_p[0]
+rho_p -= np.mean(rho_p) # Keep this to remove the 0 Hz spike
+t_s = np.array(time_values_p)/203
 
-# # --- Plotting the Raw Comparison ---
-# plt.figure(figsize=(10, 6))
-# #plt.plot(freq_if, power_if, color="red", label="Ideal Fluid (Raw)", alpha=0.8)
-# plt.semilogy(freq_p, power_p, color="blue", label="Polytropic (Raw)", alpha=0.8)
+freq_p, power_p = fourier_transform(t_s, rho_p)
 
-# plt.xlabel("Frequency (kHz)")
-# plt.ylabel("Power")
-# plt.title("Raw Density Power Spectrum (No Windowing)")
-# plt.legend()
-# plt.grid(True, linestyle=":", alpha=0.6)
-# plt.savefig(output_dir + "IF_spec.png", dpi=300)
+# --- Plotting the Raw Comparison ---
+plt.figure(figsize=(10, 6))
+#plt.plot(freq_if, power_if, color="red", label="Ideal Fluid (Raw)", alpha=0.8)
+plt.plot(freq_p, power_p, color="blue", label="Polytropic", alpha=0.8)
+plt.xlabel("Frequency (kHz)")
+plt.ylabel("Power")
+plt.title("Raw Density Power Spectrum (No Windowing)")
+plt.legend()
+plt.grid(True, linestyle=":", alpha=0.6)
+plt.savefig(output_dir + "P_spec.png", dpi=300)
 
-# sys.exit()
+sys.exit()
 
 #### figure out the total number of ixd ####
 
@@ -217,31 +243,31 @@ print("Surface x ≈", x_p[-1])
 
 
 
-# t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
-# frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
-# filename = "/home/hsolanki/Programs/My-Work/power_spectra.txt"
-# np.savetxt(filename, frequency[None, :], fmt="%.6e")
+t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
+filename = "/home/hsolanki/Programs/My-Work/power_spectra.txt"
+np.savetxt(filename, frequency[None, :], fmt="%.6e")
 
-# for i in range(1):
-#    ixd = i
-#    time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd,"x")
+for i in range(1):
+   ixd = i
+   time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd,"x")
 
-#    time_values_p = np.array(time_values_p)/203  # convert to ms
-#    rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
-#    idxx = np.argmax(time_values_p >= 8)
-#    time_values_p = time_values_p[:idxx]
-#    rho_ts_p = rho_ts_p[:idxx]
+   time_values_p = np.array(time_values_p)/203  # convert to ms
+   rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
+   idxx = np.argmax(time_values_p >= 8)
+   time_values_p = time_values_p[:idxx]
+   rho_ts_p = rho_ts_p[:idxx]
 
-#    t_s = time_values_p  # ms
-#    power = LombScargle(t_s, rho_ts_p).power(frequency)
+   t_s = time_values_p  # ms
+   power = LombScargle(t_s, rho_ts_p).power(frequency)
 
-#    with open(filename, "a") as f:
-#       np.savetxt(f, power[None, :], fmt="%.6e")
+   with open(filename, "a") as f:
+      np.savetxt(f, power[None, :], fmt="%.6e")
 
-# loaded = np.loadtxt("/home/hsolanki/Programs/My-Work/power_spectra.txt")
-# frequency_loaded = loaded[0, :]
-# power_all_loaded = loaded[1:, :]
-# print(frequency_loaded.shape, power_all_loaded.shape)
+loaded = np.loadtxt("/home/hsolanki/Programs/My-Work/power_spectra.txt")
+frequency_loaded = loaded[0, :]
+power_all_loaded = loaded[1:, :]
+print(frequency_loaded.shape, power_all_loaded.shape)
 
 
 ixd = 0  # index of the x point for time series
