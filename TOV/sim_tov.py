@@ -137,6 +137,8 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
     return xj_sorted, f_xi_tj_sorted
 
 def fourier_transform(time_ms, rho, n_freq=3000):
+
+
     # Convert to numpy arrays
     t = np.asarray(time_ms)
     rho = np.asarray(rho)
@@ -146,9 +148,17 @@ def fourier_transform(time_ms, rho, n_freq=3000):
     t = t[idx]
     rho = rho[idx]
 
-    # Time span and minimum step (ms)
+    # Remove duplicate time stamps (ESSENTIAL)
+    unique_mask = np.diff(t, prepend=t[0] - 1.0) > 0
+    t = t[unique_mask]
+    rho = rho[unique_mask]
+
+    # Time differences
+    dt_all = np.diff(t)
+    dt_min = np.min(dt_all[dt_all > 0])
+
+    # Total duration (ms)
     T = t[-1] - t[0]
-    dt_min = np.min(np.diff(t))
 
     # Frequency grid in kHz (1/ms)
     f_min = 1.0 / T
@@ -167,9 +177,7 @@ def fourier_transform(time_ms, rho, n_freq=3000):
         for f in freq_kHz
     ])
 
-    # Power spectrum
     power = np.abs(rho_tilde)**2
-
     return freq_kHz, power
 
 
