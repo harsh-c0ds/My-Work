@@ -184,23 +184,26 @@ sim_dir_if = "/home/hsolanki/simulations/IF_sim/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
-
+t, rho = np.loadtxt('/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET/hydrobase-rho.maximum.asc', unpack=True, comments='#')
+t = np.array(t)/203  # convert to ms
+rho = np.array(rho)/ rho[0]  # normalize density
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
-rho = np.array(f_xt_values)/ f_xt_values[0]
+rho_p = np.array(f_xt_values)/ f_xt_values[0]
 t_s = np.array(time_values)/203
 
 plt.figure(figsize=(8,6))
-plt.plot(t_s, rho, color="red", linewidth=1.5)
+plt.plot(t_s, rho_p, color="red", linewidth=1.5, label="data extracted")
+plt.plot(t, rho, color="blue", linewidth=1.5, label="data read")
 plt.xlabel("Time (ms)")
 plt.ylabel(r"$\rho/\rho_{c,0}$")
 plt.title(r"Timeseries of Density")
 plt.grid(True, linestyle=":")
 plt.legend()
-plt.savefig(output_dir + "time_series_density_if.png", dpi=300)
+plt.savefig(output_dir + "time_series_density_comp.png", dpi=300)
 
 sys.exit()
 
