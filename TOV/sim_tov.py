@@ -189,7 +189,18 @@ t = np.array(t)/203  # convert to ms
 rho = np.array(rho)/ rho[0]  # normalize density
 
 print(len(t), len(rho))
+plt.figure(figsize=(8,6))
+#plt.plot(t_s, rho_p, color="red", linewidth=1.5, label="data extracted")
+plt.plot(t, rho, color="blue", linewidth=1.5, label="data read")
+plt.xlabel("Time (ms)")
+plt.ylabel(r"$\rho/\rho_{c,0}$")
+plt.title(r"Timeseries of Density")
+plt.grid(True, linestyle=":")
+plt.legend()
+plt.savefig(output_dir + "time_series_density_comp.png", dpi=300)
+
 sys.exit()
+
 ##### time series ####
 
 t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
