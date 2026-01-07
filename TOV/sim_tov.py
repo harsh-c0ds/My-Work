@@ -184,7 +184,7 @@ sim_dir_if = "/home/hsolanki/simulations/IF_sim/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
-t, rho = np.loadtxt('/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET/hydrobase-rho.maximum.asc', unpack=True, comments='#')
+itr, t, rho = np.loadtxt('/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET/hydrobase-rho.maximum.asc', unpack=True, comments='#')
 t = np.array(t)/203  # convert to ms
 rho = np.array(rho)/ rho[0]  # normalize density
 ##### time series ####
