@@ -244,8 +244,8 @@ print("Surface x ≈", x_p[-1])
 # print(frequency_loaded.shape, power_all_loaded.shape)
 
 
-ixd = 50  # index of the x point for time series
-itd = 10  # index of the time point for 1D slice
+ixd = 0  # index of the x point for time series
+itd = 0  # index of the time point for 1D slice
 
 
 sim = "p"  # "if", "p", "both"
