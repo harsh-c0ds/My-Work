@@ -190,8 +190,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
-rho = (np.array(f_xt_values) - f_xt_values[0]) / f_xt_values[0]
-rho -= np.mean(rho) # Keep this to remove the 0 Hz spike
+rho = np.array(f_xt_values)/ f_xt_values[0]
 t_s = np.array(time_values)/203
 
 plt.figure(figsize=(8,6))
