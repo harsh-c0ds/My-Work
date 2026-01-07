@@ -162,7 +162,7 @@ def fourier_transform(time_ms, rho, n_freq=3000):
 
     # Frequency grid in kHz (1/ms)
     f_min = 1.0 / T
-    freq_kHz = np.linspace(1, 7, n_freq)
+    freq_kHz = np.linspace(1, 9, n_freq)
 
     # Trapezoidal integration weights (ms)
     dt = np.zeros_like(t)
@@ -185,7 +185,7 @@ sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 ### trial ###
-t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
 time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,0,"x")
 
 # # --- For Polytropic (P) ---
@@ -204,7 +204,7 @@ plt.ylabel("Power")
 plt.title("Raw Density Power Spectrum (No Windowing)")
 plt.legend()
 plt.grid(True, linestyle=":", alpha=0.6)
-plt.savefig(output_dir + "P_spec.png", dpi=300)
+plt.savefig(output_dir + "IF_spec.png", dpi=300)
 
 sys.exit()
 
