@@ -187,7 +187,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
 rho = np.array(f_xt_values)/ f_xt_values[0]
@@ -200,7 +200,7 @@ plt.ylabel(r"$\rho/\rho_{c,0}$")
 plt.title(r"Timeseries of Density")
 plt.grid(True, linestyle=":")
 plt.legend()
-plt.savefig(output_dir + "time_series_density_P.png", dpi=300)
+plt.savefig(output_dir + "time_series_density_if.png", dpi=300)
 
 sys.exit()
 
