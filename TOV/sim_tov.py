@@ -203,7 +203,7 @@ plt.grid(True, linestyle=":")
 plt.legend()
 plt.savefig(output_dir + "time_series_density_P.png", dpi=300)
 
-
+sys.exit()
 
 #### figure out the total number of ixd ####
 
