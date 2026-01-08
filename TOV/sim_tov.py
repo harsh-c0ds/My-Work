@@ -180,7 +180,7 @@ def fourier_transform(time_ms, rho, n_freq=3000):
     return freq_kHz, power
 
 
-sim_dir_if = "/home/hsolanki/simulations/IF_sim/output-0000/tov_ET"
+sim_dir_if = "/home/hsolanki/simulations/tov_ET_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
