@@ -221,13 +221,13 @@ rho_p = (np.array(f_xt_values) - f_xt_values[0]) / f_xt_values[0]
 t_s = np.array(time_values)/203
 
 freq_p, power_p = fourier_transform(t_s, rho_p)
-power_smooth = gaussian_filter1d(power_p, sigma=2)
+power_smooth = gaussian_filter1d(power_p, sigma=3)
 # peaks, _ = find_peaks(power_p, height=np.max(power_p)*0.1, distance=20)
 # labels = ["F", "H1", "H2", "H3", "H4", "H5"]
 peaks, properties = find_peaks(
     power_smooth,
-    prominence=np.max(power_smooth) * 0.015,  # stands out from background
-    width=2                                   # suppress narrow noise spikes
+    prominence=np.max(power_smooth) * 0.03,  # stands out from background
+    width=3                                   # suppress narrow noise spikes
 )
 labels = ["F", "H1", "H2", "H3", "H4", "H5"]
 
