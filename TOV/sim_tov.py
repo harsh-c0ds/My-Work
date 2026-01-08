@@ -163,7 +163,7 @@ def fourier_transform(time_ms, rho, n_freq=3000):
 
     # Frequency grid in kHz (1/ms)
     f_min = 1.0 / T
-    freq_kHz = np.linspace(0.5, 9, n_freq)
+    freq_kHz = np.linspace(1, 9, n_freq)
 
     # Trapezoidal integration weights (ms)
     dt = np.zeros_like(t)
@@ -193,7 +193,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
 rho = np.array(f_xt_values)/ f_xt_values[0]
