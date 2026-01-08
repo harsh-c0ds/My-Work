@@ -193,7 +193,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
 rho = np.array(f_xt_values)/ f_xt_values[0]
@@ -246,7 +246,7 @@ plt.ylabel("Power")
 plt.title("Density Power Spectrum")
 plt.legend()
 plt.grid(True, linestyle=":", alpha=0.6)
-plt.savefig(output_dir + "fft_density_IF.png", dpi=300)
+plt.savefig(output_dir + "fft_density_P.png", dpi=300)
 
 
 sys.exit()
