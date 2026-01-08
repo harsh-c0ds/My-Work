@@ -6,6 +6,7 @@ from kuibit.simdir import SimDir
 from kuibit.grid_data import UniformGrid
 from astropy.timeseries import LombScargle
 from scipy.signal import find_peaks  
+from scipy.ndimage import gaussian_filter1d
 
 ################################################
  # Define constants and conversion factors
@@ -220,33 +221,49 @@ rho_p = (np.array(f_xt_values) - f_xt_values[0]) / f_xt_values[0]
 t_s = np.array(time_values)/203
 
 freq_p, power_p = fourier_transform(t_s, rho_p)
-
-peaks, _ = find_peaks(power_p, height=np.max(power_p)*0.1, distance=20)
+power_smooth = gaussian_filter1d(power_p, sigma=3)
+# peaks, _ = find_peaks(power_p, height=np.max(power_p)*0.1, distance=20)
+# labels = ["F", "H1", "H2", "H3", "H4", "H5"]
+peaks, properties = find_peaks(
+    power_smooth,
+    prominence=np.max(power_smooth) * 0.05,  # stands out from background
+    width=5                                   # suppress narrow noise spikes
+)
 labels = ["F", "H1", "H2", "H3", "H4", "H5"]
 
 # --- Plotting the Raw Comparison ---
 plt.figure(figsize=(10, 6))
-#plt.plot(freq_if, power_if, color="red", label="Ideal Fluid (Raw)", alpha=0.8)
-plt.plot(freq_p, power_p, color="blue", label="Polytropic", alpha=0.8)
-for i, peak_idx in enumerate(peaks):
+
+plt.plot(freq_p, power_p, color="blue", alpha=0.6, label="Polytropic (Raw)")
+plt.plot(freq_p, power_smooth, color="black", lw=1.5, label="Smoothed")
+
+for i, peak_idx in enumerate(peaks[:len(labels)]):
     x = freq_p[peak_idx]
-    y = power_p[peak_idx]
-    
-    # Select label from our list; fallback to 'Pn' if list is too short
-    label_text = labels[i] if i < len(labels) else f"P{i}"
-    
-    # Mark with vertical line
-    plt.axvline(x=x, color="red", linestyle="--", alpha=0.4)
-    
-    # Add custom text label
-    plt.annotate(label_text, xy=(x, y), xytext=(0, 10), textcoords='offset points', ha='center', fontstyle='italic',
-                 color='black')
+    y = power_smooth[peak_idx]
+
+    plt.axvline(x=x, color="red", linestyle="--", alpha=0.5)
+    plt.annotate(
+        labels[i],
+        xy=(x, y),
+        xytext=(0, 8),
+        textcoords="offset points",
+        ha="center",
+        fontstyle="italic",
+        color="black"
+    )
+
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
-plt.title("Density Power Spectrum")
+plt.title("Density Power Spectrum with Mode Identification")
 plt.legend()
 plt.grid(True, linestyle=":", alpha=0.6)
+
 plt.savefig(output_dir + "fft_density_P.png", dpi=300)
+plt.show()
+
+print("Identified modes:")
+for i, peak_idx in enumerate(peaks[:len(labels)]):
+    print(f"{labels[i]} mode: {freq_p[peak_idx]:.3f} kHz")
 
 
 sys.exit()
