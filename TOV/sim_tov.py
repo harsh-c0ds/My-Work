@@ -180,7 +180,7 @@ def fourier_transform(time_ms, rho, n_freq=3000):
     return freq_kHz, power
 
 
-sim_dir_if = "/home/hsolanki/simulations/tov_ET_IF/output-0000/tov_ET"
+sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
@@ -226,7 +226,7 @@ plt.figure(figsize=(10, 6))
 plt.plot(freq_p, power_p, color="blue", label="Polytropic", alpha=0.8)
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
-plt.title("Raw Density Power Spectrum (No Windowing)")
+plt.title("Density Power Spectrum")
 plt.legend()
 plt.grid(True, linestyle=":", alpha=0.6)
 plt.savefig(output_dir + "fft_density_IF.png", dpi=300)
