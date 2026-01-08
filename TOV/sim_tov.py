@@ -226,7 +226,7 @@ power_smooth = gaussian_filter1d(power_p, sigma=3) # 3
 # labels = ["F", "H1", "H2", "H3", "H4", "H5"]
 peaks, properties = find_peaks(
     power_smooth,
-    prominence=np.max(power_smooth) * 0.04,  # stands out from background 0.04
+    prominence=np.max(power_p) * 0.035,  # stands out from background 0.04
     width=4                                   # suppress narrow noise spikes 3.5
 )
 labels = ["F", "H1", "H2", "H3", "H4", "H5"]
@@ -235,7 +235,7 @@ labels = ["F", "H1", "H2", "H3", "H4", "H5"]
 plt.figure(figsize=(10, 6))
 
 plt.plot(freq_p, power_p, color="blue", alpha=0.6, label="Polytropic (Raw)")
-plt.plot(freq_p, power_smooth, color="black", lw=1.5, label="Smoothed")
+#plt.plot(freq_p, power_smooth, color="black", lw=1.5, label="Smoothed")
 
 for i, peak_idx in enumerate(peaks[:len(labels)]):
     x = freq_p[peak_idx]
