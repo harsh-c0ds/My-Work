@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
 from kuibit.simdir import SimDir 
 from kuibit.grid_data import UniformGrid
-from astropy.timeseries import LombScargle  
+from astropy.timeseries import LombScargle
+from scipy.signal import find_peaks  
 
 ################################################
  # Define constants and conversion factors
@@ -220,10 +221,26 @@ t_s = np.array(time_values)/203
 
 freq_p, power_p = fourier_transform(t_s, rho_p)
 
+peaks, _ = find_peaks(power_p, height=np.max(power_p)*0.1, distance=20)
+labels = ["F", "H1", "H2", "H3", "H4", "H5"]
+
 # --- Plotting the Raw Comparison ---
 plt.figure(figsize=(10, 6))
 #plt.plot(freq_if, power_if, color="red", label="Ideal Fluid (Raw)", alpha=0.8)
 plt.plot(freq_p, power_p, color="blue", label="Polytropic", alpha=0.8)
+for i, peak_idx in enumerate(peaks):
+    x = freq_p[peak_idx]
+    y = power_p[peak_idx]
+    
+    # Select label from our list; fallback to 'Pn' if list is too short
+    label_text = labels[i] if i < len(labels) else f"P{i}"
+    
+    # Mark with vertical line
+    plt.axvline(x=x, color="red", linestyle="--", alpha=0.4)
+    
+    # Add custom text label
+    plt.annotate(label_text, xy=(x, y), xytext=(0, 10), textcoords='offset points', ha='center', fontstyle='italic',
+                 color='black')
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
 plt.title("Density Power Spectrum")
