@@ -180,8 +180,8 @@ def fourier_transform(time_ms, rho, n_freq=3000):
     ])
 
     power = np.abs(rho_tilde)**2
-    return freq_kHz, power
 
+    return freq_kHz, power
 
 sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
@@ -192,6 +192,66 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 # rho = np.array(rho)/ rho[0]  # normalize density
 
 # print(len(t), len(rho))
+
+#### figure out the total number of ixd ####
+
+filex = "hydrobase-rho.x.asc"
+folder = sim_dir_if
+
+print("Looking for files in the folder: {}".format(folder))
+os.chdir(folder)
+print("Opening file: {}.....".format(filex))
+datax = np.loadtxt(filex, comments='#')
+print("Reading file....")
+
+# --- pick initial time slice ---
+t0 = np.min(datax[:,8])
+mask_t0 = datax[:,8] == t0
+data_t0 = datax[mask_t0]
+
+# --- extract x and rho ---
+x   = data_t0[:,9]
+rho = data_t0[:,12]
+
+# --- remove atmosphere / vacuum ---
+rho_floor = 1e-10   # adjust if needed
+mask_star =rho > rho_floor
+
+x_star = x[mask_star]
+
+# --- unique spatial points define ixd ---
+x_p = np.unique(x_star)
+x_p.sort()
+
+# --- results ---
+N_ixd = len(x_p)
+
+print("Number of valid ixd points (center → surface):", N_ixd)
+print("ixd range: 0 →", N_ixd-1)
+print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
+print("Surface x ≈", x_p[-1])
+
+sys.exit()
+####### mode extraction ########
+
+filename = "/home/hsolanki/Programs/My-Work/power_spectra.txt"
+np.savetxt(filename, frequency[None, :], fmt="%.6e")
+
+for i in range(1):
+   ixd = i
+   time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd,"x")
+
+   time_values_p = np.array(time_values_p)/203  # convert to ms
+   rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
+   idxx = np.argmax(time_values_p >= 8)
+   time_values_p = time_values_p[:idxx]
+   rho_ts_p = rho_ts_p[:idxx]
+
+   t_s = time_values_p  # ms
+   power = LombScargle(t_s, rho_ts_p).power(frequency)
+
+   with open(filename, "a") as f:
+      np.savetxt(f, power[None, :], fmt="%.6e")
 
 ##### time series ####
 
@@ -243,15 +303,14 @@ for i, peak_idx in enumerate(peaks[:len(labels)]):
     y = power_smooth[peak_idx]
 
     plt.axvline(x=x, color="red", linestyle="--", alpha=0.5)
-    plt.annotate(
-        labels[i],
-        xy=(x, y),
-        xytext=(0, 8),
-        textcoords="offset points",
-        ha="center",
-        fontstyle="italic",
-        color="black"
-    )
+    plt.annotate(f"{labels[i]} ({x:.2f} kHz)",
+      xy=(x, y),
+      xytext=(0, 10),
+      textcoords="offset points",
+      ha="center",
+      fontstyle="italic",
+      color="black")
+
 
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
@@ -288,70 +347,10 @@ print(f"F_mode = {f} kHz, amp_F = {amp_F}")
 
 sys.exit()
 
-#### figure out the total number of ixd ####
 
-filex = "hydrobase-rho.x.asc"
-folder = sim_dir_if
+# t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+# frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
 
-print("Looking for files in the folder: {}".format(folder))
-os.chdir(folder)
-print("Opening file: {}.....".format(filex))
-datax = np.loadtxt(filex, comments='#')
-print("Reading file....")
-
-# --- pick initial time slice ---
-t0 = np.min(datax[:,8])
-mask_t0 = datax[:,8] == t0
-data_t0 = datax[mask_t0]
-
-# --- extract x and rho ---
-x   = data_t0[:,9]
-rho = data_t0[:,12]
-
-# --- remove atmosphere / vacuum ---
-rho_floor = 1e-10   # adjust if needed
-mask_star =rho > rho_floor
-
-x_star = x[mask_star]
-
-# --- unique spatial points define ixd ---
-x_p = np.unique(x_star)
-x_p.sort()
-
-# --- results ---
-N_ixd = len(x_p)
-
-print("Number of valid ixd points (center → surface):", N_ixd)
-print("ixd range: 0 →", N_ixd-1)
-print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
-print("Surface x ≈", x_p[-1])
-
-
-
-####### Power Spectrum Calculation for all ixd ########
-
-
-
-t_p,x_p_p,rl_p,rl_n_p,datax_p = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
-frequency = np.linspace(1, 9, 5000)  # 0–9 kHz
-filename = "/home/hsolanki/Programs/My-Work/power_spectra.txt"
-np.savetxt(filename, frequency[None, :], fmt="%.6e")
-
-for i in range(1):
-   ixd = i
-   time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd,"x")
-
-   time_values_p = np.array(time_values_p)/203  # convert to ms
-   rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
-   idxx = np.argmax(time_values_p >= 8)
-   time_values_p = time_values_p[:idxx]
-   rho_ts_p = rho_ts_p[:idxx]
-
-   t_s = time_values_p  # ms
-   power = LombScargle(t_s, rho_ts_p).power(frequency)
-
-   with open(filename, "a") as f:
-      np.savetxt(f, power[None, :], fmt="%.6e")
 
 loaded = np.loadtxt("/home/hsolanki/Programs/My-Work/power_spectra.txt")
 frequency_loaded = loaded[0, :]
