@@ -194,22 +194,22 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
-rho = np.array(f_xt_values)/ f_xt_values[0]
-t_s = np.array(time_values)/203
-print(len(t_s), len(rho))
+# rho = np.array(f_xt_values)/ f_xt_values[0]
+# t_s = np.array(time_values)/203
+# print(len(t_s), len(rho))
 
-plt.figure(figsize=(8,6))
-plt.plot(t_s, rho, color="red", linewidth=1.5, label="Ideal Fluid EOS")
-#plt.plot(t, rho, color="blue", linewidth=1.5, label="data read")
-plt.xlabel("Time (ms)")
-plt.ylabel(r"$\rho/\rho_{c,0}$")
-plt.title(r"Timeseries of Density")
-plt.grid(True, linestyle=":")
-plt.legend()
-plt.savefig(output_dir + "time_series_density_IF.png", dpi=300)
+# plt.figure(figsize=(8,6))
+# plt.plot(t_s, rho, color="red", linewidth=1.5, label="Polytropic EOS")
+# #plt.plot(t, rho, color="blue", linewidth=1.5, label="data read")
+# plt.xlabel("Time (ms)")
+# plt.ylabel(r"$\rho/\rho_{c,0}$")
+# plt.title(r"Timeseries of Density")
+# plt.grid(True, linestyle=":")
+# plt.legend()
+# plt.savefig(output_dir + "time_series_density_IF.png", dpi=300)
 
 
 ### Power Spectrum ###
@@ -258,7 +258,7 @@ plt.title("Density Power Spectrum with Mode Identification")
 plt.legend()
 plt.grid(True, linestyle=":", alpha=0.6)
 
-plt.savefig(output_dir + "fft_density_IF.png", dpi=300)
+plt.savefig(output_dir + "fft_density_P.png", dpi=300)
 plt.show()
 
 print("Identified modes:")
