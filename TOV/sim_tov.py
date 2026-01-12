@@ -165,7 +165,7 @@ def fourier_transform(time_ms, rho, n_freq=3000):
     # Frequency grid in kHz (1/ms)
     f_min = 1.0 / T
     f_max = 0.5 / dt_min
-    freq_kHz = np.linspace(f_min, 9, n_freq)
+    freq_kHz = np.linspace(1, 9, n_freq)
 
     # Trapezoidal integration weights (ms)
     dt = np.zeros_like(t)
