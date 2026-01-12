@@ -196,7 +196,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 #### figure out the total number of ixd ####
 
 filex = "hydrobase-rho.x.asc"
-folder = sim_dir_if
+folder = sim_dir_p
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
