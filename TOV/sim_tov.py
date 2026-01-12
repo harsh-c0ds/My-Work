@@ -268,7 +268,7 @@ for i, peak_idx in enumerate(peaks[:len(labels)]):
 
 
 # Remove duplicate time stamps (ESSENTIAL)
-unique_mask = np.diff(t, prepend=t[0] - 1.0) > 0
+unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
 t = t_s[unique_mask]
 rho = rho_p[unique_mask]
 
@@ -278,7 +278,7 @@ dt[0] = t[1] - t[0]
 dt[-1] = t[-1] - t[-2]
 
 
-f = freq_p[0]   # F-mode frequency
+f = freq_p[peaks[0]]   # F-mode frequency
 
 rho_tilde_F = np.sum(
     rho * np.exp(-2j * np.pi * f * t) * dt
