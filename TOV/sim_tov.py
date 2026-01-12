@@ -327,9 +327,9 @@ print(f"F_mode = {f} kHz, amp_F = {amp_F}")
 ####### mode extraction ########
 t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 
-F_amp_complex = []
+F_amp_complex = [rho_tilde_F]
 f_F = f  # kHz
-for i in range(0, x_p[-1]):
+for i in range(1, int(np.floor(x_p[-1]))):
     time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
     rho = (np.array(f_xt_values) - f_xt_values[0]) / f_xt_values[0]
