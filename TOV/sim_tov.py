@@ -234,8 +234,27 @@ print("Surface x ≈", x_p[-1])
 ##### time series ####
 
 t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
-time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
+#time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
+output_file = output_dir + "rho_timeseries_P.txt"
+
+with open(output_file, "w") as f:
+    for i in range(N_ixd):
+        time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
+
+        f_xt_values = np.array(f_xt_values)
+        rho = (f_xt_values - f_xt_values[0]) / f_xt_values[0]
+        rho -= np.mean(rho)
+
+        t_s = np.array(time_values) / 203
+
+        # Write t_s as a row
+        f.write(" ".join(f"{val:.6e}" for val in t_s) + "\n")
+
+        # Write corresponding rho as the next row
+        f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
+
+sys.exit()
 # rho = np.array(f_xt_values)/ f_xt_values[0]
 # t_s = np.array(time_values)/203
 # print(len(t_s), len(rho))
@@ -329,45 +348,61 @@ t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 
 F_amp_complex = [rho_tilde_F]
 f_F = f  # kHz
-for i in range(1, int(np.floor(x_p[-1]))):
-    time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
-    rho = (np.array(f_xt_values) - f_xt_values[0]) / f_xt_values[0]
-    rho -= np.mean(rho)
-    t_s = np.array(time_values) / 203
+output_file = output_dir + "rho_timeseries_P.txt"
 
-    # Remove duplicate times
-    unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
-    t = t_s[unique_mask]
-    rho = rho[unique_mask]
-    print(f"1: {len(t_s)} → 2: {len(t)} after removing duplicates")
-   # Ensure t and rho are numpy arrays
-    t = np.array(t)
-    rho = np.array(rho)
+with open(output_file, "w") as f:
+    for i in range(N_ixd):
+        time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
-   # Initialize trapezoidal weights safely
-    dt = np.zeros_like(t, dtype=float)
+        f_xt_values = np.array(f_xt_values)
+        rho = (f_xt_values - f_xt_values[0]) / f_xt_values[0]
+        rho -= np.mean(rho)
 
-    if len(t) == 0:
-       raise ValueError("No time points available for computation!")
-    elif len(t) == 1:
-      # Only one time point, pick a small dt
-       dt[0] = 1e-6
-    elif len(t) == 2:
-      # Only two points, simple difference
-       dt[0] = t[1] - t[0]
-       dt[1] = dt[0]
-    else:
-      # Three or more points: trapezoidal rule
-       dt[1:-1] = 0.5 * (t[2:] - t[:-2])
-       dt[0] = t[1] - t[0]
-       dt[-1] = t[-1] - t[-2]
+        t_s = np.array(time_values) / 203
 
-    # PROJECT ONTO FIXED F-MODE
-    rho_tilde_F = np.sum(
-        rho * np.exp(-2j * np.pi * f_F * t) * dt
-    )
-    F_amp_complex.append(rho_tilde_F)
+        # Write t_s as a row
+        f.write(" ".join(f"{val:.6e}" for val in t_s) + "\n")
+
+        # Write corresponding rho as the next row
+        f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
+
+
+   #  # Remove duplicate times
+   #  unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
+   #  t = t_s[unique_mask]
+   #  rho = rho[unique_mask]
+   #  print(f"1: {len(t_s)} → 2: {len(t)} after removing duplicates")
+   # # Ensure t and rho are numpy arrays
+   #  t = np.array(t)
+   #  rho = np.array(rho)
+
+   # # Initialize trapezoidal weights safely
+   #  dt = np.zeros_like(t, dtype=float)
+
+   #  if len(t) == 0:
+   #     raise ValueError("No time points available for computation!")
+   #  elif len(t) == 1:
+   #    # Only one time point, pick a small dt
+   #     dt[0] = 1e-6
+   #  elif len(t) == 2:
+   #    # Only two points, simple difference
+   #     dt[0] = t[1] - t[0]
+   #     dt[1] = dt[0]
+   #  else:
+   #    # Three or more points: trapezoidal rule
+   #     dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+   #     dt[0] = t[1] - t[0]
+   #     dt[-1] = t[-1] - t[-2]
+
+   #  # PROJECT ONTO FIXED F-MODE
+   #  rho_tilde_F = np.sum(
+   #      rho * np.exp(-2j * np.pi * f_F * t) * dt
+   #  )
+   #  F_amp_complex.append(rho_tilde_F)
+
+sys.exit()
+
 
 F_amp = np.array(np.abs(F_amp_complex))
 F_amp_complex = np.array(F_amp_complex)
