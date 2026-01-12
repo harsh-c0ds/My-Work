@@ -340,7 +340,7 @@ for i in range(1, int(np.floor(x_p[-1]))):
     unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
     t = t_s[unique_mask]
     rho = rho[unique_mask]
-
+    print(f"1: {len(t_s)} → 2: {len(t)} after removing duplicates")
    # Ensure t and rho are numpy arrays
     t = np.array(t)
     rho = np.array(rho)
@@ -371,14 +371,14 @@ for i in range(1, int(np.floor(x_p[-1]))):
 
 F_amp = np.array(np.abs(F_amp_complex))
 F_amp_complex = np.array(F_amp_complex)
-x_grid = np.array(x_p[:N_ixd])   # or your radial coordinate array
-plt.figure(figsize=(8,6))
-plt.plot(x_grid, F_amp, color="blue", linewidth=1.5)
-plt.xlabel("Grid")
-plt.ylabel(r"F-mode Amplitude")
-plt.title(r"Radial Profile of F-mode Amplitude")
-plt.grid(True, linestyle=":")
-plt.savefig(output_dir + "F_mode_amplitude_profile_P.png", dpi=300)
+x_grid = np.arange(0, len(F_amp_complex)+1, 1)   # or your radial coordinate array
+# plt.figure(figsize=(8,6))
+# plt.plot(x_grid, F_amp, color="blue", linewidth=1.5)
+# plt.xlabel("Grid")
+# plt.ylabel(r"F-mode Amplitude")
+# plt.title(r"Radial Profile of F-mode Amplitude")
+# plt.grid(True, linestyle=":")
+# plt.savefig(output_dir + "F_mode_amplitude_profile_P.png", dpi=300)
 
 output_file = output_dir + "F_mode_eigenfunction_P.txt"
 
