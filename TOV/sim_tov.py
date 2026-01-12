@@ -330,7 +330,7 @@ t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
 
 F_amp_complex = []
 f_F = f  # kHz
-for i in range(N_ixd):
+for i in range(0, x_p[-1]):
     time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
     rho = (np.array(f_xt_values) - f_xt_values[0]) / f_xt_values[0]
@@ -342,11 +342,27 @@ for i in range(N_ixd):
     t = t_s[unique_mask]
     rho = rho[unique_mask]
 
-    # Trapezoidal weights
-    dt = np.zeros_like(t)
-    dt[1:-1] = 0.5 * (t[2:] - t[:-2])
-    dt[0] = t[1] - t[0]
-    dt[-1] = t[-1] - t[-2]
+   # Ensure t and rho are numpy arrays
+    t = np.array(t)
+    rho = np.array(rho)
+
+   # Initialize trapezoidal weights safely
+    dt = np.zeros_like(t, dtype=float)
+
+    if len(t) == 0:
+       raise ValueError("No time points available for computation!")
+    elif len(t) == 1:
+      # Only one time point, pick a small dt
+       dt[0] = 1e-6
+    elif len(t) == 2:
+      # Only two points, simple difference
+       dt[0] = t[1] - t[0]
+       dt[1] = dt[0]
+    else:
+      # Three or more points: trapezoidal rule
+       dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+       dt[0] = t[1] - t[0]
+       dt[-1] = t[-1] - t[-2]
 
     # PROJECT ONTO FIXED F-MODE
     rho_tilde_F = np.sum(
