@@ -231,28 +231,6 @@ print("ixd range: 0 →", N_ixd-1)
 print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
 print("Surface x ≈", x_p[-1])
 
-sys.exit()
-####### mode extraction ########
-
-filename = "/home/hsolanki/Programs/My-Work/power_spectra.txt"
-np.savetxt(filename, frequency[None, :], fmt="%.6e")
-
-for i in range(1):
-   ixd = i
-   time_values_p,f_xt_values_p = fx_timeseries(t_p,x_p_p,datax_p,ixd,"x")
-
-   time_values_p = np.array(time_values_p)/203  # convert to ms
-   rho_ts_p = (np.array(f_xt_values_p) - f_xt_values_p[0])/f_xt_values_p[0]  # normalize density
-   idxx = np.argmax(time_values_p >= 8)
-   time_values_p = time_values_p[:idxx]
-   rho_ts_p = rho_ts_p[:idxx]
-
-   t_s = time_values_p  # ms
-   power = LombScargle(t_s, rho_ts_p).power(frequency)
-
-   with open(filename, "a") as f:
-      np.savetxt(f, power[None, :], fmt="%.6e")
-
 ##### time series ####
 
 t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
@@ -344,6 +322,70 @@ rho_tilde_F = np.sum(
 )
 amp_F = abs(rho_tilde_F)
 print(f"F_mode = {f} kHz, amp_F = {amp_F}")
+
+
+####### mode extraction ########
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
+
+F_amp_complex = []
+f_F = f  # kHz
+for i in range(N_ixd):
+    time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
+
+    rho = (np.array(f_xt_values) - f_xt_values[0]) / f_xt_values[0]
+    rho -= np.mean(rho)
+    t_s = np.array(time_values) / 203
+
+    # Remove duplicate times
+    unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
+    t = t_s[unique_mask]
+    rho = rho[unique_mask]
+
+    # Trapezoidal weights
+    dt = np.zeros_like(t)
+    dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+    dt[0] = t[1] - t[0]
+    dt[-1] = t[-1] - t[-2]
+
+    # PROJECT ONTO FIXED F-MODE
+    rho_tilde_F = np.sum(
+        rho * np.exp(-2j * np.pi * f_F * t) * dt
+    )
+    F_amp_complex.append(rho_tilde_F)
+
+F_amp = np.array(np.abs(F_amp_complex))
+F_amp_complex = np.array(F_amp_complex)
+x_grid = np.array(x_p[:N_ixd])   # or your radial coordinate array
+plt.figure(figsize=(8,6))
+plt.plot(x_grid, F_amp, color="blue", linewidth=1.5)
+plt.xlabel("Grid")
+plt.ylabel(r"F-mode Amplitude")
+plt.title(r"Radial Profile of F-mode Amplitude")
+plt.grid(True, linestyle=":")
+plt.savefig(output_dir + "F_mode_amplitude_profile_P.png", dpi=300)
+
+output_file = output_dir + "F_mode_eigenfunction_P.txt"
+
+header = (
+    "# F-mode eigenfunction\n"
+    f"# F-mode frequency = {f_F:.6f} kHz\n"
+    "# Columns:\n"
+    "# x   |rho_tilde_F|   Re(rho_tilde_F)   Im(rho_tilde_F)\n"
+)
+
+data = np.column_stack((
+    x_grid,
+    np.abs(F_amp_complex),
+    np.real(F_amp_complex),
+    np.imag(F_amp_complex)
+))
+
+np.savetxt(
+    output_file,
+    data,
+    header=header,
+    fmt="%.8e"
+)
 
 sys.exit()
 
