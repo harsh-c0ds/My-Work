@@ -267,6 +267,25 @@ for i, peak_idx in enumerate(peaks[:len(labels)]):
     print(f"{labels[i]} mode: {freq_p[peak_idx]:.3f} kHz")
 
 
+# Remove duplicate time stamps (ESSENTIAL)
+unique_mask = np.diff(t, prepend=t[0] - 1.0) > 0
+t = t_s[unique_mask]
+rho = rho_p[unique_mask]
+
+dt = np.zeros_like(t)
+dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+dt[0] = t[1] - t[0]
+dt[-1] = t[-1] - t[-2]
+
+
+f = freq_p[0]   # F-mode frequency
+
+rho_tilde_F = np.sum(
+    rho * np.exp(-2j * np.pi * f * t) * dt
+)
+amp_F = abs(rho_tilde_F)
+print(f"F_mode = {f} kHz, amp_F = {amp_F}")
+
 sys.exit()
 
 #### figure out the total number of ixd ####
