@@ -323,7 +323,6 @@ rho_tilde_F = np.sum(
 )
 amp_F = abs(rho_tilde_F)
 print(f"F_mode = {f} kHz, amp_F = {amp_F}")
-sys.exit()
 
 ####### mode extraction ########
 t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
