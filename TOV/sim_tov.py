@@ -217,7 +217,7 @@ plt.savefig(output_dir + "time_series_density_IF.png", dpi=300)
 
 # # --- For Polytropic (P) ---
 rho_p = (np.array(f_xt_values) - f_xt_values[0]) / f_xt_values[0]
-#rho_p -= np.mean(rho_p) # Keep this to remove the 0 Hz spike
+rho_p -= np.mean(rho_p) # Keep this to remove the 0 Hz spike
 t_s = np.array(time_values)/203
 
 freq_p, power_p = fourier_transform(t_s, rho_p)
