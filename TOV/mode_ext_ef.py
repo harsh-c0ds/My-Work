@@ -21,7 +21,7 @@ def push_to_github(repo_path, commit_message):
         
         # Push
         origin = repo.remote(name='origin')
-        origin.push()
+        origin.push(refspec='main:main')
         
         print("Successfully pushed to GitHub!")
     except Exception as e:
