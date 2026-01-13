@@ -68,4 +68,10 @@ t_s_all = np.array(t_s_all, dtype=object)
 rho_all = np.array(rho_all, dtype=object)
 
 print("len(t_s_all): ", len(t_s_all))
-print("len(rho_all): ", len(rho_all))   
+print("len(rho_all): ", len(rho_all))  
+
+plt.plot(t_s_all[14], rho_all[14])
+plt.xlabel("Time (s)")
+plt.ylabel("Density perturbation")
+plt.title("Density perturbation vs Time for first radial point")
+plt.savefig(output_dir + "time_series_try.png")
