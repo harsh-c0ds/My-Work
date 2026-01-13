@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks  
 from scipy.ndimage import gaussian_filter1d
@@ -49,8 +50,48 @@ def fourier_transform(time_ms, rho, n_freq=3000):
 
     return freq_kHz, power
 
+sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
+sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 file_path = output_dir + "rho_timeseries_P.txt"
+
+filex = "hydrobase-rho.x.asc"
+folder = sim_dir_p
+
+print("Looking for files in the folder: {}".format(folder))
+os.chdir(folder)
+print("Opening file: {}.....".format(filex))
+datax = np.loadtxt(filex, comments='#')
+print("Reading file....")
+
+# --- pick initial time slice ---
+t0 = np.min(datax[:,8])
+mask_t0 = datax[:,8] == t0
+data_t0 = datax[mask_t0]
+
+# --- extract x and rho ---
+x   = data_t0[:,9]
+rho = data_t0[:,12]
+
+# --- remove atmosphere / vacuum ---
+rho_floor = 1e-10   # adjust if needed
+mask_star =rho > rho_floor
+
+x_star = x[mask_star]
+
+# --- unique spatial points define ixd ---
+x_p = np.unique(x_star)
+x_p.sort()
+
+# --- results ---
+N_ixd = len(x_p)
+
+print("Number of valid ixd points (center → surface):", N_ixd)
+print("ixd range: 0 →", N_ixd-1)
+print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
+print("Surface x ≈", x_p[-1])
+
+
 t_s_all = []
 rho_all = []
 
@@ -134,9 +175,19 @@ for i in range(1, 19):
     F_amp_complex.append(rho_tilde_F)
     print(f"amp_F = {abs(rho_tilde_F)}")
 
-plt.plot(np.abs(F_amp_complex), 'o-')
-plt.xlabel("Radius index")
-plt.ylabel("F-mode amplitude")
-plt.title("F-mode amplitude vs radius index")
-plt.grid()
-plt.savefig(output_dir + "F_mode_amplitude_vs_radius_index.png")
+F_amp_complex = np.array(F_amp_complex)
+
+# Eigenfunction (magnitude)
+eig = np.abs(F_amp_complex)
+
+# Normalize
+eig /= eig[0]
+
+# Radius
+r = x_p[:len(eig)]
+
+# Plot
+plt.plot(r, eig)
+plt.xlabel("r")
+plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
+plt.savefig(output_dir + "F_mode_eigenfunction.png")
