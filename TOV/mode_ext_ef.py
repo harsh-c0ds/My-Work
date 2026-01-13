@@ -177,17 +177,19 @@ for i in range(1, 19):
 
 F_amp_complex = np.array(F_amp_complex)
 
-# Eigenfunction (magnitude)
-eig = np.real(F_amp_complex)
+# Fix global phase using center point
+phase0 = np.angle(F_amp_complex[0])
+eig = np.real(F_amp_complex * np.exp(-1j * phase0))
 
-# Normalize
-eig /= eig[0]
+# Normalize (sign preserved)
+eig /= np.max(np.abs(eig))
 
 # Radius
 r = x_p[:len(eig)]
 
 # Plot
 plt.plot(r, eig)
+plt.axhline(0, color='k', ls=':')
 plt.xlabel("r")
 plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
 plt.savefig(output_dir + "F_mode_eigenfunction.png")
