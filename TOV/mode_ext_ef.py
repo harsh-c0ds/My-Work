@@ -122,7 +122,7 @@ peaks, properties = find_peaks(
     width=3.5                                   # suppress narrow noise spikes 3.5
 )
 
-f_F = freq[peaks[1]]  # Frequency of fundamental mode in kHz
+f_F = freq[peaks[0]]  # Frequency of fundamental mode in kHz
 
 # Remove duplicate time stamps (ESSENTIAL)
 unique_mask = np.diff(t_s_all[0], prepend=t_s_all[0][0] - 1.0) > 0
@@ -191,4 +191,4 @@ r = x_p[:len(eig)]
 plt.plot(r, eig)
 plt.xlabel("r")
 plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
-plt.savefig(output_dir + "H1_mode_eigenfunction.png")
+plt.savefig(output_dir + "F_mode_eigenfunction.png")
