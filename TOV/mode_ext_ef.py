@@ -1,9 +1,31 @@
 import os, sys
+from git import Repo
+import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks  
 from scipy.ndimage import gaussian_filter1d
 
+def push_to_github(repo_path, commit_message):
+    try:
+        # Initialize the repo object
+        repo = Repo(repo_path)
+        
+        # Stage all changes (or specify files like output_dir + "*.png")
+        repo.git.add(all=True)
+        
+        # Commit
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        full_message = f"{commit_message} - {now}"
+        repo.index.commit(full_message)
+        
+        # Push
+        origin = repo.remote(name='origin')
+        origin.push()
+        
+        print("Successfully pushed to GitHub!")
+    except Exception as e:
+        print(f"Error pushing to GitHub: {e}")
 
 def fourier_transform(time_ms, rho, n_freq=3000):
 
@@ -120,6 +142,11 @@ plt.plot(t_s_all[30], rho_all[30])
 plt.xlabel("Time (ms)")
 plt.ylabel(r"$\rho_c$")
 plt.savefig(output_dir + "rho_time_series_check.png")
+
+# --- Usage at the end of your code ---
+# Set the path to the root folder of your local git repository
+my_repo_path = "/home/hsolanki/Programs/My-Work/" 
+push_to_github(my_repo_path, "Updated")
 sys.exit()
 
 ######################################################
