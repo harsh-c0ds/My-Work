@@ -187,8 +187,8 @@ eig /= np.max(np.abs(eig))
 # Radius
 r = x_p[:len(eig)]
 print(len(r), len(eig), len(x_p))
-# # Plot
-# plt.plot(r, eig)
-# plt.xlabel("r")
-# plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
-# plt.savefig(output_dir + "F_mode_eigenfunction.png")
+# Plot
+plt.plot(r, eig)
+plt.xlabel("r")
+plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
+plt.savefig(output_dir + "F_mode_eigenfunction.png")
