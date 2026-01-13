@@ -102,7 +102,7 @@ print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
 
 F_amp_complex = [rho_tilde]
 
-for i in range(1,18):
+for i in range(1, 18):
 
     t_s = t_s_all[i]
     rho = rho_all[i]
@@ -113,14 +113,23 @@ for i in range(1,18):
     t = t_s[unique_mask]
     rho = rho[unique_mask]
 
-    print(f"1: {len(t_s_all[i])} → 2: {len(t)} after removing duplicates")
+    print(f"1: {len(t_s)} → 2: {len(t)} after removing duplicates")
+
+    # Trapezoidal weights
     dt = np.zeros_like(t)
+
+    if len(t) < 2:
+        print("WARNING: too few time points, skipping")
+        continue
+
     dt[1:-1] = 0.5 * (t[2:] - t[:-2])
     dt[0] = t[1] - t[0]
     dt[-1] = t[-1] - t[-2]
 
+    # Projection onto F-mode
     rho_tilde_F = np.sum(
         rho * np.exp(-2j * np.pi * f_F * t) * dt
     )
+
     F_amp_complex.append(rho_tilde_F)
     print(f"amp_F = {abs(rho_tilde_F)}")
