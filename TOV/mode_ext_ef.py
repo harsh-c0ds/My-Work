@@ -70,7 +70,7 @@ rho_all = np.array(rho_all, dtype=object)
 print("len(t_s_all): ", len(t_s_all))
 print("len(rho_all): ", len(rho_all))  
 
-plt.plot(t_s_all[40], rho_all[40])
+plt.plot(t_s_all[20], rho_all[20])
 plt.xlabel("Time (s)")
 plt.ylabel("Density perturbation")
 plt.title("Density perturbation vs Time for first radial point")
