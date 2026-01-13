@@ -1,5 +1,5 @@
+import os, sys
 import numpy as np
-import os
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks  
 from scipy.ndimage import gaussian_filter1d
@@ -112,8 +112,17 @@ t_s_all = np.array(t_s_all, dtype=object)
 rho_all = np.array(rho_all, dtype=object)
 
 print("len(t_s_all): ", len(t_s_all))
-print("len(rho_all): ", len(rho_all))  
+print("len(rho_all): ", len(rho_all))
 
+### Time_series Check ###
+
+plt.plot(t_s_all[30], rho_all[30])
+plt.xlabel("Time (ms)")
+plt.ylabel(r"$\rho_c$")
+plt.savefig(output_dir + "rho_time_series_check.png")
+sys.exit()
+
+######################################################
 freq, power = fourier_transform(t_s_all[0], rho_all[0])
 power_smooth = gaussian_filter1d(power, sigma=3) # 3
 peaks, properties = find_peaks(
