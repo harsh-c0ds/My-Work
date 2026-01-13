@@ -84,7 +84,7 @@ peaks, properties = find_peaks(
 f_F = freq[peaks[0]]  # Frequency of fundamental mode in kHz
 
 # Remove duplicate time stamps (ESSENTIAL)
-unique_mask = np.diff(t_s_all[0], prepend=t_s_all[0] - 1.0) > 0
+unique_mask = np.diff(t_s_all[0], prepend=t_s_all[0][0] - 1.0) > 0
 t = t_s_all[0][unique_mask]
 rho = rho_all[0][unique_mask]
 
