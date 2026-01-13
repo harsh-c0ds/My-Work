@@ -90,7 +90,7 @@ print("Number of valid ixd points (center → surface):", N_ixd)
 print("ixd range: 0 →", N_ixd-1)
 print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
 print("Surface x ≈", x_p[-1])
-
+surface_ixd = N_ixd - 1
 
 t_s_all = []
 rho_all = []
@@ -143,7 +143,7 @@ print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
 
 F_amp_complex = [rho_tilde]
 
-for i in range(1, 19):
+for i in range(1, surface_ixd + 1):
 
     t_s = t_s_all[i]
     rho = rho_all[i]
