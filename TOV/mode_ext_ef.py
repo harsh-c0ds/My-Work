@@ -143,7 +143,7 @@ print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
 
 F_amp_complex = [rho_tilde]
 
-for i in range(1, 19):
+for i in range(1, N_ixd):
 
     t_s = t_s_all[i]
     rho = rho_all[i]
@@ -178,7 +178,7 @@ for i in range(1, 19):
 F_amp_complex = np.array(F_amp_complex)
 
 # Eigenfunction (magnitude)
-eig = np.abs(F_amp_complex)
+eig = np.real(F_amp_complex)
 
 # Normalize
 eig /= eig[0]
