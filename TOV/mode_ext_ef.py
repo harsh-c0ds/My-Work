@@ -133,3 +133,10 @@ for i in range(1, 18):
 
     F_amp_complex.append(rho_tilde_F)
     print(f"amp_F = {abs(rho_tilde_F)}")
+
+plt.plot(np.abs(F_amp_complex), 'o-')
+plt.xlabel("Radius index")
+plt.ylabel("F-mode amplitude")
+plt.title("F-mode amplitude vs radius index")
+plt.grid()
+plt.savefig(output_dir + "F_mode_amplitude_vs_radius_index.png")
