@@ -74,28 +74,28 @@ x   = data_t0[:,9]
 rho = data_t0[:,12]
 
 # --- remove atmosphere / vacuum ---
-rho_floor = 1e-10   # adjust if needed
-mask_star =rho > rho_floor
+rho_floor = 1e-10   
+mask_star = rho > rho_floor
 
+# NEW: Filter both x and rho simultaneously to keep them synced
 x_star = x[mask_star]
+rho_star = rho[mask_star]
 
 # --- unique spatial points define ixd ---
+# We use the filtered x_star to define our radial grid
 x_p = np.unique(x_star)
 x_p.sort()
 
 # --- results ---
 N_ixd = len(x_p)
+surface_ixd = N_ixd - 1  # The index of the physical surface
 
-print("Number of valid ixd points (center → surface):", N_ixd)
-print("ixd range: 0 →", N_ixd-1)
-print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
-print("Surface x ≈", x_p[-1])
-surface_ixd = N_ixd - 1
+print(f"Number of valid points: {N_ixd}")
+print(f"Physical Surface detected at x ≈ {x_p[-1]:.4f}")
+
 
 t_s_all = []
 rho_all = []
-
-
 with open(file_path, "r") as f:
     lines = f.readlines()
 
@@ -141,54 +141,50 @@ rho_tilde = np.sum(
 amp_F = abs(rho_tilde)
 print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
 
-F_amp_complex = [rho_tilde]
+# Create an empty list for all spatial points
+F_amp_complex = []
 
-for i in range(1, surface_ixd + 1):
-
+# Loop over EVERY spatial index found in x_p
+for i in range(N_ixd):  # Use N_ixd instead of range(1, 19)
     t_s = t_s_all[i]
     rho = rho_all[i]
 
-    # Remove duplicate / non-increasing times
+    # Remove duplicates
     unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
-
     t = t_s[unique_mask]
     rho = rho[unique_mask]
 
-    print(f"1: {len(t_s)} → 2: {len(t)} after removing duplicates")
-
     # Trapezoidal weights
     dt = np.zeros_like(t)
-
     if len(t) < 2:
-        print("WARNING: too few time points, skipping")
+        # If a point is invalid, append 0 to keep array lengths consistent
+        F_amp_complex.append(0j)
         continue
 
     dt[1:-1] = 0.5 * (t[2:] - t[:-2])
     dt[0] = t[1] - t[0]
     dt[-1] = t[-1] - t[-2]
 
-    # Projection onto F-mode
-    rho_tilde_F = np.sum(
-        rho * np.exp(-2j * np.pi * f_F * t) * dt
-    )
-
+    # Projection onto the specific mode frequency (f_F)
+    rho_tilde_F = np.sum(rho * np.exp(-2j * np.pi * f_F * t) * dt)
     F_amp_complex.append(rho_tilde_F)
-    print(f"amp_F = {abs(rho_tilde_F)}")
 
 F_amp_complex = np.array(F_amp_complex)
 
-# Fix global phase using center point
+# --- Fix Phase and Plot ---
 phase0 = np.angle(F_amp_complex[0])
 eig = np.real(F_amp_complex * np.exp(-1j * phase0))
-
-# Normalize (sign preserved)
 eig /= np.max(np.abs(eig))
 
-# Radius
-r = x_p[:len(eig)]
+# Calculate Nodes (Sign changes)
+nodes = np.where(np.diff(np.sign(eig)))[0]
+print(f"Number of nodes found: {len(nodes)}")
 
-# Plot
-plt.plot(r, eig)
-plt.xlabel("r")
-plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
-plt.savefig(output_dir + "F_mode_eigenfunction.png")
+plt.figure()
+plt.plot(x_p, eig, label=f'Mode at {f_F:.2f} kHz')
+plt.axhline(0, color='black', linestyle='--', alpha=0.3)
+plt.title(f"Eigenfunction (Nodes: {len(nodes)})")
+plt.xlabel("Radius (x)")
+plt.ylabel("Normalized Amplitude")
+plt.legend()
+plt.savefig(output_dir + "verified_eigenfunction.png")
