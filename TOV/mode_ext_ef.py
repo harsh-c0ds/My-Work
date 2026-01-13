@@ -102,7 +102,7 @@ print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
 
 F_amp_complex = [rho_tilde]
 
-for i in range(1, 18):
+for i in range(1, 19):
 
     t_s = t_s_all[i]
     rho = rho_all[i]
