@@ -4,11 +4,24 @@ import matplotlib.pyplot as plt
 
 
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
-output_file = output_dir + "rho_timeseries_P.txt"
-data = np.loadtxt(output_file)
+file_path = output_dir + "rho_timeseries_P.txt"
+t_s_all = []
+rho_all = []
 
-t_s_all = data[0::2]   # rows 0,2,4,...
-rho_all = data[1::2]   # rows 1,3,5,...
+with open(file_path, "r") as f:
+    lines = f.readlines()
+
+# Process two lines at a time
+for k in range(0, len(lines), 2):
+    t_s = np.fromstring(lines[k], sep=" ")
+    rho = np.fromstring(lines[k+1], sep=" ")
+
+    t_s_all.append(t_s)
+    rho_all.append(rho)
+
+# Convert to object arrays (ragged arrays)
+t_s_all = np.array(t_s_all, dtype=object)
+rho_all = np.array(rho_all, dtype=object)
 
 i = 3  # choose index
 
