@@ -104,14 +104,14 @@ F_amp_complex = [rho_tilde]
 
 for i in range(1,18):
 
-    unique_mask = np.diff(t_s_all[i], prepend=t_s_all[i] - 1.0) > 0
-    
-    if len(unique_mask) > len(t_s_all[i]):
-        t = t_s_all[i]
-        rho = rho_all[i]
-    else:
-        t = t_s_all[i][unique_mask]
-        rho = rho_all[i][unique_mask]
+    t_s = t_s_all[i]
+    rho = rho_all[i]
+
+    # Remove duplicate / non-increasing times
+    unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
+
+    t = t_s[unique_mask]
+    rho = rho[unique_mask]
 
     print(f"1: {len(t_s_all[i])} → 2: {len(t)} after removing duplicates")
     dt = np.zeros_like(t)
