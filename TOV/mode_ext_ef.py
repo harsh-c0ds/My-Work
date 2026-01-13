@@ -1,5 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.signal import find_peaks  
+from scipy.ndimage import gaussian_filter1d
+
 
 def fourier_transform(time_ms, rho, n_freq=3000):
 
@@ -70,8 +73,49 @@ rho_all = np.array(rho_all, dtype=object)
 print("len(t_s_all): ", len(t_s_all))
 print("len(rho_all): ", len(rho_all))  
 
-plt.plot(t_s_all[18], rho_all[18])
-plt.xlabel("Time (s)")
-plt.ylabel("Density perturbation")
-plt.title("Density perturbation vs Time for first radial point")
-plt.savefig(output_dir + "time_series_try.png")
+freq, power = fourier_transform(t_s_all[0], rho_all[0])
+power_smooth = gaussian_filter1d(power, sigma=3) # 3
+peaks, properties = find_peaks(
+    power_smooth,
+    prominence=np.max(power) * 0.04,  # stands out from background 0.04
+    width=3.5                                   # suppress narrow noise spikes 3.5
+)
+
+f_F = freq[peaks[0]]  # Frequency of fundamental mode in kHz
+
+# Remove duplicate time stamps (ESSENTIAL)
+unique_mask = np.diff(t_s_all[0], prepend=t_s_all[0] - 1.0) > 0
+t = t_s_all[0][unique_mask]
+rho = rho_all[0][unique_mask]
+
+print(f"1: {len(t_s_all[0])} → 2: {len(t)} after removing duplicates")
+dt = np.zeros_like(t)
+dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+dt[0] = t[1] - t[0]
+dt[-1] = t[-1] - t[-2]
+
+rho_tilde = np.sum(
+    rho * np.exp(-2j * np.pi * f_F * t) * dt
+)
+amp_F = abs(rho_tilde)
+print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
+
+F_amp_complex = [rho_tilde]
+
+for i in range(1,18):
+
+    unique_mask = np.diff(t_s_all[i], prepend=t_s_all[i] - 1.0) > 0
+    t = t_s_all[i][unique_mask]
+    rho = rho_all[i][unique_mask]
+
+    print(f"1: {len(t_s_all[i])} → 2: {len(t)} after removing duplicates")
+    dt = np.zeros_like(t)
+    dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+    dt[0] = t[1] - t[0]
+    dt[-1] = t[-1] - t[-2]
+
+    rho_tilde_F = np.sum(
+        rho * np.exp(-2j * np.pi * f_F * t) * dt
+    )
+    F_amp_complex.append(rho_tilde_F)
+    print(f"amp_F = {abs(rho_tilde_F)}")
