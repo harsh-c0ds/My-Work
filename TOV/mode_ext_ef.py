@@ -217,11 +217,11 @@ eig = np.real(F_amp_complex)
 eig /= np.max(np.abs(eig))
 
 # Radius
-r = N_ixd[:len(eig)]
-print(len(r), len(eig), len(x_p))
+#r = N_ixd[:len(eig)]
+#print(len(r), len(eig), len(x_p))
 # Plot
 plt.figure(figsize=(8,6))
-plt.plot(r, eig)
+plt.plot(eig)
 plt.xlabel("r")
 plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
 plt.savefig(output_dir + "F_mode_eigenfunction.png")
