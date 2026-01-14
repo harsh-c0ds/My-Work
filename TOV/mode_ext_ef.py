@@ -143,11 +143,7 @@ plt.xlabel("Time (ms)")
 plt.ylabel(r"$\rho_c$")
 plt.savefig(output_dir + "rho_time_series_check.png")
 
-# --- Usage at the end of your code ---
-# Set the path to the root folder of your local git repository
-my_repo_path = "/home/hsolanki/Programs/My-Work/" 
-push_to_github(my_repo_path, "Updated")
-sys.exit()
+
 
 ######################################################
 freq, power = fourier_transform(t_s_all[0], rho_all[0])
@@ -179,7 +175,7 @@ print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
 
 F_amp_complex = [rho_tilde]
 
-for i in range(1, 30):
+for i in range(1, 20):
 
     t_s = t_s_all[i]
     rho = rho_all[i]
@@ -228,3 +224,8 @@ plt.plot(r, eig)
 plt.xlabel("r")
 plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
 plt.savefig(output_dir + "F_mode_eigenfunction.png")
+
+# --- Usage at the end of your code ---
+# Set the path to the root folder of your local git repository
+my_repo_path = "/home/hsolanki/Programs/My-Work/" 
+push_to_github(my_repo_path, "Updated")
