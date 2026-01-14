@@ -210,9 +210,9 @@ for i in range(1, 20):
 F_amp_complex = np.array(F_amp_complex)
 
 # Fix global phase using center point
-phase0 = np.angle(F_amp_complex[0])
-eig = np.real(F_amp_complex * np.exp(-1j * phase0))
-
+# phase0 = np.angle(F_amp_complex[0])
+# eig = np.real(F_amp_complex * np.exp(-1j * phase0))
+eig = np.real(F_amp_complex)
 # Normalize (sign preserved)
 eig /= np.max(np.abs(eig))
 
