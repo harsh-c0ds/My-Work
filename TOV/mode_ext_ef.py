@@ -214,7 +214,7 @@ F_amp_complex = np.array(F_amp_complex)
 # eig = np.real(F_amp_complex * np.exp(-1j * phase0))
 eig = np.real(F_amp_complex)
 # Normalize (sign preserved)
-eig /= np.max(np.abs(eig))
+#eig /= np.max(np.abs(eig))
 
 # Radius
 r = x_p[:len(eig)]
