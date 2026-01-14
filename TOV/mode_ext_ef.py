@@ -214,12 +214,13 @@ F_amp_complex = np.array(F_amp_complex)
 # eig = np.real(F_amp_complex * np.exp(-1j * phase0))
 eig = np.real(F_amp_complex)
 # Normalize (sign preserved)
-#eig /= np.max(np.abs(eig))
+eig /= np.max(np.abs(eig))
 
 # Radius
 r = x_p[:len(eig)]
 print(len(r), len(eig), len(x_p))
 # Plot
+plt.figure(figsize=(8,6))
 plt.plot(r, eig)
 plt.xlabel("r")
 plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
