@@ -219,7 +219,7 @@ for i in range(0, 50):
 
     # Projection onto F-mode
     rho_tilde_F = np.sum(
-        rho * np.exp(-2j * np.pi * f_F * t) * dt
+        rho * np.exp(-2j * np.pi * f_F[0] * t) * dt
     )
 
     F_amp_complex.append(rho_tilde_F)
