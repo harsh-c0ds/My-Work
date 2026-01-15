@@ -137,7 +137,7 @@ print("len(t_s_all): ", len(t_s_all))
 print("len(rho_all): ", len(rho_all))
 
 ### Time_series Check ###
-ik = 60
+ik = 50
 
 t = t_s_all[ik]
 rho = rho_all[ik]
