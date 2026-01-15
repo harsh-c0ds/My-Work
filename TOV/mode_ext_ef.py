@@ -137,13 +137,16 @@ print("len(t_s_all): ", len(t_s_all))
 print("len(rho_all): ", len(rho_all))
 
 ### Time_series Check ###
-ik = 20
+ik = 19
 plt.figure(figsize=(8,6))
 plt.plot(t_s_all[ik], rho_all[ik])
 plt.xlabel("Time (ms)")
 plt.ylabel(f"rho_c at {ik}")
 plt.savefig(output_dir + "rho_time_series_check.png")
-
+# --- Usage at the end of your code ---
+# Set the path to the root folder of your local git repository
+my_repo_path = "/home/hsolanki/Programs/My-Work/" 
+push_to_github(my_repo_path, "Updated")
 sys.exit()
 
 ######################################################
@@ -227,7 +230,4 @@ plt.xlabel("r")
 plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
 plt.savefig(output_dir + "F_mode_eigenfunction.png")
 
-# --- Usage at the end of your code ---
-# Set the path to the root folder of your local git repository
-my_repo_path = "/home/hsolanki/Programs/My-Work/" 
-push_to_github(my_repo_path, "Updated")
+
