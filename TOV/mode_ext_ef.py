@@ -242,7 +242,7 @@ plt.figure(figsize=(8,6))
 plt.plot(eig)
 plt.xlabel("Grid Point Index")
 plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
-plt.savefig(output_dir + "F_mode_eigenfunction_1.png")
+plt.savefig(output_dir + "F_mode_eigenfunction_2.png")
 
 # --- Usage at the end of your code ---
 # Set the path to the root folder of your local git repository
