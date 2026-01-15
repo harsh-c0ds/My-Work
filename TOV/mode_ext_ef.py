@@ -137,59 +137,71 @@ print("len(t_s_all): ", len(t_s_all))
 print("len(rho_all): ", len(rho_all))
 
 ### Time_series Check ###
-ik = 50
+# ik = 50
 
-t = t_s_all[ik]
-rho = rho_all[ik]
-lim = np.argmin(t <= 5)
-t = t[:lim]
-rho = rho[:lim]
+# t = t_s_all[ik]
+# rho = rho_all[ik]
+# lim = np.argmin(t <= 5)
+# t = t[:lim]
+# rho = rho[:lim]
 
-plt.figure(figsize=(8,6))
-plt.plot(t, rho)
-plt.xlabel("Time (ms)")
-plt.ylabel(f"rho_c at {ik}")
-plt.savefig(output_dir + "rho_time_series_check.png")
-# --- Usage at the end of your code ---
-# Set the path to the root folder of your local git repository
-my_repo_path = "/home/hsolanki/Programs/My-Work/" 
-push_to_github(my_repo_path, "Updated")
-sys.exit()
+# plt.figure(figsize=(8,6))
+# plt.plot(t, rho)
+# plt.xlabel("Time (ms)")
+# plt.ylabel(f"rho_c at {ik}")
+# plt.savefig(output_dir + "rho_time_series_check.png")
 
-######################################################
-freq, power = fourier_transform(t_s_all[0], rho_all[0])
-power_smooth = gaussian_filter1d(power, sigma=3) # 3
-peaks, properties = find_peaks(
-    power_smooth,
-    prominence=np.max(power) * 0.04,  # stands out from background 0.04
-    width=3.5                                   # suppress narrow noise spikes 3.5
-)
 
-f_F = freq[peaks[0]]  # Frequency of fundamental mode in kHz
 
-# Remove duplicate time stamps (ESSENTIAL)
-unique_mask = np.diff(t_s_all[0], prepend=t_s_all[0][0] - 1.0) > 0
-t = t_s_all[0][unique_mask]
-rho = rho_all[0][unique_mask]
+###################### Centre F-Freq Finder ################################
 
-print(f"1: {len(t_s_all[0])} → 2: {len(t)} after removing duplicates")
-dt = np.zeros_like(t)
-dt[1:-1] = 0.5 * (t[2:] - t[:-2])
-dt[0] = t[1] - t[0]
-dt[-1] = t[-1] - t[-2]
+# freq, power = fourier_transform(t_s_all[0], rho_all[0])
+# power_smooth = gaussian_filter1d(power, sigma=3) # 3
+# peaks, properties = find_peaks(
+#     power_smooth,
+#     prominence=np.max(power) * 0.04,  # stands out from background 0.04
+#     width=3.5                                   # suppress narrow noise spikes 3.5
+# )
 
-rho_tilde = np.sum(
-    rho * np.exp(-2j * np.pi * f_F * t) * dt
-)
-amp_F = abs(rho_tilde)
-print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
+# f_F = freq[peaks[0]]  # Frequency of fundamental mode in kHz
 
-F_amp_complex = [rho_tilde]
+# # Remove duplicate time stamps (ESSENTIAL)
+# unique_mask = np.diff(t_s_all[0], prepend=t_s_all[0][0] - 1.0) > 0
+# t = t_s_all[0][unique_mask]
+# rho = rho_all[0][unique_mask]
 
-for i in range(1, 20):
+# print(f"1: {len(t_s_all[0])} → 2: {len(t)} after removing duplicates")
+# dt = np.zeros_like(t)
+# dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+# dt[0] = t[1] - t[0]
+# dt[-1] = t[-1] - t[-2]
+
+# rho_tilde = np.sum(
+#     rho * np.exp(-2j * np.pi * f_F * t) * dt
+# )
+# amp_F = abs(rho_tilde)
+# print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
+
+F_amp_complex = []
+F_freq = []
+
+for i in range(0, 50):
 
     t_s = t_s_all[i]
     rho = rho_all[i]
+
+    #### FFT ####
+
+    freq, power = fourier_transform(t_s_all[0], rho_all[0])
+    power_smooth = gaussian_filter1d(power, sigma=3) # 3
+    peaks, properties = find_peaks(
+    power_smooth,
+    prominence=np.max(power) * 0.04,  # stands out from background 0.04
+    width=3.5)                                   # suppress narrow noise spikes 3.5
+
+    f_F = freq[peaks[0]]  # Frequency of fundamental mode in kHz
+    F_freq.append(f_F)
+    print(f"Point {i}: F_mode = {f_F} kHz")
 
     # Remove duplicate / non-increasing times
     unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
@@ -201,22 +213,17 @@ for i in range(1, 20):
 
     # Trapezoidal weights
     dt = np.zeros_like(t)
-
-    if len(t) < 2:
-        print("WARNING: too few time points, skipping")
-        continue
-
     dt[1:-1] = 0.5 * (t[2:] - t[:-2])
     dt[0] = t[1] - t[0]
     dt[-1] = t[-1] - t[-2]
 
     # Projection onto F-mode
     rho_tilde_F = np.sum(
-        rho * np.exp(-2j * np.pi *f_F  * t) * dt
+        rho * np.exp(-2j * np.pi * f_F * t) * dt
     )
 
     F_amp_complex.append(rho_tilde_F)
-    print(f"amp_F = {abs(rho_tilde_F)}")
+    #print(f"amp_F = {abs(rho_tilde_F)}")
 
 F_amp_complex = np.array(F_amp_complex)
 
@@ -233,8 +240,11 @@ eig /= np.max(np.abs(eig))
 # Plot
 plt.figure(figsize=(8,6))
 plt.plot(eig)
-plt.xlabel("r")
+plt.xlabel("Grid Point Index")
 plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
-plt.savefig(output_dir + "F_mode_eigenfunction.png")
+plt.savefig(output_dir + "F_mode_eigenfunction_1.png")
 
-
+# --- Usage at the end of your code ---
+# Set the path to the root folder of your local git repository
+my_repo_path = "/home/hsolanki/Programs/My-Work/" 
+push_to_github(my_repo_path, "Updated")
