@@ -138,12 +138,12 @@ print("len(rho_all): ", len(rho_all))
 
 ### Time_series Check ###
 
-plt.plot(t_s_all[10], rho_all[10])
+plt.plot(t_s_all[20], rho_all[20])
 plt.xlabel("Time (ms)")
 plt.ylabel(r"$\rho_c$")
 plt.savefig(output_dir + "rho_time_series_check.png")
 
-
+sys.exit()
 
 ######################################################
 freq, power = fourier_transform(t_s_all[0], rho_all[0])
