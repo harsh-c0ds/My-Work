@@ -146,7 +146,7 @@ t = t[:lim]
 rho = rho[:lim]
 
 plt.figure(figsize=(8,6))
-plt.plot(t_s_all[ik], rho_all[ik])
+plt.plot(t, rho)
 plt.xlabel("Time (ms)")
 plt.ylabel(f"rho_c at {ik}")
 plt.savefig(output_dir + "rho_time_series_check.png")
