@@ -141,7 +141,7 @@ ik = 20
 plt.figure(figsize=(8,6))
 plt.plot(t_s_all[ik], rho_all[ik])
 plt.xlabel("Time (ms)")
-plt.ylabel(r"$\rho_c$ at {ik}")
+plt.ylabel(f"rho_c at {ik}")
 plt.savefig(output_dir + "rho_time_series_check.png")
 
 sys.exit()
