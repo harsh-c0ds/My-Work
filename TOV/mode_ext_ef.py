@@ -138,6 +138,7 @@ print("len(rho_all): ", len(rho_all))
 
 ### Time_series Check ###
 ik = 20
+plt.figure(figsize=(8,6))
 plt.plot(t_s_all[ik], rho_all[ik])
 plt.xlabel("Time (ms)")
 plt.ylabel(r"$\rho_c$ at {ik}")
