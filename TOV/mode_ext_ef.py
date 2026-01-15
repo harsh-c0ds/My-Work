@@ -235,7 +235,7 @@ eig = np.real(F_amp_complex)
 #eig /= np.max(np.abs(eig))
 
 # Radius
-r = N_ixd[:len(eig)]
+r = np.arange(0, len(eig), 1)
 r = r*1.477
 #print(len(r), len(eig), len(x_p))
 # Plot
