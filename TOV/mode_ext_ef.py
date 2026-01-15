@@ -137,10 +137,10 @@ print("len(t_s_all): ", len(t_s_all))
 print("len(rho_all): ", len(rho_all))
 
 ### Time_series Check ###
-
-plt.plot(t_s_all[20], rho_all[20])
+ik = 20
+plt.plot(t_s_all[ik], rho_all[ik])
 plt.xlabel("Time (ms)")
-plt.ylabel(r"$\rho_c$")
+plt.ylabel(r"$\rho_c$ at {ik}")
 plt.savefig(output_dir + "rho_time_series_check.png")
 
 sys.exit()
