@@ -155,32 +155,32 @@ print("len(rho_all): ", len(rho_all))
 
 ###################### Centre F-Freq Finder ################################
 
-# freq, power = fourier_transform(t_s_all[0], rho_all[0])
-# power_smooth = gaussian_filter1d(power, sigma=3) # 3
-# peaks, properties = find_peaks(
-#     power_smooth,
-#     prominence=np.max(power) * 0.04,  # stands out from background 0.04
-#     width=3.5                                   # suppress narrow noise spikes 3.5
-# )
+freq, power = fourier_transform(t_s_all[0], rho_all[0])
+power_smooth = gaussian_filter1d(power, sigma=3) # 3
+peaks, properties = find_peaks(
+    power_smooth,
+    prominence=np.max(power) * 0.04,  # stands out from background 0.04
+    width=3.5                                   # suppress narrow noise spikes 3.5
+)
 
-# f_F = freq[peaks[0]]  # Frequency of fundamental mode in kHz
+f_F_c = freq[peaks[0]]  # Frequency of fundamental mode in kHz
 
-# # Remove duplicate time stamps (ESSENTIAL)
-# unique_mask = np.diff(t_s_all[0], prepend=t_s_all[0][0] - 1.0) > 0
-# t = t_s_all[0][unique_mask]
-# rho = rho_all[0][unique_mask]
+# Remove duplicate time stamps (ESSENTIAL)
+unique_mask = np.diff(t_s_all[0], prepend=t_s_all[0][0] - 1.0) > 0
+t = t_s_all[0][unique_mask]
+rho = rho_all[0][unique_mask]
 
-# print(f"1: {len(t_s_all[0])} → 2: {len(t)} after removing duplicates")
-# dt = np.zeros_like(t)
-# dt[1:-1] = 0.5 * (t[2:] - t[:-2])
-# dt[0] = t[1] - t[0]
-# dt[-1] = t[-1] - t[-2]
+print(f"1: {len(t_s_all[0])} → 2: {len(t)} after removing duplicates")
+dt = np.zeros_like(t)
+dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+dt[0] = t[1] - t[0]
+dt[-1] = t[-1] - t[-2]
 
-# rho_tilde = np.sum(
-#     rho * np.exp(-2j * np.pi * f_F * t) * dt
-# )
-# amp_F = abs(rho_tilde)
-# print(f"F_mode = {f_F} kHz, amp_F = {amp_F}")
+rho_tilde = np.sum(
+    rho * np.exp(-2j * np.pi * f_F_c * t) * dt
+)
+amp_F = abs(rho_tilde)
+print(f"F_mode = {f_F_c} kHz, amp_F = {amp_F}")
 
 F_amp_complex = []
 F_freq = []
@@ -219,7 +219,7 @@ for i in range(0, 50):
 
     # Projection onto F-mode
     rho_tilde_F = np.sum(
-        rho * np.exp(-2j * np.pi * f_F[0] * t) * dt
+        rho * np.exp(-2j * np.pi * f_F_c * t) * dt
     )
 
     F_amp_complex.append(rho_tilde_F)
