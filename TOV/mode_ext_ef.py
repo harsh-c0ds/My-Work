@@ -232,15 +232,16 @@ F_amp_complex = np.array(F_amp_complex)
 # eig = np.real(F_amp_complex * np.exp(-1j * phase0))
 eig = np.real(F_amp_complex)
 # Normalize (sign preserved)
-eig /= np.max(np.abs(eig))
+#eig /= np.max(np.abs(eig))
 
 # Radius
-#r = N_ixd[:len(eig)]
+r = N_ixd[:len(eig)]
+r = r*1.477
 #print(len(r), len(eig), len(x_p))
 # Plot
 plt.figure(figsize=(8,6))
-plt.plot(eig)
-plt.xlabel("Grid Point Index")
+plt.plot(r,eig)
+plt.xlabel("r (Km)")
 plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
 plt.savefig(output_dir + "F_mode_eigenfunction_2.png")
 
