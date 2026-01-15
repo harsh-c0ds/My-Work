@@ -137,7 +137,7 @@ print("len(t_s_all): ", len(t_s_all))
 print("len(rho_all): ", len(rho_all))
 
 ### Time_series Check ###
-ik = 15
+ik = 10
 plt.figure(figsize=(8,6))
 plt.plot(t_s_all[ik], rho_all[ik])
 plt.xlabel("Time (ms)")
