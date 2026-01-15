@@ -141,12 +141,10 @@ ik = 20
 
 t = t_s_all[ik]
 rho = rho_all[ik]
-lim = np.argmin(t < 5)
+lim = np.argmin(t <= 5)
 t = t[:lim]
 rho = rho[:lim]
 
-print(lim, len(t), len(rho))
-sys.exit()
 plt.figure(figsize=(8,6))
 plt.plot(t_s_all[ik], rho_all[ik])
 plt.xlabel("Time (ms)")
