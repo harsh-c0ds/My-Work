@@ -137,7 +137,16 @@ print("len(t_s_all): ", len(t_s_all))
 print("len(rho_all): ", len(rho_all))
 
 ### Time_series Check ###
-ik = 13
+ik = 20
+
+t = t_s_all[ik]
+rho = rho_all[ik]
+lim = np.argmin(t < 5)
+t = t[:lim]
+rho = rho[:lim]
+
+print(lim, len(t), len(rho))
+sys.exit()
 plt.figure(figsize=(8,6))
 plt.plot(t_s_all[ik], rho_all[ik])
 plt.xlabel("Time (ms)")
@@ -205,7 +214,7 @@ for i in range(1, 20):
 
     # Projection onto F-mode
     rho_tilde_F = np.sum(
-        rho * np.exp(-2j * np.pi * f_F * t) * dt
+        rho * np.exp(-2j * np.pi *f_F  * t) * dt
     )
 
     F_amp_complex.append(rho_tilde_F)
