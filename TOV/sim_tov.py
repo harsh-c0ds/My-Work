@@ -185,6 +185,7 @@ def fourier_transform(time_ms, rho, n_freq=3000):
 
 sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
+sim_dir_lean = "/home/hsolanki/simulations/lean_bssn/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 # itr, t, rho = np.loadtxt('/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET/hydrobase-rho.maximum.asc', unpack=True, comments='#')
@@ -196,7 +197,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 #### figure out the total number of ixd ####
 
 filex = "hydrobase-rho.x.asc"
-folder = sim_dir_p
+folder = sim_dir_lean
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -233,42 +234,42 @@ print("Surface x ≈", x_p[-1])
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_p,0.0,"x")
-#time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_lean,0.0,"x")
+time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
-output_file = output_dir + "rho_timeseries_P.txt"
+# output_file = output_dir + "rho_timeseries_P.txt"
 
-with open(output_file, "w") as f:
-    for i in range(N_ixd):
-        time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
+# with open(output_file, "w") as f:
+#     for i in range(N_ixd):
+#         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
-        f_xt_values = np.array(f_xt_values)
-        rho = (f_xt_values - f_xt_values[0]) / f_xt_values[0]
-        rho -= np.mean(rho)
+#         f_xt_values = np.array(f_xt_values)
+#         rho = (f_xt_values - f_xt_values[0]) / f_xt_values[0]
+#         rho -= np.mean(rho)
 
-        t_s = np.array(time_values) / 203
+#         t_s = np.array(time_values) / 203
 
-        # Write t_s as a row
-        f.write(" ".join(f"{val:.6e}" for val in t_s) + "\n")
+#         # Write t_s as a row
+#         f.write(" ".join(f"{val:.6e}" for val in t_s) + "\n")
 
-        # Write corresponding rho as the next row
-        f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
+#         # Write corresponding rho as the next row
+#         f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
 
+# sys.exit()
+rho = np.array(f_xt_values)/ f_xt_values[0]
+t_s = np.array(time_values)/203
+print(len(t_s), len(rho))
+
+plt.figure(figsize=(8,6))
+plt.plot(t_s, rho, color="red", linewidth=1.5, label="Polytropic EOS - Lean BSSN")
+#plt.plot(t, rho, color="blue", linewidth=1.5, label="data read")
+plt.xlabel("Time (ms)")
+plt.ylabel(r"$\rho/\rho_{c,0}$")
+plt.title(r"Timeseries of Density")
+plt.grid(True, linestyle=":")
+plt.legend()
+plt.savefig(output_dir + "time_series_density_Lean.png", dpi=300)
 sys.exit()
-# rho = np.array(f_xt_values)/ f_xt_values[0]
-# t_s = np.array(time_values)/203
-# print(len(t_s), len(rho))
-
-# plt.figure(figsize=(8,6))
-# plt.plot(t_s, rho, color="red", linewidth=1.5, label="Polytropic EOS")
-# #plt.plot(t, rho, color="blue", linewidth=1.5, label="data read")
-# plt.xlabel("Time (ms)")
-# plt.ylabel(r"$\rho/\rho_{c,0}$")
-# plt.title(r"Timeseries of Density")
-# plt.grid(True, linestyle=":")
-# plt.legend()
-# plt.savefig(output_dir + "time_series_density_IF.png", dpi=300)
-
 
 ### Power Spectrum ###
 
