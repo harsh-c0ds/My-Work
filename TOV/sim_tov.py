@@ -186,6 +186,7 @@ def fourier_transform(time_ms, rho, n_freq=3000):
 sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 sim_dir_lean = "/home/hsolanki/simulations/lean_bssn/output-0001/tov_ET"
+sim_dir_lean_mid = "/home/hsolanki/simulations/lean_bssn_mid/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 # itr, t, rho = np.loadtxt('/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET/hydrobase-rho.maximum.asc', unpack=True, comments='#')
@@ -197,7 +198,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 #### figure out the total number of ixd ####
 
 filex = "hydrobase-rho.x.asc"
-folder = sim_dir_lean
+folder = sim_dir_lean_mid
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -234,10 +235,10 @@ print("Surface x ≈", x_p[-1])
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_lean,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_lean_mid,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
-output_file = output_dir + "rho_timeseries_lean_low.txt"
+output_file = output_dir + "rho_timeseries_lean_mid.txt"
 
 with open(output_file, "w") as f:
     for i in range(N_ixd):
