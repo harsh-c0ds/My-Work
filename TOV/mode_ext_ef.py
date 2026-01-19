@@ -74,11 +74,12 @@ def fourier_transform(time_ms, rho, n_freq=3000):
 
 sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
+sim_dir_lean = "/home/hsolanki/simulations/lean_bssn,output-0001/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
-file_path = output_dir + "rho_timeseries_P.txt"
+file_path = output_dir + "rho_timeseries_lean_low.txt"
 
 filex = "hydrobase-rho.x.asc"
-folder = sim_dir_p
+folder = sim_dir_lean
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -123,7 +124,7 @@ with open(file_path, "r") as f:
 
 # Process two lines at a time
 for k in range(0, len(lines), 2):
-    t_s = np.fromstring(lines[k], sep=" ")
+    t_s = np.fromstring(lines[k], sep=" ") / 203 ##devide by 203 for lean bssn
     rho = np.fromstring(lines[k+1], sep=" ")
 
     t_s_all.append(t_s)
@@ -137,13 +138,73 @@ print("len(t_s_all): ", len(t_s_all))
 print("len(rho_all): ", len(rho_all))
 
 ### Time_series Check ###
-# ik = 50
+ik = 0
 
-# t = t_s_all[ik]
-# rho = rho_all[ik]
-# lim = np.argmin(t <= 5)
-# t = t[:lim]
-# rho = rho[:lim]
+t = t_s_all[ik]
+rho = rho_all[ik]
+lim = np.argmin(t <= 5)
+t = t[:lim]
+rho = rho[:lim]
+
+
+freq, power = fourier_transform(t, rho)
+#power_smooth = gaussian_filter1d(power, sigma=3) # 3
+peaks, properties = find_peaks(
+    power,
+    prominence=np.max(power) * 0.04,  # stands out from background 0.04
+    width=3.5                                   # suppress narrow noise spikes 3.5
+)
+
+f_F_c = freq[peaks[0]]  # Frequency of fundamental mode in kHz
+
+labels = ["F", "H1", "H2", "H3", "H4", "H5"]
+
+# --- Plotting the Raw Comparison ---
+plt.figure(figsize=(10, 6))
+
+plt.plot(freq, power, color="blue", alpha=0.6, label="Lean Low")
+#plt.plot(freq_p, power_smooth, color="black", lw=1.5, label="Smoothed")
+
+for i, peak_idx in enumerate(peaks[:len(labels)]):
+    x = freq[peak_idx]
+    y = power[peak_idx]
+
+    plt.axvline(x=x, color="red", linestyle="--", alpha=0.5)
+    plt.annotate(f"{labels[i]} ({x:.2f} kHz)",
+      xy=(x, y),
+      xytext=(0, 10),
+      textcoords="offset points",
+      ha="center",
+      fontstyle="italic",
+      color="black")
+
+
+plt.xlabel("Frequency (kHz)")
+plt.ylabel("Power")
+plt.title("Density Power Spectrum with Mode Identification")
+plt.legend()
+plt.grid(True, linestyle=":", alpha=0.6)
+
+plt.savefig(output_dir + "fft_density_lean_low.png", dpi=300)
+
+sys.exit()
+
+# Remove duplicate time stamps (ESSENTIAL)
+unique_mask = np.diff(t, prepend=t[0] - 1.0) > 0
+t_rm = t[unique_mask]
+rho = rho[unique_mask]
+
+print(f"1: {len(t)} → 2: {len(t_rm)} after removing duplicates")
+dt = np.zeros_like(t_rm)
+dt[1:-1] = 0.5 * (t_rm[2:] - t_rm[:-2])
+dt[0] = t_rm[1] - t_rm[0]
+dt[-1] = t_rm[-1] - t_rm[-2]
+
+rho_tilde = np.sum(
+    rho * np.exp(-2j * np.pi * f_F_c * t_rm) * dt
+)
+amp_F = abs(rho_tilde)
+print(f"F_mode = {f_F_c} kHz, amp_F = {amp_F}")
 
 # plt.figure(figsize=(8,6))
 # plt.plot(t, rho)
@@ -185,7 +246,7 @@ print(f"F_mode = {f_F_c} kHz, amp_F = {amp_F}")
 F_amp_complex = []
 F_freq = []
 
-for i in range(0, 50):
+for i in range(0, 20):
 
     t_s = t_s_all[i]
     rho = rho_all[i]
