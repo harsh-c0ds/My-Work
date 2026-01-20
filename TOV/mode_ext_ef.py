@@ -72,82 +72,130 @@ def fourier_transform(time_ms, rho, n_freq=3000):
 
     return freq_kHz, power
 
+def detect_star_surface(folder, filename="hydrobase-rho.x.asc", rho_floor=1e-10, time_col=8, x_col=9, rho_col=12, verbose=True):
+
+    if verbose:
+        print(f"Looking for files in the folder: {folder}")
+
+    # Preserve caller's working directory
+    cwd = os.getcwd()
+    try:
+        os.chdir(folder)
+
+        if verbose:
+            print(f"Opening file: {filename}.....")
+
+        data = np.loadtxt(filename, comments='#')
+
+    finally:
+        os.chdir(cwd)
+
+    if verbose:
+        print("Reading file....")
+
+    # --- pick initial time slice ---
+    t0 = np.min(data[:, time_col])
+    mask_t0 = data[:, time_col] == t0
+    data_t0 = data[mask_t0]
+
+    # --- extract x and rho ---
+    x = data_t0[:, x_col]
+    rho = data_t0[:, rho_col]
+
+    # --- remove atmosphere / vacuum ---
+    mask_star = rho > rho_floor
+    x_star = x[mask_star]
+    rho_star = rho[mask_star]  # kept for consistency / future use
+
+    # --- unique spatial points define ixd ---
+    x_p = np.unique(x_star)
+    x_p.sort()
+
+    N_ixd = len(x_p)
+    surface_ixd = N_ixd - 1
+    surface_x = x_p[-1]
+
+    if verbose:
+        print(f"Number of valid points: {N_ixd}")
+        print(f"Physical Surface detected at x ≈ {surface_x:.4f}")
+
+    return x_p, surface_ixd, surface_x
+
+def load_time_series(file_path):
+    t_s_all = []
+    rho_all = []
+    with open(file_path, "r") as f:
+        lines = f.readlines()
+
+    # Process two lines at a time
+    for k in range(0, len(lines), 2):
+        t_s = np.fromstring(lines[k], sep=" ") ##devide by 203 for lean bssn
+        rho = np.fromstring(lines[k+1], sep=" ")
+
+        t_s_all.append(t_s)
+        rho_all.append(rho)
+
+    # Convert to object arrays (ragged arrays)
+    t_s_all = np.array(t_s_all, dtype=object)
+    rho_all = np.array(rho_all, dtype=object)
+
+    print("len(t_s_all): ", len(t_s_all))
+    print("len(rho_all): ", len(rho_all))
+    return np.array(t_s_all), np.array(rho_all)
+
+
 sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 sim_dir_lean = "/home/hsolanki/simulations/lean_bssn/output-0001/tov_ET"
+sim_dir_lean_mid = "/home/hsolanki/simulations/lean_bssn_mid/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
-file_path = output_dir + "rho_timeseries_lean_low.txt"
+file_path = output_dir + "rho_timeseries_lean_mid.txt"
+file_path_adm = output_dir + "rho_timeseries_P.txt"
 
-filex = "hydrobase-rho.x.asc"
-folder = sim_dir_lean
+# Detect star surface to get x_p
+x_p, surface_ixd_l, surface_x = detect_star_surface(sim_dir_lean_mid, filename="hydrobase-rho.x.asc") 
+x_P_P, surface_ixd_p, surface_x_p = detect_star_surface(sim_dir_p, filename="hydrobase-rho.x.asc") 
 
-print("Looking for files in the folder: {}".format(folder))
-os.chdir(folder)
-print("Opening file: {}.....".format(filex))
-datax = np.loadtxt(filex, comments='#')
-print("Reading file....")
+t_s_all_l, rho_all_l = load_time_series(file_path)
+t_s_all_P, rho_all_P = load_time_series(file_path_adm)
 
-# --- pick initial time slice ---
-t0 = np.min(datax[:,8])
-mask_t0 = datax[:,8] == t0
-data_t0 = datax[mask_t0]
-
-# --- extract x and rho ---
-x   = data_t0[:,9]
-rho = data_t0[:,12]
-
-# --- remove atmosphere / vacuum ---
-rho_floor = 1e-10   
-mask_star = rho > rho_floor
-
-# NEW: Filter both x and rho simultaneously to keep them synced
-x_star = x[mask_star]
-rho_star = rho[mask_star]
-
-# --- unique spatial points define ixd ---
-# We use the filtered x_star to define our radial grid
-x_p = np.unique(x_star)
-x_p.sort()
-
-# --- results ---
-N_ixd = len(x_p)
-surface_ixd = N_ixd - 1  # The index of the physical surface
-
-print(f"Number of valid points: {N_ixd}")
-print(f"Physical Surface detected at x ≈ {x_p[-1]:.4f}")
-
-
-t_s_all = []
-rho_all = []
-with open(file_path, "r") as f:
-    lines = f.readlines()
-
-# Process two lines at a time
-for k in range(0, len(lines), 2):
-    t_s = np.fromstring(lines[k], sep=" ") / 203 ##devide by 203 for lean bssn
-    rho = np.fromstring(lines[k+1], sep=" ")
-
-    t_s_all.append(t_s)
-    rho_all.append(rho)
-
-# Convert to object arrays (ragged arrays)
-t_s_all = np.array(t_s_all, dtype=object)
-rho_all = np.array(rho_all, dtype=object)
-
-print("len(t_s_all): ", len(t_s_all))
-print("len(rho_all): ", len(rho_all))
+t_s_all_l = t_s_all_l / 203  # convert to ms
 
 ### Time_series Check ###
 ik = 0
 
-t = t_s_all[ik]
-rho = rho_all[ik]
-lim = np.argmin(t <= 5)
-t = t[:lim]
-rho = rho[:lim]
+t_l = t_s_all_l[ik]
+rho_l = rho_all_l[ik]
+t_adm = t_s_all_P[ik]
+rho_adm = rho_all_P[ik]
+
+lim = np.argmin(t_l <= 5)
+
+t_l = t_l[:lim]
+rho_l = rho_l[:lim]
+t_adm = t_adm[:lim]
+rho_adm = rho_adm[:lim]
+
+plt.figure(figsize=(10,6))
+plt.plot(t_l, rho_l, label="Lean mid", color="blue", alpha=0.6)
+plt.plot(t_adm, rho_adm, label="ADM", color="green", alpha=0.6)
+plt.xlabel("Time (ms)")
+plt.ylabel(r"Central Density $\rho_c$")
+plt.title("Timeseries of Central Density Comparison")
+plt.grid(True, linestyle=":")
+plt.legend()
+plt.savefig(output_dir + "time_series_density_lean_mid_vs_ADM.png", dpi=300)
+
+# --- Usage at the end of your code ---
+# Set the path to the root folder of your local git repository
+my_repo_path = "/home/hsolanki/Programs/My-Work/" 
+push_to_github(my_repo_path, "Updated")
+
+sys.exit()
 
 
-freq, power = fourier_transform(t, rho)
+freq_l, power_l = fourier_transform(t_l, rho_l)
+
 #power_smooth = gaussian_filter1d(power, sigma=3) # 3
 peaks, properties = find_peaks(
     power,
