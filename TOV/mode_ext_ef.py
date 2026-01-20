@@ -202,7 +202,7 @@ freq_adm, power_adm = fourier_transform(t_adm, rho_adm)
 peaks_l, properties = find_peaks(
     power_l,
     prominence=np.max(power_l) * 0.04,  # stands out from background 0.04
-    width=1.5                                   # suppress narrow noise spikes 3.5
+    width=0.32                               # suppress narrow noise spikes 3.5
 )
 
 peaks_adm, properties = find_peaks(
