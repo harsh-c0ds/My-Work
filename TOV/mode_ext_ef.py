@@ -170,11 +170,12 @@ t_adm = t_s_all_P[ik]
 rho_adm = rho_all_P[ik]
 
 lim = np.argmin(t_l <= 5)
+lim_adm = np.argmin(t_adm <= 5)
 
 t_l = t_l[:lim]
 rho_l = rho_l[:lim]
-t_adm = t_adm[:lim]
-rho_adm = rho_adm[:lim]
+t_adm = t_adm[:lim_adm]
+rho_adm = rho_adm[:lim_adm]
 
 plt.figure(figsize=(10,6))
 plt.plot(t_l, rho_l, label="Lean mid", color="blue", alpha=0.6)
