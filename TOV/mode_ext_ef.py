@@ -201,7 +201,7 @@ freq_adm, power_adm = fourier_transform(t_adm, rho_adm)
 #power_smooth = gaussian_filter1d(power, sigma=3) # 3
 peaks_l, properties = find_peaks(
     power_l,
-    prominence=np.max(power_l) * 0.04,  # stands out from background 0.04
+    prominence=np.max(power_l) * 0.02,  # stands out from background 0.04
     width=0.32                               # suppress narrow noise spikes 3.5
 )
 
