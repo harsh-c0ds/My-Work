@@ -238,25 +238,25 @@ print("Surface x ≈", x_p[-1])
 t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_lean_mid,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
-output_file = output_dir + "rho_timeseries_lean_mid.txt"
+# output_file = output_dir + "rho_timeseries_lean_mid.txt"
 
-with open(output_file, "w") as f:
-    for i in range(N_ixd):
-        time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
+# with open(output_file, "w") as f:
+#     for i in range(N_ixd):
+#         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
-        f_xt_values = np.array(f_xt_values)
-        rho = (f_xt_values - f_xt_values[0]) / f_xt_values[0]
-        rho -= np.mean(rho)
+#         f_xt_values = np.array(f_xt_values)
+#         rho = (f_xt_values - f_xt_values[0]) / f_xt_values[0]
+#         rho -= np.mean(rho)
 
-        t_s = np.array(time_values)
+#         t_s = np.array(time_values)
 
-        # Write t_s as a row
-        f.write(" ".join(f"{val:.6e}" for val in t_s) + "\n")
+#         # Write t_s as a row
+#         f.write(" ".join(f"{val:.6e}" for val in t_s) + "\n")
 
-        # Write corresponding rho as the next row
-        f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
+#         # Write corresponding rho as the next row
+#         f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
 
-sys.exit()
+# sys.exit()
 
 
 rho = np.array(f_xt_values)/ f_xt_values[0]
@@ -271,7 +271,7 @@ plt.ylabel(r"$\rho/\rho_{c,0}$")
 plt.title(r"Timeseries of Density")
 plt.grid(True, linestyle=":")
 plt.legend()
-plt.savefig(output_dir + "time_series_density_Lean.png", dpi=300)
+plt.savefig(output_dir + "time_series_density_Lean_mid.png", dpi=300)
 sys.exit()
 
 ### Power Spectrum ###
