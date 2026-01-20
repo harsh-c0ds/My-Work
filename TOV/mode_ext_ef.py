@@ -177,64 +177,107 @@ rho_l = rho_l[:lim]
 t_adm = t_adm[:lim_adm]
 rho_adm = rho_adm[:lim_adm]
 
-plt.figure(figsize=(10,6))
-plt.plot(t_l, rho_l, label="Lean mid", color="blue", alpha=0.6)
-plt.plot(t_adm, rho_adm, label="ADM", color="green", alpha=0.6)
-plt.xlabel("Time (ms)")
-plt.ylabel(r"Central Density $\rho_c$")
-plt.title("Timeseries of Central Density Comparison at Centre")
-plt.grid(True, linestyle=":")
-plt.legend()
-plt.savefig(output_dir + "time_series_density_lean_mid_vs_ADM.png", dpi=300)
+# plt.figure(figsize=(10,6))
+# plt.plot(t_l, rho_l, label="Lean mid", color="blue", alpha=0.6)
+# plt.plot(t_adm, rho_adm, label="ADM", color="green", alpha=0.6)
+# plt.xlabel("Time (ms)")
+# plt.ylabel(r"Central Density $\rho_c$")
+# plt.title("Timeseries of Central Density Comparison at Centre")
+# plt.grid(True, linestyle=":")
+# plt.legend()
+# plt.savefig(output_dir + "time_series_density_lean_mid_vs_ADM.png", dpi=300)
 
-# --- Usage at the end of your code ---
-# Set the path to the root folder of your local git repository
-my_repo_path = "/home/hsolanki/Programs/My-Work/" 
-push_to_github(my_repo_path, "Updated")
+# # --- Usage at the end of your code ---
+# # Set the path to the root folder of your local git repository
+# my_repo_path = "/home/hsolanki/Programs/My-Work/" 
+# push_to_github(my_repo_path, "Updated")
 
-sys.exit()
+
 
 
 freq_l, power_l = fourier_transform(t_l, rho_l)
+freq_adm, power_adm = fourier_transform(t_adm, rho_adm)
 
 #power_smooth = gaussian_filter1d(power, sigma=3) # 3
-peaks, properties = find_peaks(
-    power,
-    prominence=np.max(power) * 0.04,  # stands out from background 0.04
+peaks_l, properties = find_peaks(
+    power_l,
+    prominence=np.max(power_l) * 0.04,  # stands out from background 0.04
     width=3.5                                   # suppress narrow noise spikes 3.5
 )
 
-f_F_c = freq[peaks[0]]  # Frequency of fundamental mode in kHz
+peaks_adm, properties = find_peaks(
+    power_adm,
+    prominence=np.max(power_adm) * 0.04,  # stands out from background 0.04
+    width=3.5                                   # suppress narrow noise spikes 3.5
+)
 
+F_c_l = freq_l[peaks_l[0]]  # Frequency of fundamental mode in kHz
+F_c_adm = freq_adm[peaks_adm[0]]  # Frequency of fundamental mode in kHz
 labels = ["F", "H1", "H2", "H3", "H4", "H5"]
 
 # --- Plotting the Raw Comparison ---
 plt.figure(figsize=(10, 6))
 
-plt.plot(freq, power, color="blue", alpha=0.6, label="Lean Low")
-#plt.plot(freq_p, power_smooth, color="black", lw=1.5, label="Smoothed")
+# --- plot PSDs ---
+plt.plot(freq_l, power_l, alpha=0.6, label="Lean Mid")
+plt.plot(freq_adm, power_adm, alpha=0.6, label="ADM")
 
-for i, peak_idx in enumerate(peaks[:len(labels)]):
-    x = freq[peak_idx]
-    y = power[peak_idx]
+# --- package peak information ---
+spectra = [
+    {
+        "freq": freq_l,
+        "power": power_l,
+        "peaks": peaks_l,
+        "labels": labels,
+        "color": "red",
+        "name": "Lean Mid",
+        "yoffset": 10
+    },
+    {
+        "freq": freq_adm,
+        "power": power_adm,
+        "peaks": peaks_adm,
+        "labels": labels,
+        "color": "purple",
+        "name": "ADM",
+        "yoffset": -15
+    }
+]
 
-    plt.axvline(x=x, color="red", linestyle="--", alpha=0.5)
-    plt.annotate(f"{labels[i]} ({x:.2f} kHz)",
-      xy=(x, y),
-      xytext=(0, 10),
-      textcoords="offset points",
-      ha="center",
-      fontstyle="italic",
-      color="black")
+# --- annotate peaks ---
+for spec in spectra:
+    for i, peak_idx in enumerate(spec["peaks"][:len(spec["labels"])]):
+        x = spec["freq"][peak_idx]
+        y = spec["power"][peak_idx]
 
+        plt.axvline(
+            x=x,
+            color=spec["color"],
+            linestyle="--",
+            alpha=0.5
+        )
+
+        plt.annotate(
+            f"{spec['labels'][i]} ({x:.2f} kHz)",
+            xy=(x, y),
+            xytext=(0, spec["yoffset"]),
+            textcoords="offset points",
+            ha="center",
+            fontstyle="italic",
+            color=spec["color"]
+        )
 
 plt.xlabel("Frequency (kHz)")
 plt.ylabel("Power")
 plt.title("Density Power Spectrum with Mode Identification")
 plt.legend()
 plt.grid(True, linestyle=":", alpha=0.6)
+plt.savefig(output_dir + "mode_comparision_lean_adm.png", dpi=300)
 
-plt.savefig(output_dir + "fft_density_lean_low.png", dpi=300)
+# --- Usage at the end of your code ---
+# Set the path to the root folder of your local git repository
+my_repo_path = "/home/hsolanki/Programs/My-Work/" 
+push_to_github(my_repo_path, "Updated")
 
 sys.exit()
 
@@ -303,7 +346,7 @@ for i in range(0, 20):
     #### FFT ####
 
     freq, power = fourier_transform(t_s_all[0], rho_all[0])
-    power_smooth = gaussian_filter1d(power, sigma=3) # 3
+    #power_smooth = gaussian_filter1d(power, sigma=3) # 3
     peaks, properties = find_peaks(
     power_smooth,
     prominence=np.max(power) * 0.04,  # stands out from background 0.04
@@ -329,7 +372,7 @@ for i in range(0, 20):
 
     # Projection onto F-mode
     rho_tilde_F = np.sum(
-        rho * np.exp(-2j * np.pi * f_F_c * t) * dt
+        rho * np.exp(-2j * np.pi * f_F * t) * dt
     )
 
     F_amp_complex.append(rho_tilde_F)
