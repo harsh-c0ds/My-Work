@@ -1,5 +1,4 @@
 import os, sys, re
-from TOV.mode_ext_ef import push_to_github
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
