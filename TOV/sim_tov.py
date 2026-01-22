@@ -1,4 +1,5 @@
 import os, sys, re
+from TOV.mode_ext_ef import push_to_github
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
@@ -7,6 +8,8 @@ from kuibit.grid_data import UniformGrid
 from astropy.timeseries import LombScargle
 from scipy.signal import find_peaks  
 from scipy.ndimage import gaussian_filter1d
+from git import Repo
+import datetime
 
 ################################################
  # Define constants and conversion factors
@@ -18,6 +21,28 @@ M_sol = 1.98892e30  # kg
 # convertion factors
 M_to_ms = 1./(1000*M_sol*G/(c*c*c))
 M_to_density = c**5 / (G**3 * M_sol**2) # kg/m^3
+
+
+def push_to_github(repo_path, commit_message):
+    try:
+        # Initialize the repo object
+        repo = Repo(repo_path)
+        
+        # Stage all changes (or specify files like output_dir + "*.png")
+        repo.git.add(all=True)
+        
+        # Commit
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        full_message = f"{commit_message} - {now}"
+        repo.index.commit(full_message)
+        
+        # Push
+        origin = repo.remote(name='origin')
+        origin.push(refspec='main:main')
+        
+        print("Successfully pushed to GitHub!")
+    except Exception as e:
+        print(f"Error pushing to GitHub: {e}")
 
 def get_info(thorn,quantity, folder,t0,coordinate="x"):
         print("Looking for files in the folder: {}".format(folder))
@@ -185,7 +210,7 @@ def fourier_transform(time_ms, rho, n_freq=3000):
 
 sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
-sim_dir_lean = "/home/hsolanki/simulations/lean_bssn/output-0001/tov_ET"
+sim_dir_lean = "/home/hsolanki/simulations/lean_high/output-0000/tov_ET"
 sim_dir_lean_mid = "/home/hsolanki/simulations/lean_bssn_mid/output-0000/tov_ET"
 sim_dir_l_beta_1 = "/home/hsolanki/simulations/l_beta_1/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
@@ -199,7 +224,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 #### figure out the total number of ixd ####
 
 filex = "hydrobase-rho.x.asc"
-folder = sim_dir_l_beta_1
+folder = sim_dir_lean
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -236,10 +261,10 @@ print("Surface x ≈", x_p[-1])
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_l_beta_1,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_lean,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
-output_file = output_dir + "rho_timeseries_l_beta_1.txt"
+output_file = output_dir + "rho_timeseries_lean_high.txt"
 
 with open(output_file, "w") as f:
     for i in range(N_ixd):
@@ -256,6 +281,11 @@ with open(output_file, "w") as f:
 
         # Write corresponding rho as the next row
         f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
+
+# --- Usage at the end of your code ---
+# Set the path to the root folder of your local git repository
+my_repo_path = "/home/hsolanki/Programs/My-Work/" 
+push_to_github(my_repo_path, "Updated")
 
 sys.exit()
 
