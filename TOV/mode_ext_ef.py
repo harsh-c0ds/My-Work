@@ -280,7 +280,7 @@ plt.ylabel("Power")
 plt.title("Density Power Spectrum with Mode Identification")
 plt.legend()
 plt.grid(True, linestyle=":", alpha=0.6)
-plt.savefig(output_dir + "mode_comparision_lean_adm.png", dpi=300)
+plt.savefig(output_dir + "mode_comparision_lean_adm_1.png", dpi=300)
 
 # --- Usage at the end of your code ---
 # Set the path to the root folder of your local git repository
