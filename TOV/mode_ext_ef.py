@@ -148,6 +148,7 @@ sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 sim_dir_lean = "/home/hsolanki/simulations/lean_bssn/output-0001/tov_ET"
 sim_dir_lean_mid = "/home/hsolanki/simulations/lean_bssn_mid/output-0000/tov_ET"
+sim_dir_l_beta_1 = "/home/hsolanki/simulations/l_beta_1/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 file_path = output_dir + "rho_timeseries_lean_mid.txt"
 file_path_adm = output_dir + "rho_timeseries_P.txt"
@@ -197,6 +198,13 @@ rho_adm = rho_adm[:lim_adm]
 
 freq_l, power_l = fourier_transform(t_l, rho_l)
 freq_adm, power_adm = fourier_transform(t_adm, rho_adm)
+
+lim_f = np.argmin(freq_l >= 1.2)
+lim_f_adm = np.argmin(freq_adm >= 1.2)
+freq_l = freq_l[:lim_f]
+power_l = power_l[:lim_f]
+freq_adm = freq_adm[:lim_f_adm]
+power_adm = power_adm[:lim_f_adm]
 
 #power_smooth = gaussian_filter1d(power, sigma=3) # 3
 peaks_l, properties = find_peaks(
