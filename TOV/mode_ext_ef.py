@@ -206,6 +206,9 @@ power_l = power_l[lim_f:]
 freq_adm = freq_adm[lim_f_adm:]
 power_adm = power_adm[lim_f_adm:]
 
+print(lim_f, lim_f_adm, len(freq_l), len(freq_adm), len(power_l), len(power_adm))
+sys.exit()
+
 #power_smooth = gaussian_filter1d(power, sigma=3) # 3
 peaks_l, properties = find_peaks(
     power_l,
