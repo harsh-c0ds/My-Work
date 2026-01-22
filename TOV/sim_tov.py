@@ -187,6 +187,7 @@ sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 sim_dir_lean = "/home/hsolanki/simulations/lean_bssn/output-0001/tov_ET"
 sim_dir_lean_mid = "/home/hsolanki/simulations/lean_bssn_mid/output-0000/tov_ET"
+sim_dir_l_beta_1 = "/home/hsolanki/simulations/l_beta_1/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 # itr, t, rho = np.loadtxt('/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET/hydrobase-rho.maximum.asc', unpack=True, comments='#')
@@ -198,7 +199,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 #### figure out the total number of ixd ####
 
 filex = "hydrobase-rho.x.asc"
-folder = sim_dir_lean_mid
+folder = sim_dir_l_beta_1
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -235,28 +236,28 @@ print("Surface x ≈", x_p[-1])
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_lean_mid,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_l_beta_1,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 
-# output_file = output_dir + "rho_timeseries_lean_mid.txt"
+output_file = output_dir + "rho_timeseries_l_beta_1.txt"
 
-# with open(output_file, "w") as f:
-#     for i in range(N_ixd):
-#         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
+with open(output_file, "w") as f:
+    for i in range(N_ixd):
+        time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
-#         f_xt_values = np.array(f_xt_values)
-#         rho = (f_xt_values - f_xt_values[0]) / f_xt_values[0]
-#         rho -= np.mean(rho)
+        f_xt_values = np.array(f_xt_values)
+        rho = (f_xt_values - f_xt_values[0]) / f_xt_values[0]
+        rho -= np.mean(rho)
 
-#         t_s = np.array(time_values)
+        t_s = np.array(time_values)
 
-#         # Write t_s as a row
-#         f.write(" ".join(f"{val:.6e}" for val in t_s) + "\n")
+        # Write t_s as a row
+        f.write(" ".join(f"{val:.6e}" for val in t_s) + "\n")
 
-#         # Write corresponding rho as the next row
-#         f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
+        # Write corresponding rho as the next row
+        f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
 
-# sys.exit()
+sys.exit()
 
 
 rho = np.array(f_xt_values)/ f_xt_values[0]

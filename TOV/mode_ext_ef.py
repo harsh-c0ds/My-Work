@@ -395,7 +395,7 @@ r = r*1.477
 plt.figure(figsize=(8,6))
 plt.plot(r,eig)
 plt.xlabel("r (Km)")
-plt.ylabel(r"$|\tilde{\rho}_F(r)|$")
+plt.ylabel(r"$\tilde{\rho}_F(r)$")
 plt.savefig(output_dir + "F_mode_eigenfunction_2.png")
 
 # --- Usage at the end of your code ---
