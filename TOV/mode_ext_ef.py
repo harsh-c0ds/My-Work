@@ -150,15 +150,15 @@ sim_dir_lean = "/home/hsolanki/simulations/lean_bssn/output-0001/tov_ET"
 sim_dir_lean_mid = "/home/hsolanki/simulations/lean_bssn_mid/output-0000/tov_ET"
 sim_dir_l_beta_1 = "/home/hsolanki/simulations/l_beta_1/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
-file_path = output_dir + "rho_timeseries_lean_mid.txt"
+file_path = output_dir + "rho_timeseries_l_beta_1.txt"
 file_path_adm = output_dir + "rho_timeseries_P.txt"
 
 # Detect star surface to get x_p
-x_p, surface_ixd_l, surface_x = detect_star_surface(sim_dir_lean_mid, filename="hydrobase-rho.x.asc") 
-x_P_P, surface_ixd_p, surface_x_p = detect_star_surface(sim_dir_p, filename="hydrobase-rho.x.asc") 
+x_p, surface_ixd_l, surface_x = detect_star_surface(sim_dir_l_beta_1, filename="hydrobase-rho.x.asc") 
+#x_P_P, surface_ixd_p, surface_x_p = detect_star_surface(sim_dir_p, filename="hydrobase-rho.x.asc") 
 
 t_s_all_l, rho_all_l = load_time_series(file_path)
-t_s_all_P, rho_all_P = load_time_series(file_path_adm)
+#t_s_all_P, rho_all_P = load_time_series(file_path_adm)
 
 t_s_all_l = t_s_all_l / 203  # convert to ms
 
@@ -167,20 +167,20 @@ ik = 0
 
 t_l = t_s_all_l[ik]
 rho_l = rho_all_l[ik]
-t_adm = t_s_all_P[ik]
-rho_adm = rho_all_P[ik]
+# t_adm = t_s_all_P[ik]
+# rho_adm = rho_all_P[ik]
 
 lim = np.argmin(t_l <= 5)
-lim_adm = np.argmin(t_adm <= 5)
+#lim_adm = np.argmin(t_adm <= 5)
 
 t_l = t_l[:lim]
 rho_l = rho_l[:lim]
-t_adm = t_adm[:lim_adm]
-rho_adm = rho_adm[:lim_adm]
+# t_adm = t_adm[:lim_adm]
+# rho_adm = rho_adm[:lim_adm]
 
 # plt.figure(figsize=(10,6))
 # plt.plot(t_l, rho_l, label="Lean mid", color="blue", alpha=0.6)
-# plt.plot(t_adm, rho_adm, label="ADM", color="green", alpha=0.6)
+# #plt.plot(t_adm, rho_adm, label="ADM", color="green", alpha=0.6)
 # plt.xlabel("Time (ms)")
 # plt.ylabel(r"Central Density $\rho_c$")
 # plt.title("Timeseries of Central Density Comparison at Centre")
@@ -188,8 +188,8 @@ rho_adm = rho_adm[:lim_adm]
 # plt.legend()
 # plt.savefig(output_dir + "time_series_density_lean_mid_vs_ADM.png", dpi=300)
 
-# # --- Usage at the end of your code ---
-# # Set the path to the root folder of your local git repository
+# --- Usage at the end of your code ---
+# Set the path to the root folder of your local git repository
 # my_repo_path = "/home/hsolanki/Programs/My-Work/" 
 # push_to_github(my_repo_path, "Updated")
 
@@ -197,31 +197,25 @@ rho_adm = rho_adm[:lim_adm]
 
 
 freq_l, power_l = fourier_transform(t_l, rho_l)
-freq_adm, power_adm = fourier_transform(t_adm, rho_adm)
+#freq_adm, power_adm = fourier_transform(t_adm, rho_adm)
 
-lim_f = np.argmin(freq_l <= 1.2)
-lim_f_adm = np.argmin(freq_adm <= 1.2)
-freq_l = freq_l[lim_f:]
-power_l = power_l[lim_f:]
-freq_adm = freq_adm[lim_f_adm:]
-power_adm = power_adm[lim_f_adm:]
 
 
 #power_smooth = gaussian_filter1d(power, sigma=3) # 3
 peaks_l, properties = find_peaks(
     power_l,
-    prominence=np.max(power_l) * 0.02,  # stands out from background 0.04
-    width=0.32                               # suppress narrow noise spikes 3.5
+    prominence=np.max(power_l) * 0.04,  # stands out from background 0.04
+    width=3.5                               # suppress narrow noise spikes 3.5
 )
 
-peaks_adm, properties = find_peaks(
-    power_adm,
-    prominence=np.max(power_adm) * 0.04,  # stands out from background 0.04
-    width=3.5                                   # suppress narrow noise spikes 3.5
-)
+# peaks_adm, properties = find_peaks(
+#     power_adm,
+#     prominence=np.max(power_adm) * 0.04,  # stands out from background 0.04
+#     width=3.5                                   # suppress narrow noise spikes 3.5
+# )
 
 F_c_l = freq_l[peaks_l[0]]  # Frequency of fundamental mode in kHz
-F_c_adm = freq_adm[peaks_adm[0]]  # Frequency of fundamental mode in kHz
+#F_c_adm = freq_adm[peaks_adm[0]]  # Frequency of fundamental mode in kHz
 labels = ["F", "H1", "H2", "H3", "H4", "H5"]
 
 # --- Plotting the Raw Comparison ---
@@ -229,7 +223,7 @@ plt.figure(figsize=(10, 6))
 
 # --- plot PSDs ---
 plt.plot(freq_l, power_l, alpha=0.6, label="Lean Mid")
-plt.plot(freq_adm, power_adm, alpha=0.6, label="ADM")
+#plt.plot(freq_adm, power_adm, alpha=0.6, label="ADM")
 
 # --- package peak information ---
 spectra = [
@@ -242,15 +236,15 @@ spectra = [
         "name": "Lean Mid",
         "yoffset": 10
     },
-    {
-        "freq": freq_adm,
-        "power": power_adm,
-        "peaks": peaks_adm,
-        "labels": labels,
-        "color": "purple",
-        "name": "ADM",
-        "yoffset": -15
-    }
+    # {
+    #     "freq": freq_adm,
+    #     "power": power_adm,
+    #     "peaks": peaks_adm,
+    #     "labels": labels,
+    #     "color": "purple",
+    #     "name": "ADM",
+    #     "yoffset": -15
+    # }
 ]
 
 # --- annotate peaks ---
@@ -281,7 +275,7 @@ plt.ylabel("Power")
 plt.title("Density Power Spectrum with Mode Identification")
 plt.legend()
 plt.grid(True, linestyle=":", alpha=0.6)
-plt.savefig(output_dir + "mode_comparision_lean_adm_1.png", dpi=300)
+plt.savefig(output_dir + "mode_l_beta_1.png", dpi=300)
 
 # --- Usage at the end of your code ---
 # Set the path to the root folder of your local git repository
