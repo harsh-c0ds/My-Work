@@ -201,10 +201,10 @@ freq_adm, power_adm = fourier_transform(t_adm, rho_adm)
 
 lim_f = np.argmin(freq_l >= 1.2)
 lim_f_adm = np.argmin(freq_adm >= 1.2)
-freq_l = freq_l[:lim_f]
-power_l = power_l[:lim_f]
-freq_adm = freq_adm[:lim_f_adm]
-power_adm = power_adm[:lim_f_adm]
+freq_l = freq_l[lim_f:]
+power_l = power_l[lim_f:]
+freq_adm = freq_adm[lim_f_adm:]
+power_adm = power_adm[lim_f_adm:]
 
 #power_smooth = gaussian_filter1d(power, sigma=3) # 3
 peaks_l, properties = find_peaks(
