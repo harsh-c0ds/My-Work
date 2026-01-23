@@ -211,7 +211,7 @@ sim_dir_if = "/home/hsolanki/simulations/tov_IF/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 sim_dir_lean = "/home/hsolanki/simulations/lean_high/output-0000/tov_ET"
 sim_dir_lean_mid = "/home/hsolanki/simulations/lean_bssn_mid/output-0000/tov_ET"
-sim_dir_l_beta_1 = "/home/hsolanki/simulations/l_beta_1/output-0002/tov_ET"
+sim_dir_l_beta_1 = "/home/hsolanki/simulations/l_beta_1/output-0001/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 # itr, t, rho = np.loadtxt('/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET/hydrobase-rho.maximum.asc', unpack=True, comments='#')
