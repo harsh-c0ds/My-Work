@@ -211,7 +211,7 @@ freq_l, power_l = fourier_transform(t_l, rho_l)
 
 peaks_l, properties = find_peaks(
     power_l,
-    height=np.max(power_l) * 0.1,
+    height=np.max(power_l) * 0.07,
     prominence=np.percentile(power_l, 95) * 0.15,
     width=6,
 )
