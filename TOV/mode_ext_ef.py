@@ -170,17 +170,17 @@ rho_l = rho_all_l[ik]
 t_adm = t_s_all_P[ik]
 rho_adm = rho_all_P[ik]
 
-lim = np.argmin(t_l <= 5)
-lim_adm = np.argmin(t_adm <= 5)
+lim = np.argmin(t_l >= 0.5) & np.argmin(t_l <= 5)
+lim_adm = np.argmin(t_adm >= 0.5) & np.argmin(t_adm <= 5)
 
-t_l = t_l[:lim]
-rho_l = rho_l[:lim]
-t_adm = t_adm[:lim_adm]
-rho_adm = rho_adm[:lim_adm]
+t_l = t_l[lim]
+rho_l = rho_l[lim]
+t_adm = t_adm[lim_adm]
+rho_adm = rho_adm[lim_adm]
 
 plt.figure(figsize=(10,6))
-plt.plot(t_l, rho_l, label="Lean mid", color="blue", alpha=0.6)
-plt.plot(t_adm, rho_adm, label="ADM", color="green", alpha=0.6)
+plt.plot(t_l, rho_l, label="Lean High", color="blue", alpha=0.6)
+plt.plot(t_adm, rho_adm, label="ML_BSSN", color="green", alpha=0.6)
 plt.xlabel("Time (ms)")
 plt.ylabel(r"Central Density $\rho_c$")
 plt.title("Timeseries of Central Density Comparison at Centre")
@@ -237,7 +237,7 @@ plt.figure(figsize=(10, 6))
 
 # --- plot PSDs ---
 plt.plot(freq_l, power_l, alpha=0.6, label="Lean High")
-plt.plot(freq_adm, power_adm, alpha=0.6, label="ADM")
+plt.plot(freq_adm, power_adm, alpha=0.6, label="ML_BSSN")
 # --- package peak information ---
 spectra = [
     {
@@ -246,16 +246,17 @@ spectra = [
         "peaks": peaks_l,
         "labels": labels,
         "color": "red",
-        "name": "Lean Mid",
+        "name": "Lean High",
         "yoffset": 10
     },
+    
     {
         "freq": freq_adm,
         "power": power_adm,
         "peaks": peaks_adm,
         "labels": labels,
         "color": "purple",
-        "name": "ADM",
+        "name": "ML_BSSN",
         "yoffset": -15
     }
 ]
