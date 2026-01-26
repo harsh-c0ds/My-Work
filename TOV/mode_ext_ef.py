@@ -220,7 +220,7 @@ peaks_adm, properties = find_peaks(
     power_adm,
     height=np.max(power_adm) * 0.07,
     prominence=np.percentile(power_adm, 95) * 0.15,
-    width=20.5,
+    width=30.5,
 )
 # peaks_adm, properties = find_peaks(
 #     power_adm,
@@ -236,7 +236,7 @@ labels = ["F", "H1", "H2", "H3", "H4", "H5"]
 plt.figure(figsize=(10, 6))
 
 # --- plot PSDs ---
-plt.plot(freq_l, power_l, alpha=0.6, label="Lean Mid")
+plt.plot(freq_l, power_l, alpha=0.6, label="Lean High")
 plt.plot(freq_adm, power_adm, alpha=0.6, label="ADM")
 # --- package peak information ---
 spectra = [
