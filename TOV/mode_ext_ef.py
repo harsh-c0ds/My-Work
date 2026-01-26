@@ -219,7 +219,7 @@ peaks_l, properties = find_peaks(
 peaks_adm, properties = find_peaks(
     power_adm,
     height=np.max(power_adm) * 0.06,
-    prominence=np.percentile(power_adm, 95) * 0.2,
+    prominence=np.percentile(power_adm, 95) * 0.18,
     width=7.0,
 )
 # peaks_adm, properties = find_peaks(
