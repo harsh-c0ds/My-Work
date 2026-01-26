@@ -202,10 +202,18 @@ freq_l, power_l = fourier_transform(t_l, rho_l)
 
 
 #power_smooth = gaussian_filter1d(power, sigma=3) # 3
+# peaks_l, properties = find_peaks(
+#     power_l,
+#     prominence=np.max(power_l) * 0.04,  # stands out from background 0.04
+#     width=3.5                               # suppress narrow noise spikes 3.5
+# )
+# df = freq_l[1] - freq_l[0]  # frequency resolution
+
 peaks_l, properties = find_peaks(
     power_l,
-    prominence=np.max(power_l) * 0.04,  # stands out from background 0.04
-    width=3.5                               # suppress narrow noise spikes 3.5
+    height=np.max(power_l) * 0.12,
+    prominence=np.percentile(power_l, 95) * 0.15,
+    width=6,
 )
 
 # peaks_adm, properties = find_peaks(
