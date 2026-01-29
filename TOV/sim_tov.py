@@ -223,7 +223,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 #### figure out the total number of ixd ####
 
 filex = "hydrobase-rho.x.asc"
-folder = sim_dir_if
+folder = sim_dir_l_beta_1
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -262,7 +262,7 @@ print("Surface x ≈", x_p[-1])
 
 t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")    
-output_file = output_dir + "rho_timeseries_IF_1.txt"
+output_file = output_dir + "rho_timeseries_l_b_1_0001.txt"
 
 with open(output_file, "w") as f:
     for i in range(N_ixd):
