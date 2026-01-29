@@ -260,7 +260,7 @@ print("Surface x ≈", x_p[-1])
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_if,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_l_beta_1,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")    
 output_file = output_dir + "rho_timeseries_l_b_1_0001.txt"
 
