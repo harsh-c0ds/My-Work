@@ -222,8 +222,8 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 #### figure out the total number of ixd ####
 
-filex = "hydrobase-rho.x.asc"
-folder = sim_dir_l_beta_1
+filex = "hydrobase-vel.x.asc"
+folder = sim_dir_p
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -242,7 +242,7 @@ rho = data_t0[:,12]
 
 # --- remove atmosphere / vacuum ---
 rho_floor = 1e-10   # adjust if needed
-mask_star =rho > rho_floor
+mask_star =rho < rho_floor
 
 x_star = x[mask_star]
 
@@ -260,12 +260,12 @@ print("Surface x ≈", x_p[-1])
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_l_beta_1,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir_p,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")    
-output_file = output_dir + "rho_timeseries_l_b_1_0002.txt"
+output_file = output_dir + "vel_timeseries_P.txt"
 
 with open(output_file, "w") as f:
-    for i in range(N_ixd):
+    for i in range(70):
         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
         f_xt_values = np.array(f_xt_values)

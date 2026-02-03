@@ -138,7 +138,7 @@ def get_1d_slice(tk1, xk1, datax, itd, coordinate):
 ixd = 0  # index of the x point for time series
 itd = 0  # index of the time point for 1D slice
 
-t_rns,x_p_rns,rl_rns,rl_n_rns,datax_rns = get_info("hydrobase","rho","/home/harsh/simulations/hydro_rns_2/output-0000/tov_ET",0.0,"x")
+t_rns,x_p_rns,rl_rns,rl_n_rns,datax_rns = get_info("hydrobase","vel","/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET",0.0,"x")
 
 # for itd in range(len(t)):
 #     xj_sorted, f_xi_tj_sorted = get_1d_slice(t, x_p, datax, itd, coordinate="x")
@@ -169,8 +169,8 @@ plt.figure(figsize=(8,5))  # optional, makes figure larger
 plt.plot(time_values_rns, f_xt_values_rns, color='k', label=f"mid (x={ixd*0.5})")
 
 plt.xlabel("Time")
-plt.ylabel("Rho")
-plt.title("rho vs time at x index")
+plt.ylabel("file_path_Vel")
+plt.title("Vel vs time at x index")
 plt.legend()
 plt.grid(True)  # optional, makes reading easier
 #plt.savefig("/home/harsh/m_thesis/Programs/output_plots/rho_x.png", dpi=300)
