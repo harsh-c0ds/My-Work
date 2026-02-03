@@ -16,7 +16,7 @@ ActiveThorns = "CarpetIOASCII CarpetIOScalar CarpetIOHDF5 CarpetIOBasic"
 
 # Finalize
 Cactus::terminate           = "time"
-Cactus::cctk_final_time     = 1400 #800 # divide by ~203 to get ms
+Cactus::cctk_final_time     = 3000 #800 # divide by ~203 to get ms
 
 # Termination Trigger
 ActiveThorns = "TerminationTrigger"
@@ -42,9 +42,9 @@ CoordBase::zmax = 24.0
 # have to be multiples of these. 'dx' is the size of one cell in x-direction.
 # Making this smaller means using higher resolution, because more points will
 # be used to cover the same space.
-CoordBase::dx   =   1.0
-CoordBase::dy   =   1.0
-CoordBase::dz   =   1.0
+CoordBase::dx   =   0.3
+CoordBase::dy   =   0.3
+CoordBase::dz   =   0.3
 
 CarpetRegrid2::regrid_every =   0
 CarpetRegrid2::num_centres  =   1
@@ -148,13 +148,12 @@ ADMBase::dtlapse_evolution_method= "LeanBSSNMoL"
 ADMBase::dtshift_evolution_method= "LeanBSSNMoL"
 
 LeanBSSNMoL::impose_conf_fac_floor_at_initial   = yes
-LeanBSSNMoL::eta_beta                         = 0.50
+LeanBSSNMoL::eta_beta                         = 1
 LeanBSSNMoL::conf_fac_floor                   = 1.0d-04
 LeanBSSNMoL::derivs_order                     = 4
 LeanBSSNMoL::use_advection_stencils           = yes
 LeanBSSNMoL::calculate_constraints            = yes
 LeanBSSNMoL::calculate_constraints_every      = 32
-LeanBSSNMoL::zeta_alpha			      = 1
 
 # init parameters
 InitBase::initial_data_setup_method = "init_some_levels"
