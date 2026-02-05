@@ -261,7 +261,7 @@ print("Total number of points at t0 =", len(x))
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir_lean,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir_p,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")    
 output_file = output_dir + "vel_timeseries_P.txt"
 
