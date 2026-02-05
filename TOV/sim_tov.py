@@ -265,7 +265,7 @@ time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 output_file = output_dir + "vel_timeseries_P.txt"
 
 with open(output_file, "w") as f:
-    for i in range(70):
+    for i in range(1):
         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
         f_xt_values = np.array(f_xt_values)
