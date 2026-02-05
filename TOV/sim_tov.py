@@ -222,8 +222,8 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 #### figure out the total number of ixd ####
 
-filex = "admbase-lapse.x.asc"
-folder = sim_dir_lean
+filex = "hydrobase-vel.x.asc"
+folder = sim_dir_p
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -261,12 +261,12 @@ print("Total number of points at t0 =", len(x))
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("admbase","lapse",sim_dir_lean,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir_lean,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")    
-output_file = output_dir + "lapse_timeseries_Lean.txt"
+output_file = output_dir + "vel_timeseries_P.txt"
 
 with open(output_file, "w") as f:
-    for i in range(80):
+    for i in range(0):
         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
         f_xt_values = np.array(f_xt_values)
