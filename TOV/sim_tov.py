@@ -240,23 +240,24 @@ data_t0 = datax[mask_t0]
 x   = data_t0[:,9]
 rho = data_t0[:,12]
 
+print("Total number of points at t0 =", len(x))
 # --- remove atmosphere / vacuum ---
-rho_floor = 1e-10   # adjust if needed
-mask_star =rho < rho_floor
+# rho_floor = 1e-10   # adjust if needed
+# mask_star =rho < rho_floor
 
-x_star = x[mask_star]
+# x_star = x[mask_star]
 
-# --- unique spatial points define ixd ---
-x_p = np.unique(x_star)
-x_p.sort()
+# # --- unique spatial points define ixd ---
+# x_p = np.unique(x_star)
+# x_p.sort()
 
-# --- results ---
-N_ixd = len(x_p)
+# # --- results ---
+# N_ixd = len(x_p)
 
-print("Number of valid ixd points (center → surface):", N_ixd)
-print("ixd range: 0 →", N_ixd-1)
-print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
-print("Surface x ≈", x_p[-1])
+# print("Number of valid ixd points (center → surface):", N_ixd)
+# print("ixd range: 0 →", N_ixd-1)
+# print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
+# print("Surface x ≈", x_p[-1])
 
 ##### time series ####
 
@@ -265,7 +266,7 @@ time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")
 output_file = output_dir + "lapse_timeseries_Lean.txt"
 
 with open(output_file, "w") as f:
-    for i in range(N_ixd-1):
+    for i in range(80):
         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
         f_xt_values = np.array(f_xt_values)
