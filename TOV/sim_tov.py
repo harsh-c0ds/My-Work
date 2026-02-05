@@ -223,7 +223,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 #### figure out the total number of ixd ####
 
 filex = "hydrobase-vel.x.asc"
-folder = sim_dir_p
+folder = sim_dir_lean
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -260,12 +260,12 @@ print("Surface x ≈", x_p[-1])
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir_p,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir_lean,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")    
-output_file = output_dir + "vel_timeseries_P.txt"
+output_file = output_dir + "vel_timeseries_Lean.txt"
 
 with open(output_file, "w") as f:
-    for i in range(1):
+    for i in range(3,3):
         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
         f_xt_values = np.array(f_xt_values)
