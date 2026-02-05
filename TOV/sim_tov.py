@@ -108,11 +108,11 @@ def fx_timeseries(t,x_p,datax,ixd, coordinate="x"):     #index value of x as inp
         t_index = datax[:,8] == t[j]
 # get data  as t,coordinate,f(t,coordinate) 
         if coordinate == "x": 
-          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,9]  , datax[t_index,12]  ))
+          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,9]  , datax[t_index,13]  ))
         if coordinate == "y": 
-          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,10]  , datax[t_index,12]  ))
+          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,10]  , datax[t_index,13]  ))
         if coordinate == "z": 
-          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,11]  , datax[t_index,12]  ))
+          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,11]  , datax[t_index,13]  ))
 #now x=f_x_ti[0][:] and f(x)=f_x_ti[1][:]
  #create filter for space points
         if ixd==0:
