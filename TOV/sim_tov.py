@@ -108,11 +108,11 @@ def fx_timeseries(t,x_p,datax,ixd, coordinate="x"):     #index value of x as inp
         t_index = datax[:,8] == t[j]
 # get data  as t,coordinate,f(t,coordinate) 
         if coordinate == "x": 
-          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,9]  , datax[t_index,13]  ))
+          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,9]  , datax[t_index,12]  ))
         if coordinate == "y": 
-          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,10]  , datax[t_index,13]  ))
+          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,10]  , datax[t_index,12]  ))
         if coordinate == "z": 
-          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,11]  , datax[t_index,13]  ))
+          f_x_ti = np.vstack(  (datax[t_index,8],  datax[t_index,11]  , datax[t_index,12]  ))
 #now x=f_x_ti[0][:] and f(x)=f_x_ti[1][:]
  #create filter for space points
         if ixd==0:
@@ -222,7 +222,7 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 #### figure out the total number of ixd ####
 
-filex = "hydrobase-vel.x.asc"
+filex = "admbase-lapse.x.asc"
 folder = sim_dir_lean
 
 print("Looking for files in the folder: {}".format(folder))
@@ -260,12 +260,12 @@ print("Surface x ≈", x_p[-1])
 
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir_lean,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("admbase","lapse",sim_dir_lean,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")    
-output_file = output_dir + "vel_timeseries_Lean.txt"
+output_file = output_dir + "lapse_timeseries_Lean.txt"
 
 with open(output_file, "w") as f:
-    for i in range(78,78):
+    for i in range(N_ixd-1):
         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
         f_xt_values = np.array(f_xt_values)
