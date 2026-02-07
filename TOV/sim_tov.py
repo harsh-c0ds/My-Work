@@ -207,6 +207,56 @@ def fourier_transform(time_ms, rho, n_freq=3000):
 
     return freq_kHz, power
 
+def detect_star_surface(folder, filename="hydrobase-rho.x.asc", rho_floor=1e-10, time_col=8, x_col=9, rho_col=12, verbose=True):
+
+    if verbose:
+        print(f"Looking for files in the folder: {folder}")
+
+    # Preserve caller's working directory
+    cwd = os.getcwd()
+    try:
+        os.chdir(folder)
+
+        if verbose:
+            print(f"Opening file: {filename}.....")
+
+        data = np.loadtxt(filename, comments='#')
+
+    finally:
+        os.chdir(cwd)
+
+    if verbose:
+        print("Reading file....")
+
+    # --- pick initial time slice ---
+    t0 = np.min(data[:, time_col])
+    mask_t0 = data[:, time_col] == t0
+    data_t0 = data[mask_t0]
+
+    # --- extract x and rho ---
+    x = data_t0[:, x_col]
+    rho = data_t0[:, rho_col]
+
+    # --- remove atmosphere / vacuum ---
+    mask_star = rho > rho_floor
+    x_star = x[mask_star]
+    rho_star = rho[mask_star]  # kept for consistency / future use
+
+    # --- unique spatial points define ixd ---
+    x_p = np.unique(x_star)
+    x_p.sort()
+
+    N_ixd = len(x_p)
+    surface_ixd = N_ixd - 1
+    surface_x = x_p[-1]
+
+    if verbose:
+        print(f"Number of valid points: {N_ixd}")
+        print(f"Physical Surface detected at x ≈ {surface_x:.4f}")
+        print(f"surface index: {surface_ixd}")
+
+    return x_p, surface_ixd, surface_x, N_ixd
+
 sim_dir_if = "/home/hsolanki/simulations/IF_sim_1/output-0000/tov_ET"
 sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 sim_dir_lean = "/home/hsolanki/simulations/lean_2/output-0000/tov_ET"
@@ -222,52 +272,16 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 # print(len(t), len(rho))
 
 #### figure out the total number of ixd ####
+x_p_ch, surface_ixd_ch, surface_x_ch, N_ixd_ch = detect_star_surface(sim_dir_lean_ch, filename="hydrobase-rho.x.asc")
 
-filex = "hydrobase-rho.x.asc"
-folder = sim_dir_lean_ch
-
-print("Looking for files in the folder: {}".format(folder))
-os.chdir(folder)
-print("Opening file: {}.....".format(filex))
-datax = np.loadtxt(filex, comments='#')
-print("Reading file....")
-
-# --- pick initial time slice ---
-t0 = np.min(datax[:,8])
-mask_t0 = datax[:,8] == t0
-data_t0 = datax[mask_t0]
-
-# --- extract x and rho ---
-x   = data_t0[:,9]
-rho = data_t0[:,12]
-
-print("Total number of points at t0 =", len(x))
-# --- remove atmosphere / vacuum ---
-rho_floor = 1e-10   # adjust if needed
-mask_star =rho < rho_floor
-
-x_star = x[mask_star]
-
-# --- unique spatial points define ixd ---
-x_p = np.unique(x_star)
-x_p.sort()
-
-# --- results ---
-N_ixd = len(x_p)
-
-print("Number of valid ixd points (center → surface):", N_ixd)
-print("ixd range: 0 →", N_ixd-1)
-print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
-print("Surface x ≈", x_p[-1])
-sys.exit()
 ##### time series ####
 
-t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir_p,0.0,"x")
+t,x_p,rl,rl_n,datax = get_info("hydrobase","rho",sim_dir_lean_ch,0.0,"x")
 time_values,f_xt_values = fx_timeseries(t,x_p,datax,0,"x")    
-output_file = output_dir + "vel_timeseries_P.txt"
+output_file = output_dir + "rho_timeseries_Lean_ch.txt"
 
 with open(output_file, "w") as f:
-    for i in range(0):
+    for i in range(N_ixd_ch):
         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
         f_xt_values = np.array(f_xt_values)
