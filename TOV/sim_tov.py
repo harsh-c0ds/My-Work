@@ -212,6 +212,7 @@ sim_dir_p = "/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET"
 sim_dir_lean = "/home/hsolanki/simulations/lean_2/output-0000/tov_ET"
 sim_dir_lean_mid = "/home/hsolanki/simulations/lean_bssn_mid/output-0000/tov_ET"
 sim_dir_l_beta_1 = "/home/hsolanki/simulations/l_beta_1/output-0002/tov_ET"
+sim_dir_lean_ch = "/home/hsolanki/simulations/lean_ch/output-0000/tov_ET"
 output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 # itr, t, rho = np.loadtxt('/home/hsolanki/simulations/Pol_sim/output-0000/tov_ET/hydrobase-rho.maximum.asc', unpack=True, comments='#')
@@ -222,8 +223,8 @@ output_dir = "/home/hsolanki/Programs/My-Work/output/"
 
 #### figure out the total number of ixd ####
 
-filex = "hydrobase-vel.x.asc"
-folder = sim_dir_p
+filex = "hydrobase-rho.x.asc"
+folder = sim_dir_lean_ch
 
 print("Looking for files in the folder: {}".format(folder))
 os.chdir(folder)
@@ -242,23 +243,23 @@ rho = data_t0[:,12]
 
 print("Total number of points at t0 =", len(x))
 # --- remove atmosphere / vacuum ---
-# rho_floor = 1e-10   # adjust if needed
-# mask_star =rho < rho_floor
+rho_floor = 1e-10   # adjust if needed
+mask_star =rho < rho_floor
 
-# x_star = x[mask_star]
+x_star = x[mask_star]
 
-# # --- unique spatial points define ixd ---
-# x_p = np.unique(x_star)
-# x_p.sort()
+# --- unique spatial points define ixd ---
+x_p = np.unique(x_star)
+x_p.sort()
 
-# # --- results ---
-# N_ixd = len(x_p)
+# --- results ---
+N_ixd = len(x_p)
 
-# print("Number of valid ixd points (center → surface):", N_ixd)
-# print("ixd range: 0 →", N_ixd-1)
-# print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
-# print("Surface x ≈", x_p[-1])
-
+print("Number of valid ixd points (center → surface):", N_ixd)
+print("ixd range: 0 →", N_ixd-1)
+print("Center x ≈", x_p[np.argmin(np.abs(x_p))])
+print("Surface x ≈", x_p[-1])
+sys.exit()
 ##### time series ####
 
 t,x_p,rl,rl_n,datax = get_info("hydrobase","vel",sim_dir_p,0.0,"x")
