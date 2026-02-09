@@ -406,7 +406,6 @@ eig = np.real(F_amp_complex)
 
 # Radius
 r = x_p[:len(eig)]
-r = r*1.477
 #print(len(r), len(eig), len(x_p))
 # Plot
 plt.figure(figsize=(8,6))

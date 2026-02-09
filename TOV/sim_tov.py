@@ -417,40 +417,38 @@ with open(output_file, "w") as f:
         f.write(" ".join(f"{val:.6e}" for val in rho) + "\n")
 
 
-   #  # Remove duplicate times
-   #  unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
-   #  t = t_s[unique_mask]
-   #  rho = rho[unique_mask]
-   #  print(f"1: {len(t_s)} → 2: {len(t)} after removing duplicates")
-   # # Ensure t and rho are numpy arrays
-   #  t = np.array(t)
-   #  rho = np.array(rho)
+    # Remove duplicate times
+    unique_mask = np.diff(t_s, prepend=t_s[0] - 1.0) > 0
+    t = t_s[unique_mask]
+    rho = rho[unique_mask]
+    print(f"1: {len(t_s)} → 2: {len(t)} after removing duplicates")
+   # Ensure t and rho are numpy arrays
+    t = np.array(t)
+    rho = np.array(rho)
 
-   # # Initialize trapezoidal weights safely
-   #  dt = np.zeros_like(t, dtype=float)
+   # Initialize trapezoidal weights safely
+    dt = np.zeros_like(t, dtype=float)
 
-   #  if len(t) == 0:
-   #     raise ValueError("No time points available for computation!")
-   #  elif len(t) == 1:
-   #    # Only one time point, pick a small dt
-   #     dt[0] = 1e-6
-   #  elif len(t) == 2:
-   #    # Only two points, simple difference
-   #     dt[0] = t[1] - t[0]
-   #     dt[1] = dt[0]
-   #  else:
-   #    # Three or more points: trapezoidal rule
-   #     dt[1:-1] = 0.5 * (t[2:] - t[:-2])
-   #     dt[0] = t[1] - t[0]
-   #     dt[-1] = t[-1] - t[-2]
+    if len(t) == 0:
+       raise ValueError("No time points available for computation!")
+    elif len(t) == 1:
+      # Only one time point, pick a small dt
+       dt[0] = 1e-6
+    elif len(t) == 2:
+      # Only two points, simple difference
+       dt[0] = t[1] - t[0]
+       dt[1] = dt[0]
+    else:
+      # Three or more points: trapezoidal rule
+       dt[1:-1] = 0.5 * (t[2:] - t[:-2])
+       dt[0] = t[1] - t[0]
+       dt[-1] = t[-1] - t[-2]
 
-   #  # PROJECT ONTO FIXED F-MODE
-   #  rho_tilde_F = np.sum(
-   #      rho * np.exp(-2j * np.pi * f_F * t) * dt
-   #  )
-   #  F_amp_complex.append(rho_tilde_F)
-
-sys.exit()
+    # PROJECT ONTO FIXED F-MODE
+    rho_tilde_F = np.sum(
+        rho * np.exp(-2j * np.pi * f_F * t) * dt
+    )
+    F_amp_complex.append(rho_tilde_F)
 
 
 F_amp = np.array(np.abs(F_amp_complex))
