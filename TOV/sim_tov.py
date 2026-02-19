@@ -285,7 +285,7 @@ with open(output_file, "w") as f:
         time_values, f_xt_values = fx_timeseries(t, x_p, datax, i, "x")
 
         f_xt_values = np.array(f_xt_values)
-        rho = (f_xt_values - f_xt_values[0]) / f_xt_values[0]
+        rho = (f_xt_values) / f_xt_values[0]
         rho -= np.mean(rho)
 
         t_s = np.array(time_values)
