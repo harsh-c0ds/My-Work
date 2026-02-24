@@ -1,0 +1,21 @@
+# My Work – Numerical Methods & Orbital Simulations
+
+## Overview
+This repository contains **numerical simulations of a three-body orbital system** using various integration schemes. The simulations study **orbital dynamics, energy conservation, angular momentum, and eccentricity evolution** for multiple bodies under Newtonian gravity.
+
+Implemented in **Python** with **NumPy** and **Matplotlib**.
+
+## Physics Context
+We simulate a system of three bodies:  
+1. Central massive body  
+2. Two smaller orbiting bodies  
+
+Key quantities computed:  
+- Positions and velocities  
+- Energy (kinetic + potential)  
+- Angular momentum  
+- Orbital elements: eccentricity `e` and semi-major axis `a`  
+
+The code also explores **varying initial separations (`delta`)** and close encounters between bodies.
+
+## Repository Structure
