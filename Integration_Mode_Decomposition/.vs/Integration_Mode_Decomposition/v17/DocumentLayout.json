@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Pietro\\Desktop\\Integration_Mode_Decomposition\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BB4FD213-C90E-4914-9C7A-EFB6C0FAA198}|Integration_Mode_Decomposition.vfproj|c:\\users\\pietro\\desktop\\integration_mode_decomposition\\integration_mode_decomposition.f90||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{BB4FD213-C90E-4914-9C7A-EFB6C0FAA198}|Integration_Mode_Decomposition.vfproj|solutionrelative:integration_mode_decomposition.f90||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Integration_Mode_Decomposition.f90",
+              "DocumentMoniker": "C:\\Users\\Pietro\\Desktop\\Integration_Mode_Decomposition\\Integration_Mode_Decomposition.f90",
+              "RelativeDocumentMoniker": "Integration_Mode_Decomposition.f90",
+              "ToolTip": "C:\\Users\\Pietro\\Desktop\\Integration_Mode_Decomposition\\Integration_Mode_Decomposition.f90",
+              "RelativeToolTip": "Integration_Mode_Decomposition.f90",
+              "ViewState": "AgIAABcBAAAAAAAAAAAAAEYBAAASAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGdSURBVDhP7ZSxa1pRFIe/qAl9RJJAAg2CpYqYl5AhlzRTJ12yZXMsQgZFSjO4mMHFCpmyBnHuX9EgCt0ckgedgtBJLAkkqJAXKnrfzRB80ZeXxErHfnCW3\u002BF8lwOHi1KKer3OpBQKhSPTNC23Qik1o5RCSrnT6/UmsV4Ct0Cke36NspTd8K8v4ZufZUxoGAatVmvMMMTr9aLrOqFQCIDvb78hb/t2/\u002BOPPRa3V/CNzFCr1ahWq6ORjcfjQQhBMpkkHA4DMLeqoX/9AID23g8wLhxSKpWcEZ1Oh3w\u002BjxDCFvZvevw6/knkcIu55TcIITY8zkGAYDD4pAKBAFJK\u002Bv3HNZW0\u002BPP7DmkOAGg0GheuwkmZjyyye/WJd/trdua6shuappFIJNB1HYDQwSa\u002BhVkAKpXKqWEYZwAopRgMBjumaVrFYtGKxWJP7uu1SqfTn4cPT71yKpUil8s54\u002BmF7XabbrfrjKcXPsd/4QPNZvPVsizLOQbPHXYmk3FGEzMmjMfjRKPR0ehF/P6HH2aUv/1gXclms1/K5fIJQ\u002BG/5B6MC/MMF6TcdgAAAABJRU5ErkJggg==",
+              "WhenOpened": "2024-12-23T22:30:28.909Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
