@@ -1,0 +1,74 @@
+==================
+WARNING: ThreadSanitizer: data race (pid=408149)
+  Atomic read of size 1 at 0x7ffff3349540 by main thread:
+    #0 pthread_mutex_lock /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1367:3 (conflict-sani+0x4283ef)
+    #1 __kmp_lock_suspend_mx <null> (libiomp5.so+0x1637d4) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Previous write of size 1 at 0x7ffff3349540 by thread T2:
+    #0 pthread_mutex_init /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1341:3 (conflict-sani+0x428084)
+    #1 __kmp_suspend_initialize_thread <null> (libiomp5.so+0x16a89c) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Thread T2 (tid=408152, running) created by main thread at:
+    #0 pthread_create /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1048:3 (conflict-sani+0x42662f)
+    #1 __kmp_create_worker <null> (libiomp5.so+0x164c87) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+SUMMARY: ThreadSanitizer: data race (/software/rapids/r24.10/imkl/2023.2.0/compiler/2023.2.0/linux/compiler/lib/intel64_lin/libiomp5.so+0x1637d4) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd) in __kmp_lock_suspend_mx
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=408149)
+  Write of size 8 at 0x00000187e2e0 by thread T2:
+    #0 main.extracted /home/nhr109/OpenMP/01/pitfalls/conflict.c:22:9 (conflict-sani+0x4d7c3e)
+    #1 __kmp_invoke_microtask <null> (libiomp5.so+0x163492) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Previous read of size 8 at 0x00000187e2e0 by thread T3:
+    #0 main.extracted /home/nhr109/OpenMP/01/pitfalls/conflict.c:23:10 (conflict-sani+0x4d7c7b)
+    #1 __kmp_invoke_microtask <null> (libiomp5.so+0x163492) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Location is global 'a' of size 88 at 0x00000187e2a0 (conflict-sani+0x187e2e0)
+
+  Thread T2 (tid=408152, running) created by main thread at:
+    #0 pthread_create /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1048:3 (conflict-sani+0x42662f)
+    #1 __kmp_create_worker <null> (libiomp5.so+0x164c87) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Thread T3 (tid=408153, running) created by main thread at:
+    #0 pthread_create /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1048:3 (conflict-sani+0x42662f)
+    #1 __kmp_create_worker <null> (libiomp5.so+0x164c87) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+SUMMARY: ThreadSanitizer: data race /home/nhr109/OpenMP/01/pitfalls/conflict.c:22:9 in main.extracted
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=408149)
+  Read of size 8 at 0x00000187e2b8 by thread T1:
+    #0 main.extracted /home/nhr109/OpenMP/01/pitfalls/conflict.c:23:10 (conflict-sani+0x4d7c7b)
+    #1 __kmp_invoke_microtask <null> (libiomp5.so+0x163492) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Previous write of size 8 at 0x00000187e2b8 by main thread:
+    #0 main.extracted /home/nhr109/OpenMP/01/pitfalls/conflict.c:22:9 (conflict-sani+0x4d7c3e)
+    #1 __kmp_invoke_microtask <null> (libiomp5.so+0x163492) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Location is global 'a' of size 88 at 0x00000187e2a0 (conflict-sani+0x187e2b8)
+
+  Thread T1 (tid=408151, running) created by main thread at:
+    #0 pthread_create /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1048:3 (conflict-sani+0x42662f)
+    #1 __kmp_create_worker <null> (libiomp5.so+0x164c87) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+SUMMARY: ThreadSanitizer: data race /home/nhr109/OpenMP/01/pitfalls/conflict.c:23:10 in main.extracted
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=408149)
+  Read of size 8 at 0x00000187e320 by main thread:
+    #0 main /home/nhr109/OpenMP/01/pitfalls/conflict.c:28:19 (conflict-sani+0x4d7a88)
+
+  Previous write of size 8 at 0x00000187e320 by thread T1:
+    #0 main.extracted /home/nhr109/OpenMP/01/pitfalls/conflict.c:23:9 (conflict-sani+0x4d7ce3)
+    #1 __kmp_invoke_microtask <null> (libiomp5.so+0x163492) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Location is global 'b' of size 88 at 0x00000187e300 (conflict-sani+0x187e320)
+
+  Thread T1 (tid=408151, running) created by main thread at:
+    #0 pthread_create /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1048:3 (conflict-sani+0x42662f)
+    #1 __kmp_create_worker <null> (libiomp5.so+0x164c87) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+SUMMARY: ThreadSanitizer: data race /home/nhr109/OpenMP/01/pitfalls/conflict.c:28:19 in main
+==================
+ThreadSanitizer: reported 4 warnings

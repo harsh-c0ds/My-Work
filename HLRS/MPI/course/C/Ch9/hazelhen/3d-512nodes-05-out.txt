@@ -1,0 +1,767 @@
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 1
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   0 0   0 0  
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       128 bytes       91.400 usec         1.400 MB/s gridsizes=    2    2    3 halosize=       16 = + 6 + 6 + 4
+       432 bytes       82.898 usec         5.211 MB/s gridsizes=    3    4    6 halosize=       54 = + 24 + 18 + 12
+      1728 bytes      196.280 usec         8.804 MB/s gridsizes=    6    8   12 halosize=      216 = + 96 + 72 + 48
+      6912 bytes      108.781 usec        63.541 MB/s gridsizes=   12   16   24 halosize=      864 = + 384 + 288 + 192
+     26632 bytes      214.281 usec       124.285 MB/s gridsizes=   24   31   47 halosize=     3329 = + 1457 + 1128 + 744
+    104408 bytes      500.259 usec       208.708 MB/s gridsizes=   47   62   93 halosize=    13051 = + 5766 + 4371 + 2914
+    413416 bytes     2181.702 usec       189.492 MB/s gridsizes=   93  124  185 halosize=    51677 = + 22940 + 17205 + 11532
+   1644280 bytes     9437.261 usec       174.233 MB/s gridsizes=  185  247  370 halosize=   205535 = + 91390 + 68450 + 45695
+   6561336 bytes    39341.002 usec       166.781 MB/s gridsizes=  370  493  739 halosize=   820167 = + 364327 + 273430 + 182410
+  26194104 bytes   210796.862 usec       124.262 MB/s gridsizes=  739  985 1477 halosize=  3274263 = + 1454845 + 1091503 + 727915
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 2
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   0 0   0 0  
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       128 bytes      190.401 usec         0.672 MB/s gridsizes=    2    2    3 halosize=       16 = + 6 + 6 + 4
+       432 bytes       54.879 usec         7.872 MB/s gridsizes=    3    4    6 halosize=       54 = + 24 + 18 + 12
+      1728 bytes       27.800 usec        62.159 MB/s gridsizes=    6    8   12 halosize=      216 = + 96 + 72 + 48
+      6912 bytes      221.362 usec        31.225 MB/s gridsizes=   12   16   24 halosize=      864 = + 384 + 288 + 192
+     26632 bytes      366.659 usec        72.634 MB/s gridsizes=   24   31   47 halosize=     3329 = + 1457 + 1128 + 744
+    104408 bytes      266.438 usec       391.867 MB/s gridsizes=   47   62   93 halosize=    13051 = + 5766 + 4371 + 2914
+    413416 bytes     1035.938 usec       399.074 MB/s gridsizes=   93  124  185 halosize=    51677 = + 22940 + 17205 + 11532
+   1644280 bytes     4605.837 usec       356.999 MB/s gridsizes=  185  247  370 halosize=   205535 = + 91390 + 68450 + 45695
+   6561336 bytes    20127.721 usec       325.985 MB/s gridsizes=  370  493  739 halosize=   820167 = + 364327 + 273430 + 182410
+  26194104 bytes    94417.701 usec       277.428 MB/s gridsizes=  739  985 1477 halosize=  3274263 = + 1454845 + 1091503 + 727915
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 3
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   0 0   0 0  
+cart_method == 3: MPIX_Cart_weighted_create( weights := 4.0 / gridsize_avg_per_proc_startval )
+weights=  2.000000 2.000000 2.000000
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights= 2.000000 2.000000 2.000000
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       128 bytes       47.579 usec         2.690 MB/s gridsizes=    2    2    3 halosize=       16 = + 6 + 6 + 4
+       432 bytes       84.519 usec         5.111 MB/s gridsizes=    3    4    6 halosize=       54 = + 24 + 18 + 12
+      1728 bytes       97.818 usec        17.665 MB/s gridsizes=    6    8   12 halosize=      216 = + 96 + 72 + 48
+      6912 bytes      130.258 usec        53.064 MB/s gridsizes=   12   16   24 halosize=      864 = + 384 + 288 + 192
+     26632 bytes       92.902 usec       286.667 MB/s gridsizes=   24   31   47 halosize=     3329 = + 1457 + 1128 + 744
+    104408 bytes      242.400 usec       430.726 MB/s gridsizes=   47   62   93 halosize=    13051 = + 5766 + 4371 + 2914
+    413416 bytes     1026.602 usec       402.703 MB/s gridsizes=   93  124  185 halosize=    51677 = + 22940 + 17205 + 11532
+   1644280 bytes     4531.660 usec       362.843 MB/s gridsizes=  185  247  370 halosize=   205535 = + 91390 + 68450 + 45695
+   6561336 bytes    20567.899 usec       319.009 MB/s gridsizes=  370  493  739 halosize=   820167 = + 364327 + 273430 + 182410
+  26194104 bytes    93956.742 usec       278.789 MB/s gridsizes=  739  985 1477 halosize=  3274263 = + 1454845 + 1091503 + 727915
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 1
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 1 2 4
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   0 0   0 0  
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       160 bytes       42.377 usec         3.776 MB/s gridsizes=    1    2    6 halosize=       20 = + 12 + 6 + 2
+       640 bytes       40.741 usec        15.709 MB/s gridsizes=    2    4   12 halosize=       80 = + 48 + 24 + 8
+      2304 bytes       96.741 usec        23.816 MB/s gridsizes=    3    8   24 halosize=      288 = + 192 + 72 + 24
+      9040 bytes      100.179 usec        90.239 MB/s gridsizes=    6   16   47 halosize=     1130 = + 752 + 282 + 96
+     34968 bytes      209.122 usec       167.214 MB/s gridsizes=   12   31   93 halosize=     4371 = + 2883 + 1116 + 372
+    139184 bytes      880.980 usec       157.988 MB/s gridsizes=   24   62  185 halosize=    17398 = + 11470 + 4440 + 1488
+    552784 bytes     4174.757 usec       132.411 MB/s gridsizes=   47  124  370 halosize=    69098 = + 45880 + 17390 + 5828
+   2193848 bytes    16826.959 usec       130.377 MB/s gridsizes=   93  247  739 halosize=   274231 = + 182533 + 68727 + 22971
+   8740888 bytes    70772.457 usec       123.507 MB/s gridsizes=  185  493 1477 halosize=  1092611 = + 728161 + 273245 + 91205
+  34936960 bytes   404864.421 usec        86.293 MB/s gridsizes=  370  985 2954 halosize=  4367120 = + 2909690 + 1092980 + 364450
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 2
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 1 2 4
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   0 0   0 0  
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       160 bytes       99.702 usec         1.605 MB/s gridsizes=    1    2    6 halosize=       20 = + 12 + 6 + 2
+       640 bytes       78.640 usec         8.138 MB/s gridsizes=    2    4   12 halosize=       80 = + 48 + 24 + 8
+      2304 bytes       63.744 usec        36.145 MB/s gridsizes=    3    8   24 halosize=      288 = + 192 + 72 + 24
+      9040 bytes      113.597 usec        79.580 MB/s gridsizes=    6   16   47 halosize=     1130 = + 752 + 282 + 96
+     34968 bytes      187.058 usec       186.936 MB/s gridsizes=   12   31   93 halosize=     4371 = + 2883 + 1116 + 372
+    139184 bytes      333.200 usec       417.720 MB/s gridsizes=   24   62  185 halosize=    17398 = + 11470 + 4440 + 1488
+    552784 bytes     1529.040 usec       361.523 MB/s gridsizes=   47  124  370 halosize=    69098 = + 45880 + 17390 + 5828
+   2193848 bytes     6702.399 usec       327.323 MB/s gridsizes=   93  247  739 halosize=   274231 = + 182533 + 68727 + 22971
+   8740888 bytes    29413.304 usec       297.175 MB/s gridsizes=  185  493 1477 halosize=  1092611 = + 728161 + 273245 + 91205
+  34936960 bytes   128439.579 usec       272.011 MB/s gridsizes=  370  985 2954 halosize=  4367120 = + 2909690 + 1092980 + 364450
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 3
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 1 2 4
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   0 0   0 0  
+cart_method == 3: MPIX_Cart_weighted_create( weights := 4.0 / gridsize_avg_per_proc_startval )
+weights=  4.000000 2.000000 1.000000
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights= 4.000000 2.000000 1.000000
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   4   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=  16   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 16 24 32
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 16 24 32
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       128 bytes       50.678 usec         2.526 MB/s gridsizes=    2    2    3 halosize=       16 = + 6 + 6 + 4
+       432 bytes       22.879 usec        18.882 MB/s gridsizes=    3    4    6 halosize=       54 = + 24 + 18 + 12
+      1728 bytes       35.720 usec        48.376 MB/s gridsizes=    6    8   12 halosize=      216 = + 96 + 72 + 48
+      6912 bytes       70.162 usec        98.515 MB/s gridsizes=   12   16   24 halosize=      864 = + 384 + 288 + 192
+     26632 bytes      114.498 usec       232.598 MB/s gridsizes=   24   31   47 halosize=     3329 = + 1457 + 1128 + 744
+    104408 bytes      254.521 usec       410.213 MB/s gridsizes=   47   62   93 halosize=    13051 = + 5766 + 4371 + 2914
+    413416 bytes      988.641 usec       418.166 MB/s gridsizes=   93  124  185 halosize=    51677 = + 22940 + 17205 + 11532
+   1644280 bytes     4533.119 usec       362.726 MB/s gridsizes=  185  247  370 halosize=   205535 = + 91390 + 68450 + 45695
+   6561336 bytes    17886.443 usec       366.833 MB/s gridsizes=  370  493  739 halosize=   820167 = + 364327 + 273430 + 182410
+  26194104 bytes    89381.061 usec       293.061 MB/s gridsizes=  739  985 1477 halosize=  3274263 = + 1454845 + 1091503 + 727915
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 1
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 4 2 1
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   0 0   0 0  
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       128 bytes       64.421 usec         1.987 MB/s gridsizes=    3    2    2 halosize=       16 = + 4 + 6 + 6
+       432 bytes       49.443 usec         8.737 MB/s gridsizes=    6    4    3 halosize=       54 = + 12 + 18 + 24
+      1728 bytes       61.903 usec        27.915 MB/s gridsizes=   12    8    6 halosize=      216 = + 48 + 72 + 96
+      6912 bytes       71.898 usec        96.137 MB/s gridsizes=   24   16   12 halosize=      864 = + 192 + 288 + 384
+     26632 bytes      174.360 usec       152.741 MB/s gridsizes=   47   31   24 halosize=     3329 = + 744 + 1128 + 1457
+    104408 bytes      313.358 usec       333.190 MB/s gridsizes=   93   62   47 halosize=    13051 = + 2914 + 4371 + 5766
+    413416 bytes     1284.523 usec       321.844 MB/s gridsizes=  185  124   93 halosize=    51677 = + 11532 + 17205 + 22940
+   1644280 bytes     5838.938 usec       281.606 MB/s gridsizes=  370  247  185 halosize=   205535 = + 45695 + 68450 + 91390
+   6561336 bytes    25185.061 usec       260.525 MB/s gridsizes=  739  493  370 halosize=   820167 = + 182410 + 273430 + 364327
+  26194104 bytes   114878.421 usec       228.016 MB/s gridsizes= 1477  985  739 halosize=  3274263 = + 727915 + 1091503 + 1454845
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 2
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 4 2 1
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   0 0   0 0  
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       128 bytes      218.897 usec         0.585 MB/s gridsizes=    3    2    2 halosize=       16 = + 4 + 6 + 6
+       432 bytes      392.680 usec         1.100 MB/s gridsizes=    6    4    3 halosize=       54 = + 12 + 18 + 24
+      1728 bytes      112.839 usec        15.314 MB/s gridsizes=   12    8    6 halosize=      216 = + 48 + 72 + 96
+      6912 bytes       50.402 usec       137.138 MB/s gridsizes=   24   16   12 halosize=      864 = + 192 + 288 + 384
+     26632 bytes      117.283 usec       227.075 MB/s gridsizes=   47   31   24 halosize=     3329 = + 744 + 1128 + 1457
+    104408 bytes      344.501 usec       303.071 MB/s gridsizes=   93   62   47 halosize=    13051 = + 2914 + 4371 + 5766
+    413416 bytes     1181.903 usec       349.788 MB/s gridsizes=  185  124   93 halosize=    51677 = + 11532 + 17205 + 22940
+   1644280 bytes     4442.320 usec       370.140 MB/s gridsizes=  370  247  185 halosize=   205535 = + 45695 + 68450 + 91390
+   6561336 bytes    19810.281 usec       331.209 MB/s gridsizes=  739  493  370 halosize=   820167 = + 182410 + 273430 + 364327
+  26194104 bytes   117951.698 usec       222.075 MB/s gridsizes= 1477  985  739 halosize=  3274263 = + 727915 + 1091503 + 1454845
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 3
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 4 2 1
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   0 0   0 0  
+cart_method == 3: MPIX_Cart_weighted_create( weights := 4.0 / gridsize_avg_per_proc_startval )
+weights=  1.000000 2.000000 4.000000
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights= 1.000000 2.000000 4.000000
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=  16   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   4   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 64 24 8
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 64 24 8
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       128 bytes       80.442 usec         1.591 MB/s gridsizes=    2    2    3 halosize=       16 = + 6 + 6 + 4
+       432 bytes       60.058 usec         7.193 MB/s gridsizes=    3    4    6 halosize=       54 = + 24 + 18 + 12
+      1728 bytes      105.419 usec        16.392 MB/s gridsizes=    6    8   12 halosize=      216 = + 96 + 72 + 48
+      6688 bytes       79.417 usec        84.213 MB/s gridsizes=   12   16   23 halosize=      836 = + 368 + 276 + 192
+     26632 bytes       78.082 usec       341.077 MB/s gridsizes=   24   31   47 halosize=     3329 = + 1457 + 1128 + 744
+    104408 bytes      241.203 usec       432.863 MB/s gridsizes=   47   62   93 halosize=    13051 = + 5766 + 4371 + 2914
+    413416 bytes     1027.737 usec       402.259 MB/s gridsizes=   93  124  185 halosize=    51677 = + 22940 + 17205 + 11532
+   1644280 bytes     4687.357 usec       350.790 MB/s gridsizes=  185  247  370 halosize=   205535 = + 91390 + 68450 + 45695
+   6561336 bytes    20200.419 usec       324.812 MB/s gridsizes=  370  493  739 halosize=   820167 = + 364327 + 273430 + 182410
+  26194104 bytes    86957.521 usec       301.229 MB/s gridsizes=  739  985 1477 halosize=  3274263 = + 1454845 + 1091503 + 727915
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 1
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 8 32   8 32   8 32  
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       192 bytes       43.139 usec         4.451 MB/s gridsizes=    2    2    3 halosize=       24 = + 8 (B8/S32) + 8 (B8/S32) + 8 (B8/S32)
+       512 bytes       40.522 usec        12.635 MB/s gridsizes=    3    4    6 halosize=       64 = + 24 (B8/S32) + 24 (B8/S32) + 16 (B8/S32)
+      1728 bytes       43.879 usec        39.381 MB/s gridsizes=    6    8   12 halosize=      216 = + 96 (B8/S32) + 72 (B8/S32) + 48 (B8/S32)
+      6912 bytes       68.278 usec       101.233 MB/s gridsizes=   12   16   24 halosize=      864 = + 384 (B8/S32) + 288 (B8/S32) + 192 (B8/S32)
+     26688 bytes      163.021 usec       163.709 MB/s gridsizes=   24   31   47 halosize=     3336 = + 1464 (B8/S32) + 1128 (B8/S32) + 744 (B8/S32)
+    104512 bytes      479.579 usec       217.924 MB/s gridsizes=   47   62   93 halosize=    13064 = + 5768 (B8/S32) + 4376 (B8/S32) + 2920 (B8/S32)
+    413504 bytes     2255.044 usec       183.368 MB/s gridsizes=   93  124  185 halosize=    51688 = + 22944 (B8/S32) + 17208 (B8/S32) + 11536 (B8/S32)
+   1644352 bytes    10027.280 usec       163.988 MB/s gridsizes=  185  247  370 halosize=   205544 = + 91392 (B8/S32) + 68456 (B8/S32) + 45696 (B8/S32)
+   6561408 bytes    40987.477 usec       160.083 MB/s gridsizes=  370  493  739 halosize=   820176 = + 364328 (B8/S32) + 273432 (B8/S32) + 182416 (B8/S32)
+  26194176 bytes   222919.860 usec       117.505 MB/s gridsizes=  739  985 1477 halosize=  3274272 = + 1454848 (B8/S32) + 1091504 (B8/S32) + 727920 (B8/S32)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 2
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 8 32   8 32   8 32  
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       192 bytes       38.042 usec         5.047 MB/s gridsizes=    2    2    3 halosize=       24 = + 8 (B8/S32) + 8 (B8/S32) + 8 (B8/S32)
+       512 bytes       33.460 usec        15.302 MB/s gridsizes=    3    4    6 halosize=       64 = + 24 (B8/S32) + 24 (B8/S32) + 16 (B8/S32)
+      1728 bytes       38.161 usec        45.282 MB/s gridsizes=    6    8   12 halosize=      216 = + 96 (B8/S32) + 72 (B8/S32) + 48 (B8/S32)
+      6912 bytes       82.760 usec        83.519 MB/s gridsizes=   12   16   24 halosize=      864 = + 384 (B8/S32) + 288 (B8/S32) + 192 (B8/S32)
+     26688 bytes      100.040 usec       266.772 MB/s gridsizes=   24   31   47 halosize=     3336 = + 1464 (B8/S32) + 1128 (B8/S32) + 744 (B8/S32)
+    104512 bytes      335.922 usec       311.120 MB/s gridsizes=   47   62   93 halosize=    13064 = + 5768 (B8/S32) + 4376 (B8/S32) + 2920 (B8/S32)
+    413504 bytes     1070.542 usec       386.257 MB/s gridsizes=   93  124  185 halosize=    51688 = + 22944 (B8/S32) + 17208 (B8/S32) + 11536 (B8/S32)
+   1644352 bytes     5165.238 usec       318.350 MB/s gridsizes=  185  247  370 halosize=   205544 = + 91392 (B8/S32) + 68456 (B8/S32) + 45696 (B8/S32)
+   6561408 bytes    24071.398 usec       272.581 MB/s gridsizes=  370  493  739 halosize=   820176 = + 364328 (B8/S32) + 273432 (B8/S32) + 182416 (B8/S32)
+  26194176 bytes   102699.180 usec       255.057 MB/s gridsizes=  739  985 1477 halosize=  3274272 = + 1454848 (B8/S32) + 1091504 (B8/S32) + 727920 (B8/S32)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 3
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 8 32   8 32   8 32  
+cart_method == 3: MPIX_Cart_weighted_create( weights := 4.0 / gridsize_avg_per_proc_startval )
+weights=  2.000000 2.000000 2.000000
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights= 2.000000 2.000000 2.000000
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+       192 bytes       55.056 usec         3.487 MB/s gridsizes=    2    2    3 halosize=       24 = + 8 (B8/S32) + 8 (B8/S32) + 8 (B8/S32)
+       512 bytes       36.922 usec        13.867 MB/s gridsizes=    3    4    6 halosize=       64 = + 24 (B8/S32) + 24 (B8/S32) + 16 (B8/S32)
+      1728 bytes       34.523 usec        50.054 MB/s gridsizes=    6    8   12 halosize=      216 = + 96 (B8/S32) + 72 (B8/S32) + 48 (B8/S32)
+      6912 bytes       62.442 usec       110.695 MB/s gridsizes=   12   16   24 halosize=      864 = + 384 (B8/S32) + 288 (B8/S32) + 192 (B8/S32)
+     26688 bytes      118.742 usec       224.756 MB/s gridsizes=   24   31   47 halosize=     3336 = + 1464 (B8/S32) + 1128 (B8/S32) + 744 (B8/S32)
+    104512 bytes      320.077 usec       326.521 MB/s gridsizes=   47   62   93 halosize=    13064 = + 5768 (B8/S32) + 4376 (B8/S32) + 2920 (B8/S32)
+    413504 bytes     1633.000 usec       253.217 MB/s gridsizes=   93  124  185 halosize=    51688 = + 22944 (B8/S32) + 17208 (B8/S32) + 11536 (B8/S32)
+   1644352 bytes     5175.223 usec       317.735 MB/s gridsizes=  185  247  370 halosize=   205544 = + 91392 (B8/S32) + 68456 (B8/S32) + 45696 (B8/S32)
+   6561408 bytes    24418.197 usec       268.710 MB/s gridsizes=  370  493  739 halosize=   820176 = + 364328 (B8/S32) + 273432 (B8/S32) + 182416 (B8/S32)
+  26194176 bytes   102014.561 usec       256.769 MB/s gridsizes=  739  985 1477 halosize=  3274272 = + 1454848 (B8/S32) + 1091504 (B8/S32) + 727920 (B8/S32)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 1
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 256 1024   256 1024   256 1024  
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      6144 bytes      352.120 usec        17.449 MB/s gridsizes=    2    2    3 halosize=      768 = + 256 (B256/S1024) + 256 (B256/S1024) + 256 (B256/S1024)
+      6144 bytes      349.059 usec        17.602 MB/s gridsizes=    3    4    6 halosize=      768 = + 256 (B256/S1024) + 256 (B256/S1024) + 256 (B256/S1024)
+      6144 bytes      101.061 usec        60.795 MB/s gridsizes=    6    8   12 halosize=      768 = + 256 (B256/S1024) + 256 (B256/S1024) + 256 (B256/S1024)
+     10240 bytes      168.500 usec        60.772 MB/s gridsizes=   12   16   24 halosize=     1280 = + 512 (B256/S1024) + 512 (B256/S1024) + 256 (B256/S1024)
+     28672 bytes      446.081 usec        64.275 MB/s gridsizes=   24   31   47 halosize=     3584 = + 1536 (B256/S1024) + 1280 (B256/S1024) + 768 (B256/S1024)
+    108544 bytes      545.702 usec       198.907 MB/s gridsizes=   47   62   93 halosize=    13568 = + 5888 (B256/S1024) + 4608 (B256/S1024) + 3072 (B256/S1024)
+    417792 bytes     2414.079 usec       173.065 MB/s gridsizes=   93  124  185 halosize=    52224 = + 23040 (B256/S1024) + 17408 (B256/S1024) + 11776 (B256/S1024)
+   1646592 bytes     9606.018 usec       171.413 MB/s gridsizes=  185  247  370 halosize=   205824 = + 91392 (B256/S1024) + 68608 (B256/S1024) + 45824 (B256/S1024)
+   6565888 bytes    40130.577 usec       163.613 MB/s gridsizes=  370  493  739 halosize=   820736 = + 364544 (B256/S1024) + 273664 (B256/S1024) + 182528 (B256/S1024)
+  26195968 bytes   206950.741 usec       126.581 MB/s gridsizes=  739  985 1477 halosize=  3274496 = + 1454848 (B256/S1024) + 1091584 (B256/S1024) + 728064 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 2
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 256 1024   256 1024   256 1024  
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      6144 bytes      287.061 usec        21.403 MB/s gridsizes=    2    2    3 halosize=      768 = + 256 (B256/S1024) + 256 (B256/S1024) + 256 (B256/S1024)
+      6144 bytes      411.100 usec        14.945 MB/s gridsizes=    3    4    6 halosize=      768 = + 256 (B256/S1024) + 256 (B256/S1024) + 256 (B256/S1024)
+      6144 bytes       60.678 usec       101.257 MB/s gridsizes=    6    8   12 halosize=      768 = + 256 (B256/S1024) + 256 (B256/S1024) + 256 (B256/S1024)
+     10240 bytes      148.759 usec        68.836 MB/s gridsizes=   12   16   24 halosize=     1280 = + 512 (B256/S1024) + 512 (B256/S1024) + 256 (B256/S1024)
+     28672 bytes      113.320 usec       253.017 MB/s gridsizes=   24   31   47 halosize=     3584 = + 1536 (B256/S1024) + 1280 (B256/S1024) + 768 (B256/S1024)
+    108544 bytes      254.321 usec       426.799 MB/s gridsizes=   47   62   93 halosize=    13568 = + 5888 (B256/S1024) + 4608 (B256/S1024) + 3072 (B256/S1024)
+    417792 bytes     1283.960 usec       325.393 MB/s gridsizes=   93  124  185 halosize=    52224 = + 23040 (B256/S1024) + 17408 (B256/S1024) + 11776 (B256/S1024)
+   1646592 bytes     4893.923 usec       336.456 MB/s gridsizes=  185  247  370 halosize=   205824 = + 91392 (B256/S1024) + 68608 (B256/S1024) + 45824 (B256/S1024)
+   6565888 bytes    20693.779 usec       317.288 MB/s gridsizes=  370  493  739 halosize=   820736 = + 364544 (B256/S1024) + 273664 (B256/S1024) + 182528 (B256/S1024)
+  26195968 bytes    97773.418 usec       267.925 MB/s gridsizes=  739  985 1477 halosize=  3274496 = + 1454848 (B256/S1024) + 1091584 (B256/S1024) + 728064 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 3
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 256 1024   256 1024   256 1024  
+cart_method == 3: MPIX_Cart_weighted_create( weights := 4.0 / gridsize_avg_per_proc_startval )
+weights=  2.000000 2.000000 2.000000
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights= 2.000000 2.000000 2.000000
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      6144 bytes       64.516 usec        95.232 MB/s gridsizes=    2    2    3 halosize=      768 = + 256 (B256/S1024) + 256 (B256/S1024) + 256 (B256/S1024)
+      6144 bytes       50.936 usec       120.623 MB/s gridsizes=    3    4    6 halosize=      768 = + 256 (B256/S1024) + 256 (B256/S1024) + 256 (B256/S1024)
+      6144 bytes       56.620 usec       108.514 MB/s gridsizes=    6    8   12 halosize=      768 = + 256 (B256/S1024) + 256 (B256/S1024) + 256 (B256/S1024)
+     10240 bytes      119.662 usec        85.574 MB/s gridsizes=   12   16   24 halosize=     1280 = + 512 (B256/S1024) + 512 (B256/S1024) + 256 (B256/S1024)
+     28672 bytes      168.858 usec       169.800 MB/s gridsizes=   24   31   47 halosize=     3584 = + 1536 (B256/S1024) + 1280 (B256/S1024) + 768 (B256/S1024)
+    108544 bytes      784.140 usec       138.424 MB/s gridsizes=   47   62   93 halosize=    13568 = + 5888 (B256/S1024) + 4608 (B256/S1024) + 3072 (B256/S1024)
+    417792 bytes     1067.281 usec       391.455 MB/s gridsizes=   93  124  185 halosize=    52224 = + 23040 (B256/S1024) + 17408 (B256/S1024) + 11776 (B256/S1024)
+   1646592 bytes     4808.540 usec       342.431 MB/s gridsizes=  185  247  370 halosize=   205824 = + 91392 (B256/S1024) + 68608 (B256/S1024) + 45824 (B256/S1024)
+   6565888 bytes    21045.423 usec       311.987 MB/s gridsizes=  370  493  739 halosize=   820736 = + 364544 (B256/S1024) + 273664 (B256/S1024) + 182528 (B256/S1024)
+  26195968 bytes    95885.921 usec       273.199 MB/s gridsizes=  739  985 1477 halosize=  3274496 = + 1454848 (B256/S1024) + 1091584 (B256/S1024) + 728064 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 1
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   8 32   256 1024  
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      2160 bytes      141.683 usec        15.245 MB/s gridsizes=    2    2    3 halosize=      270 = + 6 + 8 (B8/S32) + 256 (B256/S1024)
+      2432 bytes      139.923 usec        17.381 MB/s gridsizes=    3    4    6 halosize=      304 = + 24 + 24 (B8/S32) + 256 (B256/S1024)
+      3392 bytes      280.256 usec        12.103 MB/s gridsizes=    6    8   12 halosize=      424 = + 96 + 72 (B8/S32) + 256 (B256/S1024)
+      7424 bytes       62.761 usec       118.289 MB/s gridsizes=   12   16   24 halosize=      928 = + 384 + 288 (B8/S32) + 256 (B256/S1024)
+     26824 bytes      154.300 usec       173.843 MB/s gridsizes=   24   31   47 halosize=     3353 = + 1457 + 1128 (B8/S32) + 768 (B256/S1024)
+    105712 bytes      489.717 usec       215.864 MB/s gridsizes=   47   62   93 halosize=    13214 = + 5766 + 4376 (B8/S32) + 3072 (B256/S1024)
+    415392 bytes     2490.239 usec       166.808 MB/s gridsizes=   93  124  185 halosize=    51924 = + 22940 + 17208 (B8/S32) + 11776 (B256/S1024)
+   1645360 bytes    10016.618 usec       164.263 MB/s gridsizes=  185  247  370 halosize=   205670 = + 91390 + 68456 (B8/S32) + 45824 (B256/S1024)
+   6562296 bytes    40767.078 usec       160.970 MB/s gridsizes=  370  493  739 halosize=   820287 = + 364327 + 273432 (B8/S32) + 182528 (B256/S1024)
+  26195304 bytes   208649.440 usec       125.547 MB/s gridsizes=  739  985 1477 halosize=  3274413 = + 1454845 + 1091504 (B8/S32) + 728064 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 2
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   8 32   256 1024  
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      2160 bytes      255.637 usec         8.449 MB/s gridsizes=    2    2    3 halosize=      270 = + 6 + 8 (B8/S32) + 256 (B256/S1024)
+      2432 bytes      298.901 usec         8.136 MB/s gridsizes=    3    4    6 halosize=      304 = + 24 + 24 (B8/S32) + 256 (B256/S1024)
+      3392 bytes       84.877 usec        39.964 MB/s gridsizes=    6    8   12 halosize=      424 = + 96 + 72 (B8/S32) + 256 (B256/S1024)
+      7424 bytes       52.338 usec       141.848 MB/s gridsizes=   12   16   24 halosize=      928 = + 384 + 288 (B8/S32) + 256 (B256/S1024)
+     26824 bytes       77.620 usec       345.583 MB/s gridsizes=   24   31   47 halosize=     3353 = + 1457 + 1128 (B8/S32) + 768 (B256/S1024)
+    105712 bytes      322.742 usec       327.543 MB/s gridsizes=   47   62   93 halosize=    13214 = + 5766 + 4376 (B8/S32) + 3072 (B256/S1024)
+    415392 bytes     1161.580 usec       357.609 MB/s gridsizes=   93  124  185 halosize=    51924 = + 22940 + 17208 (B8/S32) + 11776 (B256/S1024)
+   1645360 bytes     4880.319 usec       337.142 MB/s gridsizes=  185  247  370 halosize=   205670 = + 91390 + 68456 (B8/S32) + 45824 (B256/S1024)
+   6562296 bytes    22083.058 usec       297.164 MB/s gridsizes=  370  493  739 halosize=   820287 = + 364327 + 273432 (B8/S32) + 182528 (B256/S1024)
+  26195304 bytes    97186.284 usec       269.537 MB/s gridsizes=  739  985 1477 halosize=  3274413 = + 1454845 + 1091504 (B8/S32) + 728064 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 3
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 2 2 2
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   8 32   256 1024  
+cart_method == 3: MPIX_Cart_weighted_create( weights := 4.0 / gridsize_avg_per_proc_startval )
+weights=  2.000000 2.000000 2.000000
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights= 2.000000 2.000000 2.000000
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      2160 bytes       52.600 usec        41.065 MB/s gridsizes=    2    2    3 halosize=      270 = + 6 + 8 (B8/S32) + 256 (B256/S1024)
+      2432 bytes       97.084 usec        25.050 MB/s gridsizes=    3    4    6 halosize=      304 = + 24 + 24 (B8/S32) + 256 (B256/S1024)
+      3392 bytes       52.700 usec        64.364 MB/s gridsizes=    6    8   12 halosize=      424 = + 96 + 72 (B8/S32) + 256 (B256/S1024)
+      7424 bytes       82.541 usec        89.944 MB/s gridsizes=   12   16   24 halosize=      928 = + 384 + 288 (B8/S32) + 256 (B256/S1024)
+     26824 bytes      101.480 usec       264.327 MB/s gridsizes=   24   31   47 halosize=     3353 = + 1457 + 1128 (B8/S32) + 768 (B256/S1024)
+    105712 bytes      261.798 usec       403.792 MB/s gridsizes=   47   62   93 halosize=    13214 = + 5766 + 4376 (B8/S32) + 3072 (B256/S1024)
+    415392 bytes     1214.824 usec       341.936 MB/s gridsizes=   93  124  185 halosize=    51924 = + 22940 + 17208 (B8/S32) + 11776 (B256/S1024)
+   1645360 bytes     5071.359 usec       324.442 MB/s gridsizes=  185  247  370 halosize=   205670 = + 91390 + 68456 (B8/S32) + 45824 (B256/S1024)
+   6562296 bytes    21507.559 usec       305.116 MB/s gridsizes=  370  493  739 halosize=   820287 = + 364327 + 273432 (B8/S32) + 182528 (B256/S1024)
+  26195304 bytes   100272.923 usec       261.240 MB/s gridsizes=  739  985 1477 halosize=  3274413 = + 1454845 + 1091504 (B8/S32) + 728064 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 1
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 1 2 4
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   8 32   256 1024  
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      2208 bytes       89.779 usec        24.594 MB/s gridsizes=    1    2    6 halosize=      276 = + 12 + 8 (B8/S32) + 256 (B256/S1024)
+      2624 bytes       55.118 usec        47.607 MB/s gridsizes=    2    4   12 halosize=      328 = + 48 + 24 (B8/S32) + 256 (B256/S1024)
+      4160 bytes       57.540 usec        72.298 MB/s gridsizes=    3    8   24 halosize=      520 = + 192 + 72 (B8/S32) + 256 (B256/S1024)
+     10368 bytes       94.419 usec       109.809 MB/s gridsizes=    6   16   47 halosize=     1296 = + 752 + 288 (B8/S32) + 256 (B256/S1024)
+     36120 bytes      199.461 usec       181.088 MB/s gridsizes=   12   31   93 halosize=     4515 = + 2883 + 1120 (B8/S32) + 512 (B256/S1024)
+    139568 bytes      912.342 usec       152.978 MB/s gridsizes=   24   62  185 halosize=    17446 = + 11470 + 4440 (B8/S32) + 1536 (B256/S1024)
+    553280 bytes     3977.900 usec       139.088 MB/s gridsizes=   47  124  370 halosize=    69160 = + 45880 + 17392 (B8/S32) + 5888 (B256/S1024)
+   2194408 bytes    17278.118 usec       127.005 MB/s gridsizes=   93  247  739 halosize=   274301 = + 182533 + 68728 (B8/S32) + 23040 (B256/S1024)
+   8742408 bytes    65517.902 usec       133.435 MB/s gridsizes=  185  493 1477 halosize=  1092801 = + 728161 + 273248 (B8/S32) + 91392 (B256/S1024)
+  34937744 bytes   418211.060 usec        83.541 MB/s gridsizes=  370  985 2954 halosize=  4367218 = + 2909690 + 1092984 (B8/S32) + 364544 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 2
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 1 2 4
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   8 32   256 1024  
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      2208 bytes       38.218 usec        57.773 MB/s gridsizes=    1    2    6 halosize=      276 = + 12 + 8 (B8/S32) + 256 (B256/S1024)
+      2624 bytes       41.180 usec        63.721 MB/s gridsizes=    2    4   12 halosize=      328 = + 48 + 24 (B8/S32) + 256 (B256/S1024)
+      4160 bytes       44.942 usec        92.564 MB/s gridsizes=    3    8   24 halosize=      520 = + 192 + 72 (B8/S32) + 256 (B256/S1024)
+     10368 bytes       41.299 usec       251.048 MB/s gridsizes=    6   16   47 halosize=     1296 = + 752 + 288 (B8/S32) + 256 (B256/S1024)
+     36120 bytes      122.242 usec       295.480 MB/s gridsizes=   12   31   93 halosize=     4515 = + 2883 + 1120 (B8/S32) + 512 (B256/S1024)
+    139568 bytes      323.458 usec       431.488 MB/s gridsizes=   24   62  185 halosize=    17446 = + 11470 + 4440 (B8/S32) + 1536 (B256/S1024)
+    553280 bytes     1499.538 usec       368.967 MB/s gridsizes=   47  124  370 halosize=    69160 = + 45880 + 17392 (B8/S32) + 5888 (B256/S1024)
+   2194408 bytes     7086.840 usec       309.645 MB/s gridsizes=   93  247  739 halosize=   274301 = + 182533 + 68728 (B8/S32) + 23040 (B256/S1024)
+   8742408 bytes    30915.380 usec       282.785 MB/s gridsizes=  185  493 1477 halosize=  1092801 = + 728161 + 273248 (B8/S32) + 91392 (B256/S1024)
+  34937744 bytes   133325.958 usec       262.048 MB/s gridsizes=  370  985 2954 halosize=  4367218 = + 2909690 + 1092984 (B8/S32) + 364544 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 3
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 1 2 4
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   8 32   256 1024  
+cart_method == 3: MPIX_Cart_weighted_create( weights := 4.0 / gridsize_avg_per_proc_startval )
+weights=  4.000000 2.000000 1.000000
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights= 4.000000 2.000000 1.000000
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   4   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=  16   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 16 24 32
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 16 24 32
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      2160 bytes       67.439 usec        32.029 MB/s gridsizes=    2    2    3 halosize=      270 = + 6 + 8 (B8/S32) + 256 (B256/S1024)
+      2432 bytes       46.501 usec        52.300 MB/s gridsizes=    3    4    6 halosize=      304 = + 24 + 24 (B8/S32) + 256 (B256/S1024)
+      3392 bytes       44.360 usec        76.465 MB/s gridsizes=    6    8   12 halosize=      424 = + 96 + 72 (B8/S32) + 256 (B256/S1024)
+      7424 bytes       69.604 usec       106.661 MB/s gridsizes=   12   16   24 halosize=      928 = + 384 + 288 (B8/S32) + 256 (B256/S1024)
+     26824 bytes       69.480 usec       386.068 MB/s gridsizes=   24   31   47 halosize=     3353 = + 1457 + 1128 (B8/S32) + 768 (B256/S1024)
+    105712 bytes      328.960 usec       321.352 MB/s gridsizes=   47   62   93 halosize=    13214 = + 5766 + 4376 (B8/S32) + 3072 (B256/S1024)
+    415392 bytes     1267.681 usec       327.679 MB/s gridsizes=   93  124  185 halosize=    51924 = + 22940 + 17208 (B8/S32) + 11776 (B256/S1024)
+   1645360 bytes     4556.203 usec       361.125 MB/s gridsizes=  185  247  370 halosize=   205670 = + 91390 + 68456 (B8/S32) + 45824 (B256/S1024)
+   6562296 bytes    19763.980 usec       332.033 MB/s gridsizes=  370  493  739 halosize=   820287 = + 364327 + 273432 (B8/S32) + 182528 (B256/S1024)
+  26195304 bytes    88402.419 usec       296.319 MB/s gridsizes=  739  985 1477 halosize=  3274413 = + 1454845 + 1091504 (B8/S32) + 728064 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 1
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 4 2 1
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   8 32   256 1024  
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      2144 bytes       51.441 usec        41.679 MB/s gridsizes=    3    2    2 halosize=      268 = + 4 + 8 (B8/S32) + 256 (B256/S1024)
+      2336 bytes       60.720 usec        38.471 MB/s gridsizes=    6    4    3 halosize=      292 = + 12 + 24 (B8/S32) + 256 (B256/S1024)
+      3008 bytes       50.640 usec        59.400 MB/s gridsizes=   12    8    6 halosize=      376 = + 48 + 72 (B8/S32) + 256 (B256/S1024)
+      7936 bytes       60.477 usec       131.223 MB/s gridsizes=   24   16   12 halosize=      992 = + 192 + 288 (B8/S32) + 512 (B256/S1024)
+     27264 bytes       89.984 usec       302.987 MB/s gridsizes=   47   31   24 halosize=     3408 = + 744 + 1128 (B8/S32) + 1536 (B256/S1024)
+    105424 bytes      417.142 usec       252.729 MB/s gridsizes=   93   62   47 halosize=    13178 = + 2914 + 4376 (B8/S32) + 5888 (B256/S1024)
+    414240 bytes     1472.058 usec       281.402 MB/s gridsizes=  185  124   93 halosize=    51780 = + 11532 + 17208 (B8/S32) + 23040 (B256/S1024)
+   1644344 bytes     6283.598 usec       261.688 MB/s gridsizes=  370  247  185 halosize=   205543 = + 45695 + 68456 (B8/S32) + 91392 (B256/S1024)
+   6563088 bytes    25569.596 usec       256.675 MB/s gridsizes=  739  493  370 halosize=   820386 = + 182410 + 273432 (B8/S32) + 364544 (B256/S1024)
+  26194136 bytes   120281.782 usec       217.773 MB/s gridsizes= 1477  985  739 halosize=  3274267 = + 727915 + 1091504 (B8/S32) + 1454848 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 2
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 4 2 1
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   8 32   256 1024  
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   8   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   8   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 32 24 16
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 32 24 16
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      2144 bytes       31.962 usec        67.079 MB/s gridsizes=    3    2    2 halosize=      268 = + 4 + 8 (B8/S32) + 256 (B256/S1024)
+      2336 bytes       41.442 usec        56.368 MB/s gridsizes=    6    4    3 halosize=      292 = + 12 + 24 (B8/S32) + 256 (B256/S1024)
+      3008 bytes       25.239 usec       119.181 MB/s gridsizes=   12    8    6 halosize=      376 = + 48 + 72 (B8/S32) + 256 (B256/S1024)
+      7936 bytes       51.961 usec       152.730 MB/s gridsizes=   24   16   12 halosize=      992 = + 192 + 288 (B8/S32) + 512 (B256/S1024)
+     27264 bytes       83.423 usec       326.818 MB/s gridsizes=   47   31   24 halosize=     3408 = + 744 + 1128 (B8/S32) + 1536 (B256/S1024)
+    105424 bytes      287.700 usec       366.438 MB/s gridsizes=   93   62   47 halosize=    13178 = + 2914 + 4376 (B8/S32) + 5888 (B256/S1024)
+    414240 bytes     1356.239 usec       305.433 MB/s gridsizes=  185  124   93 halosize=    51780 = + 11532 + 17208 (B8/S32) + 23040 (B256/S1024)
+   1644344 bytes     4884.357 usec       336.655 MB/s gridsizes=  370  247  185 halosize=   205543 = + 45695 + 68456 (B8/S32) + 91392 (B256/S1024)
+   6563088 bytes    21229.119 usec       309.155 MB/s gridsizes=  739  493  370 halosize=   820386 = + 182410 + 273432 (B8/S32) + 364544 (B256/S1024)
+  26194136 bytes   120875.821 usec       216.703 MB/s gridsizes= 1477  985  739 halosize=  3274267 = + 727915 + 1091504 (B8/S32) + 1454848 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 3
+start grid sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+start grid sizes integer start values for 3 dimensions = 4 2 1
+blocklength and stride of MPI_TYPE_VECTOR for each dimension, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+blocklength & sgtride pairs for each of the 3 dimensions = 0 0   8 32   256 1024  
+cart_method == 3: MPIX_Cart_weighted_create( weights := 4.0 / gridsize_avg_per_proc_startval )
+weights=  1.000000 2.000000 4.000000
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 12288 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 512 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights= 1.000000 2.000000 4.000000
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=  16   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   8   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   4   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 64 24 8
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 64 24 8
+    message size      transfertime  duplex bandwidth per process and neighbor (grid&halo in #floats)
+      2160 bytes      120.459 usec        17.931 MB/s gridsizes=    2    2    3 halosize=      270 = + 6 + 8 (B8/S32) + 256 (B256/S1024)
+      2432 bytes      208.077 usec        11.688 MB/s gridsizes=    3    4    6 halosize=      304 = + 24 + 24 (B8/S32) + 256 (B256/S1024)
+      3392 bytes      285.163 usec        11.895 MB/s gridsizes=    6    8   12 halosize=      424 = + 96 + 72 (B8/S32) + 256 (B256/S1024)
+      7232 bytes      105.262 usec        68.705 MB/s gridsizes=   12   16   23 halosize=      904 = + 368 + 280 (B8/S32) + 256 (B256/S1024)
+     26824 bytes      147.519 usec       181.834 MB/s gridsizes=   24   31   47 halosize=     3353 = + 1457 + 1128 (B8/S32) + 768 (B256/S1024)
+    105712 bytes      595.641 usec       177.476 MB/s gridsizes=   47   62   93 halosize=    13214 = + 5766 + 4376 (B8/S32) + 3072 (B256/S1024)
+    415392 bytes     1034.040 usec       401.717 MB/s gridsizes=   93  124  185 halosize=    51924 = + 22940 + 17208 (B8/S32) + 11776 (B256/S1024)
+   1645360 bytes     4700.780 usec       350.019 MB/s gridsizes=  185  247  370 halosize=   205670 = + 91390 + 68456 (B8/S32) + 45824 (B256/S1024)
+   6562296 bytes    20401.640 usec       321.655 MB/s gridsizes=  370  493  739 halosize=   820287 = + 364327 + 273432 (B8/S32) + 182528 (B256/S1024)
+  26195304 bytes    89303.818 usec       293.328 MB/s gridsizes=  739  985 1477 halosize=  3274413 = + 1454845 + 1091504 (B8/S32) + 728064 (B256/S1024)
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+cart_method = 0
+Application 2527703 resources: utime ~3569581s, stime ~30683s, Rss ~98032, inblocks ~0, outblocks ~0

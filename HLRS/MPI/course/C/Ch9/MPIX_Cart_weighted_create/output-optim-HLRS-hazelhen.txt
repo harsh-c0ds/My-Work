@@ -1,0 +1,209 @@
+Fri Feb  1 18:52:56 CET 2019
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+General input questions:
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+start mesh sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+blocklength and stride of MPI_TYPE_VECTOR for each of the 3 dimensions, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+
+Reporting of all general input arguments:
+
+cart_method = 1
+start mesh sizes integer start values for 3 dimensions = 2 2 2
+blocklength & sgtride pairs for each of the 3 dimensions = 1 0   1 0   1 0  
+
+Creating the Cartesian communicator and further input arguments:
+
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 8 6 4
+    message size      transfertime  duplex bandwidth per process and neighbor (mesh&halo in #floats)
+       128 bytes       11.020 usec     11.616 MB/s meshsizes total=    16    12    12 per process=    2    2    3 halosize=       16 = + 6 + 6 + 4
+       432 bytes       12.240 usec     35.293 MB/s meshsizes total=    24    24    24 per process=    3    4    6 halosize=       54 = + 24 + 18 + 12
+      1728 bytes       10.800 usec    159.995 MB/s meshsizes total=    48    48    48 per process=    6    8   12 halosize=      216 = + 96 + 72 + 48
+      6688 bytes       23.956 usec    279.175 MB/s meshsizes total=    96    96    92 per process=   12   16   23 halosize=      836 = + 368 + 276 + 192
+     25576 bytes       96.402 usec    265.305 MB/s meshsizes total=   184   186   184 per process=   23   31   46 halosize=     3197 = + 1426 + 1058 + 713
+    104408 bytes      240.998 usec    433.231 MB/s meshsizes total=   376   372   372 per process=   47   62   93 halosize=    13051 = + 5766 + 4371 + 2914
+    411192 bytes      894.299 usec    459.793 MB/s meshsizes total=   744   738   740 per process=   93  123  185 halosize=    51399 = + 22755 + 17205 + 11439
+   1636392 bytes     3810.897 usec    429.398 MB/s meshsizes total=  1480  1476  1476 per process=  185  246  369 halosize=   204549 = + 90774 + 68265 + 45510
+   6561336 bytes    18832.979 usec    348.396 MB/s meshsizes total=  2960  2958  2956 per process=  370  493  739 halosize=   820167 = + 364327 + 273430 + 182410
+  26194104 bytes    78748.178 usec    332.631 MB/s meshsizes total=  5912  5910  5908 per process=  739  985 1477 halosize=  3274263 = + 1454845 + 1091503 + 727915
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+General input questions:
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+start mesh sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+blocklength and stride of MPI_TYPE_VECTOR for each of the 3 dimensions, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+
+Reporting of all general input arguments:
+
+cart_method = 2
+start mesh sizes integer start values for 3 dimensions = 2 2 2
+blocklength & sgtride pairs for each of the 3 dimensions = 1 0   1 0   1 0  
+
+Creating the Cartesian communicator and further input arguments:
+
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 192 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 8 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   2   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   2   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   2   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 8 6 4
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 8 6 4
+    message size      transfertime  duplex bandwidth per process and neighbor (mesh&halo in #floats)
+       128 bytes       12.059 usec     10.614 MB/s meshsizes total=    16    12    12 per process=    2    2    3 halosize=       16 = + 6 + 6 + 4
+       432 bytes       16.618 usec     25.996 MB/s meshsizes total=    24    24    24 per process=    3    4    6 halosize=       54 = + 24 + 18 + 12
+      1728 bytes       14.739 usec    117.240 MB/s meshsizes total=    48    48    48 per process=    6    8   12 halosize=      216 = + 96 + 72 + 48
+      6688 bytes       20.180 usec    331.421 MB/s meshsizes total=    96    96    92 per process=   12   16   23 halosize=      836 = + 368 + 276 + 192
+     25576 bytes       50.759 usec    503.868 MB/s meshsizes total=   184   186   184 per process=   23   31   46 halosize=     3197 = + 1426 + 1058 + 713
+    104408 bytes      166.020 usec    628.887 MB/s meshsizes total=   376   372   372 per process=   47   62   93 halosize=    13051 = + 5766 + 4371 + 2914
+    411192 bytes      674.419 usec    609.698 MB/s meshsizes total=   744   738   740 per process=   93  123  185 halosize=    51399 = + 22755 + 17205 + 11439
+   1636392 bytes     2676.597 usec    611.370 MB/s meshsizes total=  1480  1476  1476 per process=  185  246  369 halosize=   204549 = + 90774 + 68265 + 45510
+   6561336 bytes    14366.360 usec    456.715 MB/s meshsizes total=  2960  2958  2956 per process=  370  493  739 halosize=   820167 = + 364327 + 273430 + 182410
+  26194104 bytes    50971.184 usec    513.900 MB/s meshsizes total=  5912  5910  5908 per process=  739  985 1477 halosize=  3274263 = + 1454845 + 1091503 + 727915
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+General input questions:
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+start mesh sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+blocklength and stride of MPI_TYPE_VECTOR for each of the 3 dimensions, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+
+Reporting of all general input arguments:
+
+cart_method = 1
+start mesh sizes integer start values for 3 dimensions = 1 2 4
+blocklength & sgtride pairs for each of the 3 dimensions = 1 0   1 0   1 0  
+
+Creating the Cartesian communicator and further input arguments:
+
+cart_method == 1: MPI_Dims_create + MPI_Cart_create
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 8 6 4
+    message size      transfertime  duplex bandwidth per process and neighbor (mesh&halo in #floats)
+       160 bytes        8.240 usec     19.418 MB/s meshsizes total=     8    12    24 per process=    1    2    6 halosize=       20 = + 12 + 6 + 2
+       640 bytes       11.001 usec     58.178 MB/s meshsizes total=    16    24    48 per process=    2    4   12 halosize=       80 = + 48 + 24 + 8
+      2216 bytes       17.118 usec    129.451 MB/s meshsizes total=    24    48    92 per process=    3    8   23 halosize=      277 = + 184 + 69 + 24
+      8864 bytes       41.280 usec    214.730 MB/s meshsizes total=    48    96   184 per process=    6   16   46 halosize=     1108 = + 736 + 276 + 96
+     34968 bytes      107.241 usec    326.070 MB/s meshsizes total=    96   186   372 per process=   12   31   93 halosize=     4371 = + 2883 + 1116 + 372
+    137208 bytes      481.539 usec    284.937 MB/s meshsizes total=   184   372   740 per process=   23   62  185 halosize=    17151 = + 11470 + 4255 + 1426
+    548088 bytes     1931.901 usec    283.704 MB/s meshsizes total=   376   738  1476 per process=   47  123  369 halosize=    68511 = + 45387 + 17343 + 5781
+   2187192 bytes     7822.924 usec    279.588 MB/s meshsizes total=   744  1476  2956 per process=   93  246  739 halosize=   273399 = + 181794 + 68727 + 22878
+   8740888 bytes    32419.939 usec    269.615 MB/s meshsizes total=  1480  2958  5908 per process=  185  493 1477 halosize=  1092611 = + 728161 + 273245 + 91205
+  34936960 bytes   168891.082 usec    206.861 MB/s meshsizes total=  2960  5910 11816 per process=  370  985 2954 halosize=  4367120 = + 2909690 + 1092980 + 364450
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+General input questions:
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+start mesh sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+blocklength and stride of MPI_TYPE_VECTOR for each of the 3 dimensions, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+
+Reporting of all general input arguments:
+
+cart_method = 2
+start mesh sizes integer start values for 3 dimensions = 1 2 4
+blocklength & sgtride pairs for each of the 3 dimensions = 1 0   1 0   1 0  
+
+Creating the Cartesian communicator and further input arguments:
+
+cart_method == 2: MPIX_Cart_weighted_create( MPIX_WEIGHTS_EQUAL )
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 192 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 8 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights == MPIX_WEIGHTS_EQUAL
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   2   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   2   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   2   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 8 6 4
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 8 6 4
+    message size      transfertime  duplex bandwidth per process and neighbor (mesh&halo in #floats)
+       160 bytes       23.880 usec      6.700 MB/s meshsizes total=     8    12    24 per process=    1    2    6 halosize=       20 = + 12 + 6 + 2
+       640 bytes       14.424 usec     44.369 MB/s meshsizes total=    16    24    48 per process=    2    4   12 halosize=       80 = + 48 + 24 + 8
+      2216 bytes       10.023 usec    221.089 MB/s meshsizes total=    24    48    92 per process=    3    8   23 halosize=      277 = + 184 + 69 + 24
+      8864 bytes       24.161 usec    366.867 MB/s meshsizes total=    48    96   184 per process=    6   16   46 halosize=     1108 = + 736 + 276 + 96
+     34968 bytes       52.681 usec    663.769 MB/s meshsizes total=    96   186   372 per process=   12   31   93 halosize=     4371 = + 2883 + 1116 + 372
+    137208 bytes      182.381 usec    752.317 MB/s meshsizes total=   184   372   740 per process=   23   62  185 halosize=    17151 = + 11470 + 4255 + 1426
+    548088 bytes      779.319 usec    703.291 MB/s meshsizes total=   376   738  1476 per process=   47  123  369 halosize=    68511 = + 45387 + 17343 + 5781
+   2187192 bytes     3467.302 usec    630.805 MB/s meshsizes total=   744  1476  2956 per process=   93  246  739 halosize=   273399 = + 181794 + 68727 + 22878
+   8740888 bytes    14402.356 usec    606.907 MB/s meshsizes total=  1480  2958  5908 per process=  185  493 1477 halosize=  1092611 = + 728161 + 273245 + 91205
+  34936960 bytes    64691.877 usec    540.052 MB/s meshsizes total=  2960  5910 11816 per process=  370  985 2954 halosize=  4367120 = + 2909690 + 1092980 + 364450
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+General input questions:
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+start mesh sizes integer start values for 3 dimensions (e.g., 2 2 2) ?
+blocklength and stride of MPI_TYPE_VECTOR for each of the 3 dimensions, '0 0' stands for contiguous (e.g. 0 0 256 1024 8 32) ?
+
+Reporting of all general input arguments:
+
+cart_method = 3
+start mesh sizes integer start values for 3 dimensions = 1 2 4
+blocklength & sgtride pairs for each of the 3 dimensions = 1 0   1 0   1 0  
+
+Creating the Cartesian communicator and further input arguments:
+
+cart_method == 3: MPIX_Cart_weighted_create( weights := 4.0 / meshsize_avg_per_proc_startval )
+weights=  4.000000 2.000000 1.000000
+MPIX_Cart_ml_create_from_comms: global_equal==1, nlevels=3, ndims=3 
+MPIX_Cart_ml_create_from_comms: total_sizes= 192 24 12
+MPIX_Cart_ml_create_from_comms:       sizes= 8 2 12
+MPIX_Cart_ml_create_from_comms: dim_weights= 4.000000 2.000000 1.000000
+MPIX_Cart_ml_create_from_comms: dims_ml[d=0]=   1   2   2
+MPIX_Cart_ml_create_from_comms: dims_ml[d=1]=   2   1   3
+MPIX_Cart_ml_create_from_comms: dims_ml[d=2]=   4   1   2
+MPIX_Cart_ml_create_from_comms:        dims= 4 6 8
+
+[MPI_Barrier and switching to output via stdout through rank==0 in comm_cart]
+
+ndims=3 dims= 4 6 8
+    message size      transfertime  duplex bandwidth per process and neighbor (mesh&halo in #floats)
+       128 bytes       17.877 usec      7.160 MB/s meshsizes total=     8    12    24 per process=    2    2    3 halosize=       16 = + 6 + 6 + 4
+       432 bytes        7.544 usec     57.267 MB/s meshsizes total=    12    24    48 per process=    3    4    6 halosize=       54 = + 24 + 18 + 12
+      1728 bytes       12.503 usec    138.210 MB/s meshsizes total=    24    48    96 per process=    6    8   12 halosize=      216 = + 96 + 72 + 48
+      6688 bytes       15.459 usec    432.627 MB/s meshsizes total=    48    96   184 per process=   12   16   23 halosize=      836 = + 368 + 276 + 192
+     26008 bytes       38.357 usec    678.055 MB/s meshsizes total=    92   186   376 per process=   23   31   47 halosize=     3251 = + 1457 + 1081 + 713
+    103168 bytes      127.559 usec    808.788 MB/s meshsizes total=   184   372   744 per process=   46   62   93 halosize=    12896 = + 5766 + 4278 + 2852
+    411192 bytes      480.480 usec    855.794 MB/s meshsizes total=   372   738  1480 per process=   93  123  185 halosize=    51399 = + 22755 + 17205 + 11439
+   1639840 bytes     1861.439 usec    880.953 MB/s meshsizes total=   740  1476  2960 per process=  185  246  370 halosize=   204980 = + 91020 + 68450 + 45510
+   6551480 bytes     8416.939 usec    778.368 MB/s meshsizes total=  1476  2958  5912 per process=  369  493  739 halosize=   818935 = + 364327 + 272691 + 181917
+  26194104 bytes    38406.062 usec    682.030 MB/s meshsizes total=  2956  5910 11816 per process=  739  985 1477 halosize=  3274263 = + 1454845 + 1091503 + 727915
+
+
+[I/O via stdout AND stdin through rank==0 in MPI_COMM_WORLD]
+
+General input questions:
+
+cart_method: 0=end, 1=Dims_create+Cart_create, 2=Cart_weighted_create(WEIGHTS_EQUAL), 3=dito(weights), 4=dito manually, 5=Cart_ml_create(dims_ml) ?
+Application 2640948 resources: utime ~5038s, stime ~106s, Rss ~6560, inblocks ~0, outblocks ~0
+
+real	0m35.136s
+user	0m0.052s
+sys	0m0.036s
+Fri Feb  1 18:53:31 CET 2019

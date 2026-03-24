@@ -1,0 +1,17 @@
+  Unloading intel/18
+  Unloading intel-mpi/2018
+  Loading intel/18 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux
+  Loading intel-mpi/2018 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux/mpi
+  it=           1  rank( world=           0  shm=           0  head=           0
+ ) sum(i=           2 ...i=    25600001 ) =        327680038400000
+ ALL finalize and return!!!
+  it=           1  rank( world=          16  shm=           0  head=           1
+ ) sum(i=           2 ...i=    25600001 ) =        327680038400000
+  it=           1  rank( world=           1  shm=           1  head=          -1
+ ) sum(i=           2 ...i=    25600001 ) =        327680038400000
+  it=           1  rank( world=          17  shm=           1  head=          -1
+ ) sum(i=           2 ...i=    25600001 ) =        327680038400000
+  it=           1  rank( world=          15  shm=          15  head=          -1
+ ) sum(i=           2 ...i=    25600001 ) =        327680038400000
+  it=           1  rank( world=          31  shm=          15  head=          -1
+ ) sum(i=           2 ...i=    25600001 ) =        327680038400000

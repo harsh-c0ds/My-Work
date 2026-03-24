@@ -1,0 +1,100 @@
+###
+### Weak local experiments
+### ======================
+###
+test 85% module purge
+test 86% module load gnu/7 mpich/3.2.1
+test 87% module list
+
+Currently Loaded Modules:
+  1) gnu/7   2) mpich/3.2.1
+
+test 88% mpicc progress-test.c
+test 89% mpirun -np 2 ./a.out
+
+Message size is 4000000 bytes
+
+                              I am 1 before sleep(15)
+I am 0 before bsend call
+I am 0 after bsend call, delta = time  0.004353 sec
+I am 0 before sleep(40)
+                              I am 1 after sleep(15), delta = time 15.000074 sec
+                              I am 1: 15 seconds ago, process 0 called MPI_Bsend
+                              I am 1 before recv call
+                              I am 1: With progress, the following MPI_Recv will come back after a few micro seconds
+                              I am 1: Without progress, the following MPI_Recv will wait another 25 seconds until process 0 will call the barrier = unspecific call following the Bsend
+I am 0 after sleep(40), delta = time 40.000065 sec
+I am 0 before barrier call
+I am 0 after barrier call, delta = time  0.003434 sec
+                              I am 1 after recv call, delta time = 25.007840 sec   ### Here, you see that there is **no** asynchronous progress !!!! ###
+                              I am 1 before barrier call
+                              I am 1: With progress, the previous MPI_Recv was instantly done and the barrier has to wait for the other 25 sec
+                              I am 1: Without progress, the Recv waited for the other 25 sec and therefore the following barrier needs only a few micro seconds
+                              I am 1 after barrier call, delta = time  0.000022 sec
+
+
+test 90% module purge
+test 91% module load gnu/7 openmpi/2.1.6
+test 92% module list
+
+Currently Loaded Modules:
+  1) gnu/7   2) openmpi/2.1.6
+
+test 93% mpicc progress-test.c
+test 94% mpirun -np 2 ./a.out
+
+Message size is 4000000 bytes
+
+I am 0 before bsend call
+I am 0 after bsend call, delta = time  0.004319 sec
+I am 0 before sleep(40)
+                              I am 1 before sleep(15)
+                              I am 1 after sleep(15), delta = time 15.000077 sec
+                              I am 1: 15 seconds ago, process 0 called MPI_Bsend
+                              I am 1 before recv call
+                              I am 1: With progress, the following MPI_Recv will come back after a few micro seconds
+                              I am 1: Without progress, the following MPI_Recv will wait another 25 seconds until process 0 will call the barrier = unspecific call following the Bsend
+I am 0 after sleep(40), delta = time 40.000065 sec
+I am 0 before barrier call
+I am 0 after barrier call, delta = time  0.003567 sec
+                              I am 1 after recv call, delta time = 25.007816 sec   ### Here, you see that there is **no** asynchronous progress !!!! ###
+                              I am 1 before barrier call
+                              I am 1: With progress, the previous MPI_Recv was instantly done and the barrier has to wait for the other 25 sec
+                              I am 1: Without progress, the Recv waited for the other 25 sec and therefore the following barrier needs only a few micro seconds
+                              I am 1 after barrier call, delta = time  0.000013 sec
+
+
+test 95%
+
+###
+### Strong local experiment with asynchronous progress thead 
+### ========================================================
+###
+
+test 103% module purge
+test 104% module load gnu/7 mpich/3.2.1
+test 105% setenv MPICH_ASYNC_PROGRESS 1
+test 106% mpicc progress-test.c
+test 107% mpirun -np 2 ./a.out
+
+Message size is 4000000 bytes
+
+I am 0 before bsend call
+                              I am 1 before sleep(15)
+I am 0 after bsend call, delta = time  0.004371 sec
+I am 0 before sleep(40)
+                              I am 1 after sleep(15), delta = time 15.000062 sec
+                              I am 1: 15 seconds ago, process 0 called MPI_Bsend
+                              I am 1 before recv call
+                              I am 1: With progress, the following MPI_Recv will come back after a few micro seconds
+                              I am 1: Without progress, the following MPI_Recv will wait another 25 seconds until process 0 will call the barrier = unspecific call following the Bsend
+                              I am 1 after recv call, delta time =  0.003626 sec   ### Here, you see that there ***is*** asynchronous progress !!!! ###
+                              I am 1 before barrier call
+                              I am 1: With progress, the previous MPI_Recv was instantly done and the barrier has to wait for the other 25 sec
+                              I am 1: Without progress, the Recv waited for the other 25 sec and therefore the following barrier needs only a few micro seconds
+I am 0 after sleep(40), delta = time 40.000061 sec
+I am 0 before barrier call
+I am 0 after barrier call, delta = time  0.000030 sec
+                              I am 1 after barrier call, delta = time 25.007904 sec
+test 108%
+

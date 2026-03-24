@@ -1,0 +1,11 @@
+  Unloading intel/18
+  Unloading intel-mpi/2018
+  Loading intel/18 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux
+  Loading intel-mpi/2018 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux/mpi
+		rank ( world: 0, shm: 0, head: 0) arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = 0x2ba944547000, arr_ptr = 0x2ba944547000 
+ALL finalize and return !!!.
+		rank ( world: 1, shm: 1, head: -1) arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = (nil), arr_ptr = 0x2b591467d000 
+		rank ( world: 16, shm: 0, head: 1) arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = 0x2ab7ca10c000, arr_ptr = 0x2ab7ca10c000 
+		rank ( world: 15, shm: 15, head: -1) arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = (nil), arr_ptr = 0x2b78df3fb000 
+		rank ( world: 17, shm: 1, head: -1) arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = (nil), arr_ptr = 0x2ba1d1aef000 
+		rank ( world: 31, shm: 15, head: -1) arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = (nil), arr_ptr = 0x2b1ae970e000 

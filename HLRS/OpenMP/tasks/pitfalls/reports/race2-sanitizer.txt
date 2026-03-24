@@ -1,0 +1,17 @@
+==================
+WARNING: ThreadSanitizer: data race (pid=410518)
+  Atomic read of size 1 at 0x7ffff3349540 by main thread:
+    #0 pthread_mutex_lock /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1367:3 (race2-sani+0x4283df)
+    #1 __kmp_lock_suspend_mx <null> (libiomp5.so+0x1637d4) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Previous write of size 1 at 0x7ffff3349540 by thread T2:
+    #0 pthread_mutex_init /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1341:3 (race2-sani+0x428074)
+    #1 __kmp_suspend_initialize_thread <null> (libiomp5.so+0x16a89c) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+  Thread T2 (tid=410521, running) created by main thread at:
+    #0 pthread_create /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/tsan_interceptors_posix.cpp:1048:3 (race2-sani+0x42661f)
+    #1 __kmp_create_worker <null> (libiomp5.so+0x164c87) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd)
+
+SUMMARY: ThreadSanitizer: data race (/software/rapids/r24.10/imkl/2023.2.0/compiler/2023.2.0/linux/compiler/lib/intel64_lin/libiomp5.so+0x1637d4) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd) in __kmp_lock_suspend_mx
+==================
+ThreadSanitizer: reported 1 warnings

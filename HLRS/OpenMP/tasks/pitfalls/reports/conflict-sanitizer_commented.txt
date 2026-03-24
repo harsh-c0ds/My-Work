@@ -1,0 +1,76 @@
+[COMMENT:
+ conflict.c includes
+              1         2         3
+     123456789012345678901234567890 (character locations)
+  18 #pragma omp parallel
+  19   {
+  20 #pragma omp for
+  21   for(i=1; i<NMAX; i++){
+  22     a[i]=1.0/i;
+  23     b[i]=a[i-1]+a[i];
+  24   }
+  25   }/* end parallel*/
+  26
+  27   for(i=1;i<NMAX; i++){
+  28     printf("%g\n",b[i]);
+  29   }
+
+ with a write-read-conflict between
+  - writing a[i]   on line 22 (see assigment "=" on location 9) in one thread and
+  - reading the same location as a[i-1] on line 23 (pos. 10-15) in another thread 
+]
+==================
+SUMMARY: ThreadSanitizer: data race (/software/rapids/r24.10/imkl/2023.2.0/compiler/2023.2.0/linux/compiler/lib/intel64_lin/libiomp5.so+0x1637d4) (BuildId: [...]) in __kmp_lock_suspend_mx
+
+[COMMENT: This report is outside of the scope of conflict.c
+]
+==================
+WARNING: ThreadSanitizer: data race (pid=408149)
+  Write of size 8 at 0x00000187e2e0 by thread T2:
+    #0 main.extracted ~/OpenMP/01/pitfalls/conflict.c:22:9 (conflict-sani+0x4d7c3e)
+  Previous read of size 8 at 0x00000187e2e0 by thread T3:
+    #0 main.extracted ~/OpenMP/01/pitfalls/conflict.c:23:10 (conflict-sani+0x4d7c7b)
+  Location is global 'a' of size 88 at 0x00000187e2a0 (conflict-sani+0x187e2e0)
+
+[COMMENT: Here, the datarace is detected as read-write conflict:
+            in global array a,
+            read (1st) at conflict.c:23:10 (i.e. the access on line 23 to variable a[i-1] at location 10),
+            write(2nd) at conflict.c:22:9  (i.e. the assigment on line 22 on character location 9 to a[i]).
+] 
+==================
+WARNING: ThreadSanitizer: data race (pid=408149)
+  Read of size 8 at 0x00000187e2b8 by thread T1:
+    #0 main.extracted ~/OpenMP/01/pitfalls/conflict.c:23:10 (conflict-sani+0x4d7c7b)
+  Previous write of size 8 at 0x00000187e2b8 by main thread:
+    #0 main.extracted ~/OpenMP/01/pitfalls/conflict.c:22:9 (conflict-sani+0x4d7c3e)
+  Location is global 'a' of size 88 at 0x00000187e2a0 (conflict-sani+0x187e2b8)
+
+[COMMENT: Here, the same datarace is detected, but as write-read conflict:
+            in global array a,
+            write(1st) at conflict.c:22:9  (i.e. the assigment on line 22 on character location 9 to a[i]),
+            read (2nd) at conflict.c:23:10 (i.e. the access on line 23 to variable a[i-1] at location 10).
+] 
+==================
+WARNING: ThreadSanitizer: data race (pid=408149)
+  Read of size 8 at 0x00000187e320 by main thread:
+    #0 main ~/OpenMP/01/pitfalls/conflict.c:28:19 (conflict-sani+0x4d7a88)
+  Previous write of size 8 at 0x00000187e320 by thread T1:
+    #0 main.extracted ~/OpenMP/01/pitfalls/conflict.c:23:9 (conflict-sani+0x4d7ce3)
+  Location is global 'b' of size 88 at 0x00000187e300 (conflict-sani+0x187e320)
+
+[COMMENT: Here, a false positive report of a write-read conflict:
+            in global array b,
+            write(1st) at conflict.c:23:9  (i.e. the assigment on line 23 on character location 9 to b[i],)
+            read  at conflict.c:28:10 (i.e. the access on line 23 to variable b[i] at location 19).
+          This conflict does not exist because between the write and the read accesses are two omp barriers:
+           - at the end of the worksharing "#pragma omp for" ... "}" is a first omp barrier on line 24, and
+           - at the end of the parallel region "#pragma omp parallel" ... "}" is a second omp barrier on line 25.
+] 
+==================
+ThreadSanitizer: reported 4 warnings
+
+[COMMENT: 1st warning: irrelevant
+          2nd warning: correct
+          3rd warning: a duplicate
+          4th warning: false positive
+]

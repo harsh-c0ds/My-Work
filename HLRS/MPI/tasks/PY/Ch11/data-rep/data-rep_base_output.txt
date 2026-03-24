@@ -1,0 +1,13 @@
+  Unloading intel/18
+  Unloading intel-mpi/2018
+  Loading intel/18 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux
+  Loading intel-mpi/2018 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux/mpi
+it: 0, rank ( world: 31 ):	sum(i=0...i=255999999) = 32767999872000000 
+it: 0, rank ( world: 0 ):	sum(i=0...i=255999999) = 32767999872000000 
+it: 0, rank ( world: 1 ):	sum(i=0...i=255999999) = 32767999872000000 
+it: 1, rank ( world: 0 ):	sum(i=1...i=256000000) = 32768000128000000 
+it: 1, rank ( world: 1 ):	sum(i=1...i=256000000) = 32768000128000000 
+it: 1, rank ( world: 31 ):	sum(i=1...i=256000000) = 32768000128000000 
+it: 2, rank ( world: 0 ):	sum(i=2...i=256000001) = 32768000384000000 
+it: 2, rank ( world: 1 ):	sum(i=2...i=256000001) = 32768000384000000 
+it: 2, rank ( world: 31 ):	sum(i=2...i=256000001) = 32768000384000000 

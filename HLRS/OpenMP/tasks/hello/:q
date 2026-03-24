@@ -1,0 +1,8 @@
+program hello
+implicit none
+integer  omp_get_thread_num
+
+   i=omp_get_num_threads()
+   print *,'hello world',i
+
+end program hello

@@ -1,0 +1,31 @@
+  Unloading intel/18
+  Unloading intel-mpi/2018
+  Loading intel/18 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux
+  Loading intel-mpi/2018 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux/mpi
+		process 0   arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = 0x2ab3f57a7000, arr_ptr = 0x2ab3f57a7000 
+		process 1   arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = (nil), arr_ptr = 0x2b5501663000 
+		process 16   arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = 0x2b1778e63000, arr_ptr = 0x2b1778e63000 
+		process 15   arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = (nil), arr_ptr = 0x2ac49666e000 
+		process 17   arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = (nil), arr_ptr = 0x2b3d8c249000 
+
+	The number of shared memory islands is: 2 islands 
+	The size of all shared memory islands is: 16 processes
+		process 31   arrSize 256000000 arrSize_ 2048000000  shm_buf_ptr = (nil), arr_ptr = 0x2b4c763c7000 
+it: 0, rank ( world: 16, shm: 0, head: 1 ):	sum(i=0...i=255999999) = 32767999872000000 
+it: 0, rank ( world: 0, shm: 0, head: 0 ):	sum(i=0...i=255999999) = 32767999872000000 
+it: 0, rank ( world: 1, shm: 1, head: -1 ):	sum(i=0...i=255999999) = 32767999872000000 
+it: 0, rank ( world: 17, shm: 1, head: -1 ):	sum(i=0...i=255999999) = 32767999872000000 
+it: 0, rank ( world: 31, shm: 15, head: -1 ):	sum(i=0...i=255999999) = 32767999872000000 
+it: 0, rank ( world: 15, shm: 15, head: -1 ):	sum(i=0...i=255999999) = 32767999872000000 
+it: 1, rank ( world: 16, shm: 0, head: 1 ):	sum(i=1...i=256000000) = 32768000128000000 
+it: 1, rank ( world: 17, shm: 1, head: -1 ):	sum(i=1...i=256000000) = 32768000128000000 
+it: 1, rank ( world: 0, shm: 0, head: 0 ):	sum(i=1...i=256000000) = 32768000128000000 
+it: 1, rank ( world: 1, shm: 1, head: -1 ):	sum(i=1...i=256000000) = 32768000128000000 
+it: 1, rank ( world: 31, shm: 15, head: -1 ):	sum(i=1...i=256000000) = 32768000128000000 
+it: 1, rank ( world: 15, shm: 15, head: -1 ):	sum(i=1...i=256000000) = 32768000128000000 
+it: 2, rank ( world: 16, shm: 0, head: 1 ):	sum(i=2...i=256000001) = 32768000384000000 
+it: 2, rank ( world: 17, shm: 1, head: -1 ):	sum(i=2...i=256000001) = 32768000384000000 
+it: 2, rank ( world: 0, shm: 0, head: 0 ):	sum(i=2...i=256000001) = 32768000384000000 
+it: 2, rank ( world: 1, shm: 1, head: -1 ):	sum(i=2...i=256000001) = 32768000384000000 
+it: 2, rank ( world: 31, shm: 15, head: -1 ):	sum(i=2...i=256000001) = 32768000384000000 
+it: 2, rank ( world: 15, shm: 15, head: -1 ):	sum(i=2...i=256000001) = 32768000384000000 

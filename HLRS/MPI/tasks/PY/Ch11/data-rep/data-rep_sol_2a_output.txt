@@ -1,0 +1,11 @@
+  Unloading intel/18
+  Unloading intel-mpi/2018
+  Loading intel/18 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux
+  Loading intel-mpi/2018 from: /cm/shared/apps/intel/compilers_and_libraries_2018.5.274/linux/mpi
+		rank ( world: 0, shm: 0)
+ALL finalize and return !!!.
+		rank ( world: 16, shm: 0)
+		rank ( world: 1, shm: 1)
+		rank ( world: 17, shm: 1)
+		rank ( world: 15, shm: 15)
+		rank ( world: 31, shm: 15)

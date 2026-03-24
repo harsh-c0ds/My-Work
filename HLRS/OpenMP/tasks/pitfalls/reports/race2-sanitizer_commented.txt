@@ -1,0 +1,24 @@
+[COMMENT:
+ race2.c includes
+              1         2         3
+     123456789012345678901234567890 (character positions)
+   6 #pragma omp parallel for private(jlast)
+   7   for(i=1; i<1000; i++){
+   8     jlast=i;
+   9   }
+  10
+  11   printf("%d\n",jlast);
+ with no datarace, but a private-initialization-return errror:
+  jlast on line 8 is written as private variable
+  and read on line 11 as shared variable after the parallelized loop
+]
+==================
+SUMMARY: ThreadSanitizer: data race (/software/rapids/r24.10/imkl/2023.2.0/compiler/2023.2.0/linux/compiler/lib/intel64_lin/libiomp5.so+0x1637d4) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd) in __kmp_lock_suspend_mx
+
+[COMMENT: This report is outside of the scope of race1.c
+]
+==================
+ThreadSanitizer: reported 1 warnings
+
+[COMMENT: Ths missing lastprivate(jlast) is not detected.
+]

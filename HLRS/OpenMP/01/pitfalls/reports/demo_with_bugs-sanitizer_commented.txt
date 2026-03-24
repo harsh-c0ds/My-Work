@@ -1,0 +1,350 @@
+==================
+SUMMARY: ThreadSanitizer: data race (/software/rapids/r24.10/imkl/2023.2.0/compiler/2023.2.0/linux/compiler/lib/intel64_lin/libiomp5.so+0x1637d4) (BuildId: 50842485d55b68c28aa378ead8b52a3bd32b1bdd) in __kmp_lock_suspend_mx
+==================
+LLVMSymbolizer: error reading file: No such file or directory
+==================
+[COMMENT:
+ demo_with_bugs.c includes
+             1         2         3
+    123456789012345678901234567890 (character positions)
+]
+ 22   /* Example 1 (this example contains an OpenMP parallelization error) */
+
+ 26 # pragma omp parallel for
+ 27   for (i=1; i<N; i++)
+ 28   {
+ 29     a[i] = 2.0*i*(i-1);
+ 30     b[i] = a[i] - a[i-1];
+ 31   } /* end of omp parallel for */
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd3bc by thread T2:
+    #0 main.extracted ~/OpenMP/01/pitfalls/demo_with_bugs.c:29:10 (demo_with_bugs-sani+0x4d85b8)
+  Previous read of size 4 at 0x7ffffffdd3bc by thread T3:
+    #0 main.extracted ~/OpenMP/01/pitfalls/demo_with_bugs.c:30:19 (demo_with_bugs-sani+0x4d8617)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f3bc)
+[COMMENT: datarace is correctly detected, but the name of the array "a" is missing.]
+==================
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Read of size 4 at 0x7ffffffdd2f4 by thread T1:
+    #0 main.extracted ~/OpenMP/01/pitfalls/demo_with_bugs.c:30:19 (demo_with_bugs-sani+0x4d8617)
+  Previous write of size 4 at 0x7ffffffdd2f4 by main thread:
+    #0 main.extracted ~/OpenMP/01/pitfalls/demo_with_bugs.c:29:10 (demo_with_bugs-sani+0x4d85b8)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f2f4)
+[COMMENT: datarace is correctly detected, but it is a duplicate.]
+==================
+ 40   /* Example 2 (this example contains an OpenMP parallelization error) */
+
+ 44 # pragma omp parallel
+ 45   {
+ 46 #   pragma omp for nowait
+ 47     for (i=1; i<N; i++)
+ 48     {
+ 49       a[i] = 3.0*i*(i+1);
+ 50     } /* end of omp for nowait */
+ 51 #   pragma omp for
+ 52     for (i=1; i<N; i++)
+ 53     {
+ 54       b[i] = a[i] - a[i-1];
+ 55     } /* end of omp for */
+ 56   } /* end of omp parallel */
+
+[COMMENT: The datarace on array "a[i]" between the write on line 49:12 and the read on line 54:20
+          due to the nowait was not detected.
+==================
+ 65   /* Example 3 (this example contains an OpenMP parallelization error) */
+
+ 68 # pragma omp parallel for
+ 69   for (i=1; i<N; i++)
+ 70   {
+ 71     x = sqrt(b[i]) - 1;
+ 72     a[i] = x*x + 2*x + 1;
+ 73   } /* end of omp parallel for */
+ 
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Read of size 4 at 0x7ffffffdd0a4 by thread T1:
+    #0 main.extracted.20 ~/OpenMP/01/pitfalls/demo_with_bugs.c:68:1 (demo_with_bugs-sani+0x4d8b3f)
+  Previous write of size 4 at 0x7ffffffdd0a4 by main thread:
+    #0 main ~/OpenMP/01/pitfalls/demo_with_bugs.c:69:8 (demo_with_bugs-sani+0x4d7e40)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0a4)
+[COMMENT: This write of "i" in line 69 is NOT in conflict with the #pragma ... on line 68,
+          therefore FALSE POSITIVE - a wrong analysis
+==================
+ 65   /* Example 3 - continued
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd0fc by thread T1:
+    #0 main.extracted.20 ~/OpenMP/01/pitfalls/demo_with_bugs.c:71:7 (demo_with_bugs-sani+0x4d8c7e)
+  Previous write of size 4 at 0x7ffffffdd0fc by main thread:
+    #0 main.extracted.20 ~/OpenMP/01/pitfalls/demo_with_bugs.c:71:7 (demo_with_bugs-sani+0x4d8c7e)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0fc)
+[COMMENT: datarace is correctly detected, but the name of the variable "x" is missing.]
+==================
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd0fc by thread T3:
+    #0 main.extracted.20 ~/OpenMP/01/pitfalls/demo_with_bugs.c:71:7 (demo_with_bugs-sani+0x4d8c7e)
+  Previous write of size 4 at 0x7ffffffdd0fc by thread T1:
+    #0 main.extracted.20 ~/OpenMP/01/pitfalls/demo_with_bugs.c:71:7 (demo_with_bugs-sani+0x4d8c7e)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0fc)
+[COMMENT: datarace is correctly detected, but it is a duplicate.]
+[COMMENT: The write-read-conflict between write "x" on line 71 by one thread
+          and reading of "x" on line 72 by another thread is not detected.]
+==================
+ 81   /* Example 4 (this example contains an OpenMP parallelization error) */
+
+ 84   f = 2;
+ 85 # pragma omp parallel for private(f, x)
+ 86   for (i=1; i<N; i++)
+ 87   {
+ 88     x = f * b[i];
+ 89     a[i] = x - 7;
+ 90   } /* end of omp parallel for */
+ 91   a[0] = x;
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Read of size 4 at 0x7ffffffdd094 by thread T2:
+    #0 main.extracted.23 ~/OpenMP/01/pitfalls/demo_with_bugs.c:85:1 (demo_with_bugs-sani+0x4d8da7)
+  Previous write of size 4 at 0x7ffffffdd094 by main thread:
+    #0 main ~/OpenMP/01/pitfalls/demo_with_bugs.c:86:8 (demo_with_bugs-sani+0x4d8030)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f094)
+[COMMENT: This write of "i" in line 86 is NOT in conflict with the #pragma ... on line 85,
+          therefore FALSE POSITIVE - a wrong analysis. ]
+[COMMENT: Ths missing "firstprivate(f)" and "lastprivate(x)" are not detected. ]
+==================
+ 98   /* Example 5 (this example contains an OpenMP parallelization error) */
+
+101   sum = 0;
+102 # pragma omp parallel for
+103   for (i=1; i<N; i++)
+104   {
+105     sum = sum + b[i];
+106   } /* end of omp parallel for */
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Read of size 4 at 0x7ffffffdd084 by thread T3:
+    #0 main.extracted.26 ~/OpenMP/01/pitfalls/demo_with_bugs.c:102:1 (demo_with_bugs-sani+0x4d8fa7)
+  Previous write of size 4 at 0x7ffffffdd084 by main thread:
+    #0 main ~/OpenMP/01/pitfalls/demo_with_bugs.c:103:8 (demo_with_bugs-sani+0x4d8149)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f084)
+
+[COMMENT: This write of "i" in line 103 is NOT in conflict with the #pragma ... on line 102,
+          therefore FALSE POSITIVE - a wrong analysis. ]
+==================
+ 98   /* Example 5 - continued
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd0f4 by thread T3:
+    #0 main.extracted.26 ~/OpenMP/01/pitfalls/demo_with_bugs.c:105:9 (demo_with_bugs-sani+0x4d90d4)
+  Previous write of size 4 at 0x7ffffffdd0f4 by main thread:
+    #0 main.extracted.26 ~/OpenMP/01/pitfalls/demo_with_bugs.c:105:9 (demo_with_bugs-sani+0x4d90d4)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0f4)
+
+[COMMENT: datarace is correctly detected, but the name of the variable "sum" is missing.]
+==================
+ 98   /* Example 5 - continued
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd0f4 by thread T1:
+    #0 main.extracted.26 ~/OpenMP/01/pitfalls/demo_with_bugs.c:105:9 (demo_with_bugs-sani+0x4d90d4)
+  Previous write of size 4 at 0x7ffffffdd0f4 by thread T3:
+    #0 main.extracted.26 ~/OpenMP/01/pitfalls/demo_with_bugs.c:105:9 (demo_with_bugs-sani+0x4d90d4)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0f4)
+
+[COMMENT: datarace is correctly detected, but it is a duplicate.]
+==================
+ 98   /* Example 5 (this example contains an OpenMP parallelization error) */
+
+101   sum = 0;
+102 # pragma omp parallel for
+103   for (i=1; i<N; i++)
+104   {
+105     sum = sum + b[i];
+106   } /* end of omp parallel for */
+
+114   /* Example 6 ....
+
+129   sum = 0;
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd0f4 by main thread:
+    #0 main ~/OpenMP/01/pitfalls/demo_with_bugs.c:129:7 (demo_with_bugs-sani+0x4d8249)
+  Previous write of size 4 at 0x7ffffffdd0f4 by thread T2:
+    #0 main.extracted.26 ~/OpenMP/01/pitfalls/demo_with_bugs.c:105:9 (demo_with_bugs-sani+0x4d90d4)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0f4)
+
+[COMMENT: Here, a false positive report of a write-write conflict:
+            in global variable sum
+            write(1st) at demo_with_bugs.c:105:9  (i.e. the assigment on line 105 on character location 9 to sum),
+            write(2nd) at demo_with_bugs.c:129:7 (i.e. the assigment on line 129 at character location 7).
+          This conflict does not exist because between the first and the second write accesses is an omp barrier
+          at the end of the "#pragma omp parallel for" ... "}" on line 106. ]
+==================
+114   /* Example 6 (this example is correct, but the Intel Thread Checker will */
+115   /* ---------  report a run time analysis "Caution": */
+116
+129   sum = 0;
+130 # pragma omp parallel private(psum)
+131   {
+132     psum = 0;
+133 #   pragma omp for
+134       for (i=1; i<N; i++)
+135       {
+136         psum = psum + b[i];
+137       } /* end of omp for */
+138 #   pragma omp critical
+139     {
+140       sum = sum + psum;
+141     } /* end of omp critical */
+142   } /* end of omp parallel */
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd0f4 by thread T2:
+    #0 main.extracted.31 ~/OpenMP/01/pitfalls/demo_with_bugs.c:140:11 (demo_with_bugs-sani+0x4d9336)
+  Previous write of size 4 at 0x7ffffffdd0f4 by main thread:
+    #0 main.extracted.31 ~/OpenMP/01/pitfalls/demo_with_bugs.c:140:11 (demo_with_bugs-sani+0x4d9336)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0f4)
+
+[COMMENT: Here, a false positive report of a write-write conflict to the shared variable sum in line 140,
+          although these accesses are within a critical section. ]
+==================
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd0f4 by thread T1:
+    #0 main.extracted.31 ~/OpenMP/01/pitfalls/demo_with_bugs.c:140:11 (demo_with_bugs-sani+0x4d9336)
+  Previous write of size 4 at 0x7ffffffdd0f4 by thread T3:
+    #0 main.extracted.31 ~/OpenMP/01/pitfalls/demo_with_bugs.c:140:11 (demo_with_bugs-sani+0x4d9336)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0f4)
+
+[COMMENT: Same false positive report.
+==================
+ 22   /* Example 1 (this example contains an OpenMP parallelization error) */
+
+ 26 # pragma omp parallel for
+ 27   for (i=1; i<N; i++)
+ 28   {
+ 29     a[i] = 2.0*i*(i-1);
+ 30     b[i] = a[i] - a[i-1];
+ 31   } /* end of omp parallel for */
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+150   /* Example 7 (this example is correct, but the Intel Thread Checker will */
+151   /* ---------  report a "compile time warning", a "run time error"        */
+152   /*            and same "Caution" as in Example 6) */
+153
+165   b[0] = 0;
+166   sum = 0;
+167 # pragma omp parallel private(psum, num_threads)
+168   {
+169 #   ifdef _OPENMP
+170       num_threads=omp_get_num_threads();
+171 #   else
+172       num_threads=1;
+173 #   endif
+174     psum = 0;
+175 #   pragma omp for schedule(static,(N-1)/num_threads+1)
+176       for (i=0; i<N; i++)
+177       {
+178         psum = psum + b[i];
+179       } /* end of omp for */
+180 #   pragma omp for ordered schedule(static,1)
+181       for (i=0;i<num_threads;i++)
+182       {
+183 #       pragma omp ordered
+184           sum = sum + psum;
+185       } /* end of omp for */
+186   } /* end of omp parallel */
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Read of size 4 at 0x7ffffffdd1c8 by thread T2:
+    #0 main.extracted.42 ~/OpenMP/01/pitfalls/demo_with_bugs.c:178:23 (demo_with_bugs-sani+0x4d9562)
+  Previous write of size 4 at 0x7ffffffdd1c8 by thread T1:
+    #0 main.extracted ~/OpenMP/01/pitfalls/demo_with_bugs.c:30:10 (demo_with_bugs-sani+0x4d8649)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f1c8)
+
+[COMMENT: Here, a false positive report of a write-read conflict:
+            in global shared array "b"
+            write(1st) at demo_with_bugs.c:30:10  (i.e. the assigment on line 30 on character location 10 to b[i]),
+            read (2nd) at demo_with_bugs.c:178:23 (i.e. the access on line 178 to b[i] at character location 23).
+          This conflict does not exist because between the first and the second access are several omp barrier. ]
+==================
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Read of size 4 at 0x7ffffffdd164 by thread T1:
+    #0 main.extracted.42 ~/OpenMP/01/pitfalls/demo_with_bugs.c:178:23 (demo_with_bugs-sani+0x4d9562)
+  Previous write of size 4 at 0x7ffffffdd164 by main thread:
+    #0 main.extracted ~/OpenMP/01/pitfalls/demo_with_bugs.c:30:10 (demo_with_bugs-sani+0x4d8649)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f164)
+
+[COMMENT: Same false positive report.
+==================
+150   /* Example 7 (this example is correct, ... - continued
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd0f4 by thread T1:
+    #0 main.extracted.42 ~/OpenMP/01/pitfalls/demo_with_bugs.c:184:15 (demo_with_bugs-sani+0x4d97f8)
+  Previous write of size 4 at 0x7ffffffdd0f4 by main thread:
+    #0 main ~/OpenMP/01/pitfalls/demo_with_bugs.c:166:7 (demo_with_bugs-sani+0x4d833d)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0f4)
+
+[COMMENT: Here, a false positive report of a write-write conflict:
+            in global variable sum
+            write(1st) at demo_with_bugs.c:166:7  (i.e. the assigment on line 166 on character location 7 to sum),
+            write(2nd) at demo_with_bugs.c:184:15 (i.e. the assigment on line 184 at character location 15).
+          This conflict does not exist because line 184 is within the "#pragma omp ordered" on line 183.
+==================
+150   /* Example 7 (this example is correct, ... - continued
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 4 at 0x7ffffffdd0f4 by thread T3:
+    #0 main.extracted.42 ~/OpenMP/01/pitfalls/demo_with_bugs.c:184:15 (demo_with_bugs-sani+0x4d97f8)
+  Previous write of size 4 at 0x7ffffffdd0f4 by thread T2:
+    #0 main.extracted.42 ~/OpenMP/01/pitfalls/demo_with_bugs.c:184:15 (demo_with_bugs-sani+0x4d97f8)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f0f4)
+
+[COMMENT: Here, a false positive report of a write-write conflict to the shared variable sum in line 184,
+          although these accesses are ordered through the "#pragma omp ordered" on line 183. ]
+==================
+ 22   /* Example 1 (this example contains an OpenMP parallelization error) */
+
+ 26 # pragma omp parallel for
+ 27   for (i=1; i<N; i++)
+ 28   {
+ 29     a[i] = 2.0*i*(i-1);
+ 30     b[i] = a[i] - a[i-1];
+ 31   } /* end of omp parallel for */
+
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 7 at 0x7ffffffdd1d9 by main thread:
+    #0 memcpy /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/../../sanitizer_common/sanitizer_common_interceptors.inc:875:5 (demo_with_bugs-sani+0x433b14)
+  Previous write of size 4 at 0x7ffffffdd1d8 by thread T2:
+    #0 main.extracted ~/OpenMP/01/pitfalls/demo_with_bugs.c:30:10 (demo_with_bugs-sani+0x4d8649)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f1d8)
+
+[COMMENT: This seems to be a false positive report due to a bug in the Thread Sanitizer.]
+==================
+WARNING: ThreadSanitizer: data race (pid=410529)
+  Write of size 7 at 0x7ffffffdd209 by main thread:
+    #0 memcpy /netbatch/donb00013_01/dir/workspace/NIT/xmain-rel/LX/xmainefi2linux_release/ws/icsws/llvm/compiler-rt/lib/tsan/rtl/../../sanitizer_common/sanitizer_common_interceptors.inc:875:5 (demo_with_bugs-sani+0x433b14)
+  Previous write of size 4 at 0x7ffffffdd208 by thread T2:
+    #0 main.extracted ~/OpenMP/01/pitfalls/demo_with_bugs.c:30:10 (demo_with_bugs-sani+0x4d8649)
+  Location is stack of main thread.
+  Location is global '??' at 0x7ffffffbe000 ([stack]+0x1f208)
+
+[COMMENT: Same false positive report.
+==================
+ThreadSanitizer: reported 19 warnings

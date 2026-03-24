@@ -1,0 +1,92 @@
+test 80% module load gnu/7 openmpi/2.1.6
+test 81% mpicc progress-test-rsend.c
+test 82% mpirun -np 2 ./a.out
+
+Message size is 4000000 bytes
+
+I am 0 token received, delta = time  0.000030 sec
+I am 0 before sleep(5)
+                              I am 1 Irecv started and token sent, delta = time  0.000030 sec
+                              I am 1 before sleep(5)
+I am 0 after sleep(5), delta = time  5.000070 sec
+I am 0 before Rsend call. This call is expected to be local because the receive (as an MPI_Irecv) is already called in process 1
+I am 0: With progress, the following MPI_Rsend will come back after a few micro seconds
+I am 0: Without progress, the following MPI_Rsend will wait another 15 seconds until process 1 will call the barrier = unspecific call following the Irecv
+                              I am 1 after sleep(5), delta = time  5.000070 sec
+                              I am 1 before sleep(15)
+I am 0 after Rsend call, delta = time 15.002303 sec
+I am 0 before sleep(40)
+                              I am 1 after sleep(15), delta = time 15.000064 sec
+                              I am 1: 15 seconds ago, process 0 called MPI_Rsend
+                              I am 1 before barrier call
+                              I am 1: With MPI_Rsend progress in process 0, this barrier has to wait for the barrier in proces 0 coming in 40-15 = 25 sec
+                              I am 1: Without MPI_Rsend progress in process 0, the Rsend waited for the 15 sec and therefore the following barrier ihas to wait 40 sec
+I am 0 after sleep(40), delta = time 40.000069 sec
+I am 0 before barrier call
+I am 0 after barrier call, delta = time  0.000039 sec
+                              I am 1 after barrier call, delta = time 40.002437 sec
+                              I am 1 before recv-wait call
+                              I am 1 after recv-wait call, delta time =  0.000004 sec
+
+test 85% module purge
+test 86% module load gnu/7 mpich/3.2.1
+test 87% mpicc progress-test-rsend.c
+test 88% mpirun -np 2 ./a.out
+
+Message size is 4000000 bytes
+
+I am 0 token received, delta = time  0.000015 sec
+I am 0 before sleep(5)
+                              I am 1 Irecv started and token sent, delta = time  0.000018 sec
+                              I am 1 before sleep(5)
+I am 0 after sleep(5), delta = time  5.000074 sec
+I am 0 before Rsend call. This call is expected to be local because the receive (as an MPI_Irecv) is already called in process 1
+I am 0: With progress, the following MPI_Rsend will come back after a few micro seconds
+I am 0: Without progress, the following MPI_Rsend will wait another 15 seconds until process 1 will call the barrier = unspecific call following the Irecv
+                              I am 1 after sleep(5), delta = time  5.000072 sec
+                              I am 1 before sleep(15)
+I am 0 after Rsend call, delta = time 15.003246 sec
+I am 0 before sleep(40)
+                              I am 1 after sleep(15), delta = time 15.000065 sec
+                              I am 1: 15 seconds ago, process 0 called MPI_Rsend
+                              I am 1 before barrier call
+                              I am 1: With MPI_Rsend progress in process 0, this barrier has to wait for the barrier in proces 0 coming in 40-15 = 25 sec
+                              I am 1: Without MPI_Rsend progress in process 0, the Rsend waited for the 15 sec and therefore the following barrier ihas to wait 40 sec
+I am 0 after sleep(40), delta = time 40.000068 sec
+I am 0 before barrier call
+I am 0 after barrier call, delta = time  0.000016 sec
+                              I am 1 after barrier call, delta = time 40.003329 sec
+                              I am 1 before recv-wait call
+                              I am 1 after recv-wait call, delta time =  0.000021 sec
+
+
+test 89% setenv MPICH_ASYNC_PROGRESS 1
+test 90% mpirun -np 2 ./a.out
+
+Message size is 4000000 bytes
+
+I am 0 token received, delta = time  0.000025 sec
+I am 0 before sleep(5)
+                              I am 1 Irecv started and token sent, delta = time  0.000028 sec
+                              I am 1 before sleep(5)
+I am 0 after sleep(5), delta = time  5.000061 sec
+I am 0 before Rsend call. This call is expected to be local because the receive (as an MPI_Irecv) is already called in process 1
+I am 0: With progress, the following MPI_Rsend will come back after a few micro seconds
+I am 0: Without progress, the following MPI_Rsend will wait another 15 seconds until process 1 will call the barrier = unspecific call following the Irecv
+                              I am 1 after sleep(5), delta = time  5.000061 sec
+                              I am 1 before sleep(15)
+I am 0 after Rsend call, delta = time  0.003724 sec
+I am 0 before sleep(40)
+                              I am 1 after sleep(15), delta = time 15.000060 sec
+                              I am 1: 15 seconds ago, process 0 called MPI_Rsend
+                              I am 1 before barrier call
+                              I am 1: With MPI_Rsend progress in process 0, this barrier has to wait for the barrier in proces 0 coming in 40-15 = 25 sec
+                              I am 1: Without MPI_Rsend progress in process 0, the Rsend waited for the 15 sec and therefore the following barrier ihas to wait 40 sec
+I am 0 after sleep(40), delta = time 40.000062 sec
+I am 0 before barrier call
+I am 0 after barrier call, delta = time  0.000270 sec
+                              I am 1 after barrier call, delta = time 25.012670 sec
+                              I am 1 before recv-wait call
+                              I am 1 after recv-wait call, delta time =  0.007937 sec
+test 91%
+
